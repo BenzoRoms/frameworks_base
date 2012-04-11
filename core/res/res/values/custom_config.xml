@@ -28,4 +28,10 @@
     <!-- The list of components which should be automatically disabled. -->
     <string-array name="config_disabledComponents" translatable="false">
     </string-array>
+
+    <!-- Path to the library that contains a device specific key handler -->
+    <string name="config_deviceKeyHandlerLib" translatable="false"></string>
+
+    <!-- Name of device key handler class -->
+    <string name="config_deviceKeyHandlerClass" translatable="false"></string>
 </resources>
