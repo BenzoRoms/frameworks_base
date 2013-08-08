@@ -2465,7 +2465,14 @@
            0. Strict threshold
            1. Lenient threshold
     -->
-    <integer name="config_LTE_RSRP_threshold_type">1</integer>
+    <integer name="config_LTE_RSRP_threshold_type">0</integer>
+
+    <!-- The second metric to be used for antenna bar display for LTE
+          The metrics to be used for Antenna display is based on RSRP and either one of the
+           0. RSSNR
+           1. RSRQ
+    -->
+    <integer name="config_LTE_antenna_bar_quantity_metric">0</integer>
 
     <!-- Enabled built-in zen mode condition providers -->
     <string-array translatable="false" name="config_system_condition_providers">
