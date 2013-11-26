@@ -28,4 +28,7 @@
     <dimen name="phone_height">210dp</dimen>
     <dimen name="phone_width">420dp</dimen>
 
+    <!-- Halo -->
+    <dimen name="halo_content_max_width">350dp</dimen>
+
 </resources>
