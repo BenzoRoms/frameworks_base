@@ -218,6 +218,17 @@ public class Action {
                         new Intent("android.settings.SHOW_INPUT_METHOD_PICKER"),
                         new UserHandle(UserHandle.USER_CURRENT));
                 return;
+            } else if (action.equals(ActionConstants.ACTION_EXPANDED_DESKTOP)) {
+                int state = mExpandedDesktopState;
+                switch (state) {
+                    case STATE_ENABLE_FOR_ALL:
+                        userConfigurableSettings();
+                        break;
+                    case STATE_USER_CONFIGURABLE:
+                        enableForAll();
+                        break;
+                }
+                return;
             } else if (action.equals(ActionConstants.ACTION_KILL)) {
                 if (isKeyguardShowing) {
                     return;
