@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.database.ContentObserver;
 import android.os.BatteryManager;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -47,14 +48,12 @@ public class BatteryBarController extends LinearLayout {
 
         void observer() {
             ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.STATUSBAR_BATTERY_BAR), false, this);
-            resolver.registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.STATUSBAR_BATTERY_BAR_STYLE), false,
-                    this);
-            resolver.registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.STATUSBAR_BATTERY_BAR_THICKNESS),
-                    false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BATTERY_BAR_LOCATION), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BATTERY_BAR_STYLE), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BATTERY_BAR_THICKNESS),false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -128,8 +127,8 @@ public class BatteryBarController extends LinearLayout {
     public void addBars() {
         // set heights
         DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-        float dp = (float) Settings.System.getInt(getContext().getContentResolver(),
-                Settings.System.STATUSBAR_BATTERY_BAR_THICKNESS, 1);
+        float dp = (float) Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.BATTERY_BAR_THICKNESS, 1, UserHandle.USER_CURRENT);
         int pixels = (int) ((metrics.density * dp) + 0.5);
 
         ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) getLayoutParams();
@@ -176,10 +175,10 @@ public class BatteryBarController extends LinearLayout {
     }
 
     public void updateSettings() {
-        mStyle = Settings.System.getInt(getContext().getContentResolver(),
-                Settings.System.STATUSBAR_BATTERY_BAR_STYLE, 0);
-        mLocation = Settings.System.getInt(getContext().getContentResolver(),
-                Settings.System.STATUSBAR_BATTERY_BAR, 0);
+        mStyle = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.BATTERY_BAR_STYLE, 0, UserHandle.USER_CURRENT);
+        mLocation = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.BATTERY_BAR_LOCATION, 0, UserHandle.USER_CURRENT);
 
         if (isLocationValid(mLocation)) {
             removeBars();
