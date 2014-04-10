@@ -24,9 +24,10 @@ import android.app.ActivityOptions;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.ContentResolver;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -847,6 +848,18 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
         TaskStackBuilder.create(getContext())
                 .addNextIntentWithParentStack(intent).startActivities(null,
                 new UserHandle(t.key.userId));
+    }
+
+    @Override
+    public void onTaskFloatClicked(Task t) {
+        Intent baseIntent = t.key.baseIntent;
+        // Hide and go home
+        onRecentsHidden();
+        mCb.onTaskLaunchFailed();
+        // Launch task in floating mode
+        baseIntent.setFlags(Intent.FLAG_FLOATING_WINDOW
+                  | Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(baseIntent);
     }
 
     @Override

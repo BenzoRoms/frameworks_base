@@ -228,6 +228,7 @@ public class QsTuner extends Fragment implements Callback {
         else if (spec.equals("timeout")) return R.string.quick_settings_timeout_label;
         else if (spec.equals("reboot")) return R.string.quick_settings_reboot_label;
         else if (spec.equals("layers")) return R.string.quick_settings_layers_manager_label;
+	else if (spec.equals("floatingwin")) return R.string.recent_float_mode_title;
         return 0;
     }
 
@@ -493,6 +494,7 @@ public class QsTuner extends Fragment implements Callback {
             else if (mSpec.equals("timeout")) return R.drawable.ic_qs_screen_timeout_vector;
             else if (mSpec.equals("reboot")) return R.drawable.ic_qs_reboot;
             else if (mSpec.equals("layers")) return R.drawable.ic_qs_layers_manager;
+	    else if (mSpec.equals("floatingwin")) return R.drawable.ic_qs_floating_on;
             return R.drawable.android;
         }
 
