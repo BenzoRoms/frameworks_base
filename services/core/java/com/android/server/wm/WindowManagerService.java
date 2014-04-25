@@ -5479,7 +5479,7 @@ public class WindowManagerService extends IWindowManager.Stub
 
     @Override
     public void keyguardGoingAway(boolean disableWindowAnimations,
-            boolean keyguardGoingToNotificationShade) {
+            boolean keyguardGoingToNotificationShade, boolean keyguardShowingMedia) {
         if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.DISABLE_KEYGUARD)
                 != PackageManager.PERMISSION_GRANTED) {
             throw new SecurityException("Requires DISABLE_KEYGUARD permission");
@@ -5490,6 +5490,7 @@ public class WindowManagerService extends IWindowManager.Stub
             mAnimator.mKeyguardGoingAway = true;
             mAnimator.mKeyguardGoingAwayToNotificationShade = keyguardGoingToNotificationShade;
             mAnimator.mKeyguardGoingAwayDisableWindowAnimations = disableWindowAnimations;
+            mAnimator.mKeyguardGoingAwayShowingMedia = keyguardShowingMedia;
             requestTraversalLocked();
         }
     }
