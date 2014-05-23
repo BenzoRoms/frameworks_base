@@ -284,4 +284,7 @@
     <string name="heads_up_enabled">Heads up notifications enabled.</string>
     <string name="heads_up_disabled">Heads up notifications disabled.</string>
 
+    <!-- Blacklisted app for floating mode -->
+    <string name="floating_mode_blacklisted_app">The current app is blacklisted as it may not work as expected in floating mode </string>
+
 </resources>
