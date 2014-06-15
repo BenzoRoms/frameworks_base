@@ -25,6 +25,7 @@ import android.annotation.ChaosLab.Classification;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
+import android.app.ActivityManager.RunningTaskInfo;
 import android.app.ActivityManagerNative;
 import android.app.IActivityManager;
 import android.app.Notification;
@@ -309,6 +310,8 @@ public abstract class BaseStatusBar extends SystemUI implements
     private ArrayList<String> mDndList = new ArrayList<String>();
     private ArrayList<String> mBlacklist = new ArrayList<String>();
     private ArrayList<String> mWhitelist = new ArrayList<String>();
+
+    private ActivityManager mActivityManager;
 
     @Override  // NotificationData.Environment
     public boolean isDeviceProvisioned() {
@@ -662,6 +665,8 @@ public abstract class BaseStatusBar extends SystemUI implements
         mAccessibilityManager = (AccessibilityManager)
                 mContext.getSystemService(Context.ACCESSIBILITY_SERVICE);
 
+        mActivityManager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+
         mDreamManager = IDreamManager.Stub.asInterface(
                 ServiceManager.checkService(DreamService.DREAM_SERVICE));
         mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
@@ -1002,6 +1007,22 @@ public abstract class BaseStatusBar extends SystemUI implements
         intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName);
         intent.putExtra(Settings.EXTRA_APP_UID, appUid);
         startNotificationGutsIntent(intent, appUid);
+    }
+
+    public String getForegroundPackageName() {
+        List<RunningTaskInfo> taskInfo = mActivityManager.getRunningTasks(1);
+        ComponentName componentInfo = taskInfo.get(0).topActivity;
+        return componentInfo.getPackageName();
+    }
+
+    public boolean isUserOnLauncher() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        ResolveInfo resolveInfo = mContext.getPackageManager().resolveActivity(
+                                              intent, PackageManager.MATCH_DEFAULT_ONLY);
+        String currentHomePackage = resolveInfo.activityInfo.packageName;
+
+        return getForegroundPackageName().equals(currentHomePackage);
     }
 
     private void launchFloating(PendingIntent pIntent) {
@@ -1842,7 +1863,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                 @Override
                 public void run() {
                     // Additional guard to only launch in floating for headsup notifications
-                    if (FloatingHeadsup() && mHeadsUpManager.isClickedHeadsUpNotification(v)) {
+                    if (FloatingHeadsup() && !isUserOnLauncher() && mHeadsUpManager.isClickedHeadsUpNotification(v)) {
                         launchFloating(intent);
                     }
                     row.setJustClicked(false);
