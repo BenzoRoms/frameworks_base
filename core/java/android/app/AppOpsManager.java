@@ -242,7 +242,9 @@ public class AppOpsManager {
     /** @hide Wifi state change **/
     public static final int OP_WIFI_CHANGE = 64;
     /** @hide */
-    public static final int _NUM_OP = 65;
+    public static final int OP_DATA_CONNECT_CHANGE = 65;
+    /** @hide */
+    public static final int _NUM_OP = 66;
 
     /** Access to coarse location information. */
     public static final String OPSTR_COARSE_LOCATION = "android:coarse_location";
@@ -346,6 +348,8 @@ public class AppOpsManager {
     /** @hide **/
     private static final String OPSTR_WIFI_CHANGE =
             "android:wifi_change";
+    private static final String OPSTR_DATA_CONNECT_CHANGE =
+            "android:data_connect_change";
 
     /**
      * This maps each operation to the operation that serves as the
@@ -421,6 +425,7 @@ public class AppOpsManager {
             OP_GET_ACCOUNTS,
             OP_BOOT_COMPLETED,
             OP_WIFI_CHANGE,
+            OP_DATA_CONNECT_CHANGE,
     };
 
     /**
@@ -493,6 +498,7 @@ public class AppOpsManager {
             OPSTR_GET_ACCOUNTS,
             OPSTR_BOOT_COMPLETED,
             OPSTR_WIFI_CHANGE,
+            OPSTR_DATA_CONNECT_CHANGE,
     };
 
     /**
@@ -565,6 +571,7 @@ public class AppOpsManager {
             "GET_ACCOUNTS",
             "BOOT_COMPLETED",
             "WIFI_CHANGE",
+            "DATA_CONNECT_CHANGE",
     };
 
     /**
@@ -637,6 +644,7 @@ public class AppOpsManager {
             Manifest.permission.GET_ACCOUNTS,
             Manifest.permission.RECEIVE_BOOT_COMPLETED,
             Manifest.permission.CHANGE_WIFI_STATE,
+            Manifest.permission.MODIFY_PHONE_STATE,
     };
 
     /**
@@ -710,6 +718,7 @@ public class AppOpsManager {
             null, // GET_ACCOUNTS
             null, //BOOT_COMPLETED
             null, //WIFI_CHANGE
+            null, //DATA_CONNECT_CHANGE
     };
 
     /**
@@ -782,6 +791,7 @@ public class AppOpsManager {
             false, // GET_ACCOUNTS
             false, // BOOT_COMPLETED
             false, // WIFI_CHANGE
+            false, //DATA_CONNECT_CHANGE
     };
 
     /**
@@ -853,6 +863,7 @@ public class AppOpsManager {
             AppOpsManager.MODE_ALLOWED,
             AppOpsManager.MODE_ALLOWED, // OP_BOOT_COMPLETED
             AppOpsManager.MODE_ALLOWED, // OP_WIFI_CHANGE
+            AppOpsManager.MODE_ALLOWED,
     };
 
     /**
@@ -928,6 +939,7 @@ public class AppOpsManager {
             false,
             false,     // OP_BOOT_COMPLETED
             false,     // OP_WIFI_CHANGE
+            false,     // OP_DATA_CONNECT_CHANGE
     };
 
     /**
