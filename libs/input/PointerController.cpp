@@ -245,6 +245,11 @@ void PointerController::setPresentation(Presentation presentation) {
 
 void PointerController::setSpots(const PointerCoords* spotCoords,
         const uint32_t* spotIdToIndex, BitSet32 spotIdBits) {
+
+    if (!spotCoords || !spotIdToIndex) {
+        return;
+    }
+
 #if DEBUG_POINTER_UPDATES
     ALOGD("setSpots: idBits=%08x", spotIdBits.value);
     for (BitSet32 idBits(spotIdBits); !idBits.isEmpty(); ) {
