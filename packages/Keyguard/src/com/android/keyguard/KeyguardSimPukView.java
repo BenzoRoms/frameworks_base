@@ -61,7 +61,7 @@ public class KeyguardSimPukView extends KeyguardPinBasedInputView {
         @Override
         public void onSimStateChanged(int subId, int slotId, State simState) {
            if (DEBUG) Log.v(TAG, "onSimStateChanged(subId=" + subId + ",state=" + simState + ")");
-           resetState();
+           resetState(false);
        };
     };
 
@@ -164,8 +164,8 @@ public class KeyguardSimPukView extends KeyguardPinBasedInputView {
     }
 
     @Override
-    public void resetState() {
-        super.resetState();
+    public void resetState(boolean important) {
+        super.resetState(false);
         mStateMachine.reset();
     }
 
