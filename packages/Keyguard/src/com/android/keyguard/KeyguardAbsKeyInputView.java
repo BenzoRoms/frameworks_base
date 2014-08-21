@@ -76,7 +76,7 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
         if (shouldLockout(deadline)) {
             handleAttemptLockout(deadline);
         } else {
-            resetState();
+            resetState(false);
         }
     }
 
@@ -86,7 +86,7 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
     }
 
     protected abstract int getPasswordTextViewId();
-    protected abstract void resetState();
+    protected abstract void resetState(boolean important);
 
     @Override
     protected void onFinishInflate() {
@@ -181,11 +181,11 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
     protected void handleAttemptLockout(long elapsedRealtimeDeadline) {
         setPasswordEntryEnabled(false);
         long elapsedRealtime = SystemClock.elapsedRealtime();
-        new CountDownTimer(elapsedRealtimeDeadline - elapsedRealtime, 1000) {
+        new CountDownTimer(elapsedRealtimeDeadline - elapsedRealtime, 200) {
 
             @Override
             public void onTick(long millisUntilFinished) {
-                int secondsRemaining = (int) (millisUntilFinished / 1000);
+                int secondsRemaining = (int) Math.ceil(millisUntilFinished / 1000.0);
                 mSecurityMessageDisplay.setMessage(
                         R.string.kg_too_many_failed_attempts_countdown, true, secondsRemaining);
             }
@@ -193,7 +193,7 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
             @Override
             public void onFinish() {
                 mSecurityMessageDisplay.setMessage("", false);
-                resetState();
+                resetState(true);
             }
         }.start();
     }
