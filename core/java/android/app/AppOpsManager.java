@@ -239,8 +239,10 @@ public class AppOpsManager {
     public static final int OP_GET_ACCOUNTS = 62;
     /** @hide */
     public static final int OP_BOOT_COMPLETED = 63;
+    /** @hide Wifi state change **/
+    public static final int OP_WIFI_CHANGE = 64;
     /** @hide */
-    public static final int _NUM_OP = 64;
+    public static final int _NUM_OP = 65;
 
     /** Access to coarse location information. */
     public static final String OPSTR_COARSE_LOCATION = "android:coarse_location";
@@ -341,6 +343,9 @@ public class AppOpsManager {
     /** Required for start at boot **/
     private static final String OPSTR_BOOT_COMPLETED =
             "android:boot_completed";
+    /** @hide **/
+    private static final String OPSTR_WIFI_CHANGE =
+            "android:wifi_change";
 
     /**
      * This maps each operation to the operation that serves as the
@@ -415,6 +420,7 @@ public class AppOpsManager {
             OP_TURN_SCREEN_ON,
             OP_GET_ACCOUNTS,
             OP_BOOT_COMPLETED,
+            OP_WIFI_CHANGE,
     };
 
     /**
@@ -486,6 +492,7 @@ public class AppOpsManager {
             null,
             OPSTR_GET_ACCOUNTS,
             OPSTR_BOOT_COMPLETED,
+            OPSTR_WIFI_CHANGE,
     };
 
     /**
@@ -557,6 +564,7 @@ public class AppOpsManager {
             "TURN_ON_SCREEN",
             "GET_ACCOUNTS",
             "BOOT_COMPLETED",
+            "WIFI_CHANGE",
     };
 
     /**
@@ -628,6 +636,7 @@ public class AppOpsManager {
             null, // no permission for turning the screen on
             Manifest.permission.GET_ACCOUNTS,
             Manifest.permission.RECEIVE_BOOT_COMPLETED,
+            Manifest.permission.CHANGE_WIFI_STATE,
     };
 
     /**
@@ -700,6 +709,7 @@ public class AppOpsManager {
             null, // TURN_ON_SCREEN
             null, // GET_ACCOUNTS
             null, //BOOT_COMPLETED
+            null, //WIFI_CHANGE
     };
 
     /**
@@ -771,6 +781,7 @@ public class AppOpsManager {
             false, // TURN_ON_SCREEN
             false, // GET_ACCOUNTS
             false, // BOOT_COMPLETED
+            false, // WIFI_CHANGE
     };
 
     /**
@@ -841,6 +852,7 @@ public class AppOpsManager {
             AppOpsManager.MODE_ALLOWED,  // OP_TURN_ON_SCREEN
             AppOpsManager.MODE_ALLOWED,
             AppOpsManager.MODE_ALLOWED, // OP_BOOT_COMPLETED
+            AppOpsManager.MODE_ALLOWED, // OP_WIFI_CHANGE
     };
 
     /**
@@ -915,6 +927,7 @@ public class AppOpsManager {
             false,
             false,
             false,     // OP_BOOT_COMPLETED
+            false,     // OP_WIFI_CHANGE
     };
 
     /**
