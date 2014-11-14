@@ -49,6 +49,11 @@ public class LocationControllerImpl extends BroadcastReceiver implements Locatio
     private static final int[] mHighPowerRequestAppOpArray
         = new int[] {AppOpsManager.OP_MONITOR_HIGH_POWER_LOCATION};
 
+    // Private intent strings for Location.
+    private static final String ACTION_LOCATION_MODE_CHANGE_REQUEST =
+            "com.android.settings.location.MODE_CHANGE_REQUEST";
+    private static final String INTENT_EXTRA_NEW_MODE = "com.android.settings.location.extra.NEW_MODE";
+
     private Context mContext;
 
     private AppOpsManager mAppOpsManager;
@@ -106,14 +111,13 @@ public class LocationControllerImpl extends BroadcastReceiver implements Locatio
      * <p>If enabling, a user consent dialog will pop up prompting the user to accept.
      * If the user doesn't accept, network location won't be enabled.
      *
-     * @return true if attempt to change setting was successful.
+     * @return true if the user isn't restricted from using location.
      */
     public boolean setLocationEnabled(boolean enabled) {
         int currentUserId = ActivityManager.getCurrentUser();
         if (isUserLocationRestricted(currentUserId)) {
             return false;
         }
-        final ContentResolver cr = mContext.getContentResolver();
 
         // Store last active mode if we are switching off
         // so we can restore it at the next enable
@@ -124,10 +128,13 @@ public class LocationControllerImpl extends BroadcastReceiver implements Locatio
         // setting won't be fully enabled until the user accepts the agreement.
         int mode = enabled
                 ? mLastActiveMode : Settings.Secure.LOCATION_MODE_OFF;
-        // QuickSettings always runs as the owner, so specifically set the settings
-        // for the current foreground user.
-        return Settings.Secure
-                .putIntForUser(cr, Settings.Secure.LOCATION_MODE, mode, currentUserId);
+        Intent intent = new Intent(ACTION_LOCATION_MODE_CHANGE_REQUEST);
+        intent.putExtra(INTENT_EXTRA_NEW_MODE, mode);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        mContext.sendBroadcastAsUser(intent, UserHandle.CURRENT,
+                android.Manifest.permission.WRITE_SECURE_SETTINGS);
+
+        return true;
     }
 
     /**
