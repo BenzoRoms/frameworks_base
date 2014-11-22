@@ -2448,10 +2448,6 @@
     <!-- Sets whether IME switcher on statusbar should be shown or not. -->
 	<bool name="config_show_IMESwitcher">true</bool>
 
-    <!-- Timeout in MS for how long you have to long-press the back key to
-         kill the foreground app. -->
-    <integer name="config_backKillTimeout">1000</integer>
-
     <!-- Disable stock OTA components if installed -->
     <string-array name="config_disabledComponents" translatable="false">
         <item>com.google.android.gsf/com.google.android.gsf.update.SystemUpdateActivity</item>
