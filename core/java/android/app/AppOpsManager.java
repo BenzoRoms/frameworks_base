@@ -1175,9 +1175,11 @@ public class AppOpsManager {
         private final int mDuration;
         private final int mProxyUid;
         private final String mProxyPackageName;
+        private final int mAllowedCount;
+        private final int mIgnoredCount;
 
         public OpEntry(int op, int mode, long time, long rejectTime, int duration,
-                int proxyUid, String proxyPackage) {
+                       int proxyUid, String proxyPackage, int allowedCount, int ignoredCount) {
             mOp = op;
             mMode = mode;
             mTime = time;
@@ -1185,6 +1187,8 @@ public class AppOpsManager {
             mDuration = duration;
             mProxyUid = proxyUid;
             mProxyPackageName = proxyPackage;
+            mAllowedCount = allowedCount;
+            mIgnoredCount = ignoredCount;
         }
 
         public int getOp() {
@@ -1219,6 +1223,14 @@ public class AppOpsManager {
             return mProxyPackageName;
         }
 
+        public int getAllowedCount() {
+            return mAllowedCount;
+        }
+
+        public int getIgnoredCount() {
+            return mIgnoredCount;
+        }
+
         @Override
         public int describeContents() {
             return 0;
@@ -1233,6 +1245,8 @@ public class AppOpsManager {
             dest.writeInt(mDuration);
             dest.writeInt(mProxyUid);
             dest.writeString(mProxyPackageName);
+            dest.writeInt(mAllowedCount);
+            dest.writeInt(mIgnoredCount);
         }
 
         OpEntry(Parcel source) {
@@ -1243,6 +1257,8 @@ public class AppOpsManager {
             mDuration = source.readInt();
             mProxyUid = source.readInt();
             mProxyPackageName = source.readString();
+            mAllowedCount = source.readInt();
+            mIgnoredCount = source.readInt();
         }
 
         public static final Creator<OpEntry> CREATOR = new Creator<OpEntry>() {
@@ -1872,5 +1888,13 @@ public class AppOpsManager {
     /** @hide */
     public void finishOp(int op) {
         finishOp(op, Process.myUid(), mContext.getOpPackageName());
+    }
+
+    /** @hide */
+    public void resetCounters() {
+        try {
+            mService.resetCounters();
+        } catch (RemoteException e) {
+        }
     }
 }
