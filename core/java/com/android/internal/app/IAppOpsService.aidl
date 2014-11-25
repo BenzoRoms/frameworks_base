@@ -46,4 +46,7 @@ interface IAppOpsService {
 
     void setUserRestrictions(in Bundle restrictions, int userHandle);
     void removeUser(int userHandle);
+
+    // AppOps accounting
+    void resetCounters();
 }
