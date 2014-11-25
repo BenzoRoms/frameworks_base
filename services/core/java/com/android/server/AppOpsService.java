@@ -159,6 +159,8 @@ public class AppOpsService extends IAppOpsService.Stub {
         public long time;
         public long rejectTime;
         public int nesting;
+        public int allowedCount;
+        public int ignoredCount;
 
         public Op(int _uid, String _packageName, int _op) {
             uid = _uid;
@@ -398,7 +400,7 @@ public class AppOpsService extends IAppOpsService.Stub {
                 Op curOp = pkgOps.valueAt(j);
                 resOps.add(new AppOpsManager.OpEntry(curOp.op, curOp.mode, curOp.time,
                         curOp.rejectTime, curOp.duration, curOp.proxyUid,
-                        curOp.proxyPackageName));
+                        curOp.proxyPackageName, curOp.allowedCount, curOp.ignoredCount));
             }
         } else {
             for (int j=0; j<ops.length; j++) {
@@ -409,7 +411,7 @@ public class AppOpsService extends IAppOpsService.Stub {
                     }
                     resOps.add(new AppOpsManager.OpEntry(curOp.op, curOp.mode, curOp.time,
                             curOp.rejectTime, curOp.duration, curOp.proxyUid,
-                            curOp.proxyPackageName));
+                            curOp.proxyPackageName, curOp.allowedCount, curOp.ignoredCount));
                 }
             }
         }
@@ -422,7 +424,7 @@ public class AppOpsService extends IAppOpsService.Stub {
             resOps = new ArrayList<>();
             for (int j=0; j<uidOps.size(); j++) {
                 resOps.add(new AppOpsManager.OpEntry(uidOps.keyAt(j), uidOps.valueAt(j),
-                        0, 0, 0, -1, null));
+                        0, 0, 0, -1, null, 0, 0));
             }
         } else {
             for (int j=0; j<ops.length; j++) {
@@ -432,7 +434,7 @@ public class AppOpsService extends IAppOpsService.Stub {
                         resOps = new ArrayList<>();
                     }
                     resOps.add(new AppOpsManager.OpEntry(uidOps.keyAt(index), uidOps.valueAt(index),
-                            0, 0, 0, -1, null));
+                            0, 0, 0, -1, null, 0, 0));
                 }
             }
         }
@@ -1087,6 +1089,7 @@ public class AppOpsService extends IAppOpsService.Stub {
             }
             Op op = getOpLocked(ops, code, true);
             if (isOpRestrictedLocked(uid, code, packageName)) {
+                op.ignoredCount++;
                 return AppOpsManager.MODE_IGNORED;
             }
             if (op.duration == -1) {
@@ -1114,6 +1117,7 @@ public class AppOpsService extends IAppOpsService.Stub {
                             + switchCode + " (" + code + ") uid " + uid + " package "
                             + packageName);
                     op.rejectTime = System.currentTimeMillis();
+                    op.ignoredCount++;
                     return switchOp.mode;
                 }
             }
@@ -1145,6 +1149,7 @@ public class AppOpsService extends IAppOpsService.Stub {
             }
             Op op = getOpLocked(ops, code, true);
             if (isOpRestrictedLocked(uid, code, resolvedPackageName)) {
+                op.ignoredCount++;
                 return AppOpsManager.MODE_IGNORED;
             }
             final int switchCode = AppOpsManager.opToSwitch(code);
@@ -1165,6 +1170,7 @@ public class AppOpsService extends IAppOpsService.Stub {
                         + switchCode + " (" + code + ") uid " + uid + " package "
                         + resolvedPackageName);
                 op.rejectTime = System.currentTimeMillis();
+                op.ignoredCount++;
                 return switchOp.mode;
             }
             if (DEBUG) Log.d(TAG, "startOperation: allowing code " + code + " uid " + uid
@@ -1576,7 +1582,14 @@ public class AppOpsService extends IAppOpsService.Stub {
                 if (proxyPackageName != null) {
                     op.proxyPackageName = proxyPackageName;
                 }
-
+                String allowed = parser.getAttributeValue(null, "ac");
+                if (allowed != null) {
+                    op.allowedCount = Integer.parseInt(allowed);
+                }
+                String ignored = parser.getAttributeValue(null, "ic");
+                if (ignored != null) {
+                    op.ignoredCount = Integer.parseInt(ignored);
+                }
                 UidState uidState = getUidStateLocked(uid, true);
                 if (uidState.pkgOps == null) {
                     uidState.pkgOps = new ArrayMap<>();
@@ -1685,6 +1698,14 @@ public class AppOpsService extends IAppOpsService.Stub {
                             String proxyPackageName = op.getProxyPackageName();
                             if (proxyPackageName != null) {
                                 out.attribute(null, "pp", proxyPackageName);
+                            }
+                            int allowed = op.getAllowedCount();
+                            if (allowed != 0) {
+                                out.attribute(null, "ac", Integer.toString(allowed));
+                            }
+                            int ignored = op.getIgnoredCount();
+                            if (ignored != 0) {
+                                out.attribute(null, "ic", Integer.toString(ignored));
                             }
                             out.endTag(null, "op");
                         }
@@ -2621,6 +2642,28 @@ public class AppOpsService extends IAppOpsService.Stub {
                 }
             }
             return true;
+        }
+    }
+
+    @Override
+    public void resetCounters() {
+        mContext.enforcePermission(android.Manifest.permission.UPDATE_APP_OPS_STATS,
+                Binder.getCallingPid(), Binder.getCallingUid(), null);
+        synchronized (this) {
+            for (int i=0; i<mUidStates.size(); i++) {
+                final UidState uidState = mUidStates.valueAt(i);
+                for (Map.Entry<String, Ops> ent : uidState.pkgOps.entrySet()) {
+                    String packageName = ent.getKey();
+                    Ops pkgOps = ent.getValue();
+                    for (int j=0; j<pkgOps.size(); j++) {
+                        Op curOp = pkgOps.valueAt(j);
+                        curOp.allowedCount = 0;
+                        curOp.ignoredCount = 0;
+                    }
+                }
+            }
+            // ensure the counter reset persists
+            scheduleWriteLocked();
         }
     }
 }

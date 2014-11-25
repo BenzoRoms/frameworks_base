@@ -48,4 +48,7 @@ interface IAppOpsService {
     void setUserRestrictions(in Bundle restrictions, IBinder token, int userHandle);
     void setUserRestriction(int code, boolean restricted, IBinder token, int userHandle, in String[] exceptionPackages);
     void removeUser(int userHandle);
+
+    // AppOps accounting
+    void resetCounters();
 }
