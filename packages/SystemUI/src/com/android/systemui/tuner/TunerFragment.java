@@ -15,6 +15,7 @@
  */
 package com.android.systemui.tuner;
 
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.ContentResolver;
 import android.database.ContentObserver;

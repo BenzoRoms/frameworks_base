@@ -1,0 +1,315 @@
+/*
+ * Copyright (C) 2013-14 The Android Open Source Project
+ * Copyright (C) 2016 The CyanogenMod Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.systemui;
+
+import android.animation.ArgbEvaluator;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.Typeface;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.StopMotionVectorDrawable;
+import android.os.BatteryManager;
+import android.os.Bundle;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+
+import com.android.systemui.statusbar.policy.BatteryController;
+
+public class BatteryMeterView extends View implements DemoMode,
+        BatteryController.BatteryStateChangeCallback {
+    public static final String TAG = BatteryMeterView.class.getSimpleName();
+    public static final String ACTION_LEVEL_TEST = "com.android.systemui.BATTERY_LEVEL_TEST";
+
+    private final int[] mColors;
+
+    protected boolean mShowPercent = true;
+    protected boolean mShowPercentLowOnly = false;
+
+    public static enum BatteryMeterMode {
+        BATTERY_METER_GONE,
+        BATTERY_METER_ICON_PORTRAIT,
+        BATTERY_METER_ICON_LANDSCAPE,
+        BATTERY_METER_CIRCLE,
+        BATTERY_METER_TEXT
+    }
+
+    private int mHeight;
+    private int mWidth;
+
+    private String mWarningString;
+    private final int mCriticalLevel;
+    private final int mLowLevel;
+
+    private boolean mAnimationsEnabled;
+
+    private BatteryController mBatteryController;
+    private boolean mPowerSaveEnabled;
+
+    private int mDarkModeBackgroundColor;
+    private int mDarkModeFillColor;
+
+    private int mLightModeBackgroundColor;
+    private int mLightModeFillColor;
+
+    protected BatteryMeterMode mMeterMode = null;
+
+    protected boolean mAttached;
+
+    private boolean mDemoMode;
+    protected BatteryTracker mDemoTracker = new BatteryTracker();
+    protected BatteryTracker mTracker = new BatteryTracker();
+    private BatteryMeterDrawable mBatteryMeterDrawable;
+
+    private int mIconTint = Color.WHITE;
+
+    private int mCurrentBackgroundColor = 0;
+    private int mCurrentFillColor = 0;
+
+    protected class BatteryTracker extends BroadcastReceiver {
+        public static final int UNKNOWN_LEVEL = -1;
+
+        // current battery status
+        boolean present = true;
+        int level = UNKNOWN_LEVEL;
+        String percentStr;
+        int plugType;
+        boolean plugged;
+        int health;
+        int status;
+        String technology;
+        int voltage;
+        int temperature;
+        boolean testmode = false;
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
+                if (testmode && ! intent.getBooleanExtra("testmode", false)) return;
+
+                level = (int)(100f
+                        * intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0)
+                        / intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100));
+
+                present = intent.getBooleanExtra(BatteryManager.EXTRA_PRESENT, true);
+                plugType = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0);
+                plugged = plugType != 0;
+                health = intent.getIntExtra(BatteryManager.EXTRA_HEALTH,
+                        BatteryManager.BATTERY_HEALTH_UNKNOWN);
+                status = intent.getIntExtra(BatteryManager.EXTRA_STATUS,
+                        BatteryManager.BATTERY_STATUS_UNKNOWN);
+                technology = intent.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY);
+                voltage = intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0);
+                temperature = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
+
+                setContentDescription(
+                        context.getString(R.string.accessibility_battery_level, level));
+                if (mBatteryMeterDrawable != null) {
+                    setVisibility(View.VISIBLE);
+                    invalidate();
+                }
+            } else if (action.equals(ACTION_LEVEL_TEST)) {
+                testmode = true;
+                post(new Runnable() {
+                    int curLevel = 0;
+                    int incr = 1;
+                    int saveLevel = level;
+                    int savePlugged = plugType;
+                    Intent dummy = new Intent(Intent.ACTION_BATTERY_CHANGED);
+                    @Override
+                    public void run() {
+                        if (curLevel < 0) {
+                            testmode = false;
+                            dummy.putExtra("level", saveLevel);
+                            dummy.putExtra("plugged", savePlugged);
+                            dummy.putExtra("testmode", false);
+                        } else {
+                            dummy.putExtra("level", curLevel);
+                            dummy.putExtra("plugged", incr > 0
+                                    ? BatteryManager.BATTERY_PLUGGED_AC : 0);
+                            dummy.putExtra("testmode", true);
+                        }
+                        getContext().sendBroadcast(dummy);
+
+                        if (!testmode) return;
+
+                        curLevel += incr;
+                        if (curLevel == 100) {
+                            incr *= -1;
+                        }
+                        postDelayed(this, 200);
+                    }
+                });
+            }
+        }
+
+        protected boolean shouldIndicateCharging() {
+            if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
+                return true;
+            }
+            if (plugged) {
+                return status == BatteryManager.BATTERY_STATUS_FULL;
+            }
+            return false;
+        }
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        filter.addAction(ACTION_LEVEL_TEST);
+        final Intent sticky = getContext().registerReceiver(mTracker, filter);
+        if (sticky != null) {
+            // preload the battery level
+            mTracker.onReceive(getContext(), sticky);
+        }
+        mBatteryController.addStateChangedCallback(this);
+        mAttached = true;
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+
+        mAttached = false;
+        getContext().unregisterReceiver(mTracker);
+        mBatteryController.removeStateChangedCallback(this);
+    }
+
+    public BatteryMeterView(Context context) {
+        this(context, null, 0);
+    }
+
+    public BatteryMeterView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public BatteryMeterView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+
+        final Resources res = context.getResources();
+        TypedArray atts = context.obtainStyledAttributes(attrs, R.styleable.BatteryMeterView,
+                defStyle, 0);
+        TypedArray levels = res.obtainTypedArray(R.array.batterymeter_color_levels);
+        TypedArray colors = res.obtainTypedArray(R.array.batterymeter_color_values);
+
+        final int N = levels.length();
+        mColors = new int[2*N];
+        for (int i=0; i<N; i++) {
+            mColors[2*i] = levels.getInt(i, 0);
+            mColors[2*i+1] = colors.getColor(i, 0);
+        }
+        levels.recycle();
+        colors.recycle();
+        atts.recycle();
+        mWarningString = context.getString(R.string.battery_meter_very_low_overlay_symbol);
+        mCriticalLevel = mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_criticalBatteryWarningLevel);
+        mLowLevel = mContext.getResources().getInteger(com.android.internal.R.integer.config_batteryPercentLowOnlyLevel);
+
+        setAnimationsEnabled(true);
+    }
+
+    protected BatteryMeterDrawable createBatteryMeterDrawable(BatteryMeterMode mode) {
+        Resources res = getResources();
+        switch (mode) {
+            case BATTERY_METER_TEXT:
+            case BATTERY_METER_GONE:
+                return null;
+            default:
+                return new AllInOneBatteryMeterDrawable(res, mode);
+        }
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
+
+        if (mMeterMode == BatteryMeterMode.BATTERY_METER_TEXT) {
+            onSizeChanged(width, height, 0, 0); // Force a size changed event
+        }
+
+        setMeasuredDimension(width, height);
+    }
+
+    public void setBatteryController(BatteryController batteryController) {
+        mBatteryController = batteryController;
+        mPowerSaveEnabled = mBatteryController.isPowerSave();
+    }
+
+    @Override
+    public void onBatteryLevelChanged(int level, boolean pluggedIn, boolean charging) {
+        // TODO: Use this callback instead of own broadcast receiver.
+    }
+
+    @Override
+    public void onPowerSaveChanged() {
+        mPowerSaveEnabled = mBatteryController.isPowerSave();
+        invalidate();
+    }
+
+    public void setAnimationsEnabled(boolean enabled) {
+        if (mAnimationsEnabled != enabled) {
+            mAnimationsEnabled = enabled;
+            setLayerType(mAnimationsEnabled ? LAYER_TYPE_HARDWARE : LAYER_TYPE_NONE, null);
+            invalidate();
+        }
+    }
+
+    @Override
+    public void onBatteryStyleChanged(int style, int percentMode, int percentLowOnly) {
+        boolean showInsidePercent = percentMode == BatteryController.PERCENTAGE_MODE_INSIDE;
+        BatteryMeterMode meterMode = BatteryMeterMode.BATTERY_METER_ICON_PORTRAIT;
+        mShowPercentLowOnly = percentLowOnly == 1;
+
+        switch (style) {
+            case BatteryController.STYLE_CIRCLE:
+                meterMode = BatteryMeterMode.BATTERY_METER_CIRCLE;
+                break;
+            case BatteryController.STYLE_GONE:
+                meterMode = BatteryMeterMode.BATTERY_METER_GONE;
+                showInsidePercent = false;
+                break;
+            case BatteryController.STYLE_ICON_LANDSCAPE:
+                meterMode = BatteryMeterMode.BATTERY_METER_ICON_LANDSCAPE;
+                break;
+            case BatteryController.STYLE_TEXT:
+                meterMode = BatteryMeterMode.BATTERY_METER_TEXT;
+                showInsidePercent = false;
+                break;
