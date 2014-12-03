@@ -223,6 +223,7 @@ public class NotificationPanelView extends PanelView implements
     private boolean mDoubleTapToSleepAnywhere;
     private boolean mDozeWakeupDoubleTap;
     private int mOneFingerQuickSettingsIntercept;
+    private int mQsSmartPullDown;
     private int mStatusBarHeaderHeight;
     private GestureDetector mDoubleTapGesture;
 
@@ -898,6 +899,12 @@ public class NotificationPanelView extends PanelView implements
                 break;
         }
         showQsOverride &= mStatusBarState == StatusBarState.SHADE;
+
+        if (mQsSmartPullDown == 1 && !mStatusBar.hasActiveClearableNotifications()
+                || mQsSmartPullDown == 2 && !mStatusBar.hasActiveOngoingNotifications()
+                || mQsSmartPullDown == 3 && !mStatusBar.hasActiveVisibleNotifications()) {
+                showQsOverride = true;
+        }
 
         return twoFingerDrag || showQsOverride || stylusButtonClickDrag || mouseButtonClickDrag;
     }
@@ -2443,6 +2450,8 @@ public class NotificationPanelView extends PanelView implements
                     Settings.System.DOUBLE_TAP_SLEEP_ANYWHERE), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.DOZE_WAKEUP_DOUBLETAP), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_SMART_PULLDOWN), false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -2472,6 +2481,8 @@ public class NotificationPanelView extends PanelView implements
                     Settings.System.DOUBLE_TAP_SLEEP_ANYWHERE, 0, UserHandle.USER_CURRENT) == 1;
             mDozeWakeupDoubleTap = Settings.System.getIntForUser(resolver,
                     Settings.System.DOZE_WAKEUP_DOUBLETAP, 0, UserHandle.USER_CURRENT) == 1;
+            mQsSmartPullDown = Settings.System.getIntForUser(resolver,
+                    Settings.System.QS_SMART_PULLDOWN, 0, UserHandle.USER_CURRENT);
         }
     }
 }
