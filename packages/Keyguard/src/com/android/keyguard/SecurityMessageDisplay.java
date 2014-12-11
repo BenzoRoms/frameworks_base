@@ -29,4 +29,6 @@ public interface SecurityMessageDisplay {
     void setTimeout(int timeout_ms);
 
     boolean isEmpty();
+
+    void setDefaultMessage(int resId);
 }
