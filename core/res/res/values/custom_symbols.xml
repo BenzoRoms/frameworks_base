@@ -219,4 +219,7 @@
   <java-symbol type="drawable" name="ic_audio_notification_mute_new" />
   <java-symbol type="drawable" name="ic_audio_notification_mute_alpha" />
 
+  <!-- Intent chooser -->
+  <java-symbol type="id" name="filtered_item_container" />
+
 </resources>
