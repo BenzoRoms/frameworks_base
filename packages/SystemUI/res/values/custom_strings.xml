@@ -272,4 +272,8 @@
     <string name="onthego_front_camera">Use front camera</string>
     <string name="onthego_service_toggle">Automatically restart service</string>
 
+    <!-- Heads up toast -->
+    <string name="heads_up_enabled">Heads up notifications enabled.</string>
+    <string name="heads_up_disabled">Heads up notifications disabled.</string>
+
 </resources>

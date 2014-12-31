@@ -2325,6 +2325,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     @Override
+    public void startAction(boolean dismissShade) {
+        startActionDismissingPanel(dismissShade);
+    }
+
+    @Override
     public void preventNextAnimation() {
         overrideActivityPendingAppTransition(true /* keyguardShowing */);
     }
@@ -3445,6 +3450,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 return true;
             }
         }, cancelAction, afterKeyguardGone);
+    }
+
+    public void startActionDismissingPanel(final boolean dismissShade) {
+        final boolean keyguardShowing = mStatusBarKeyguardViewManager.isShowing();
+        if (keyguardShowing) return;
+            if (dismissShade) {
+                animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE, true /* force */);
+            }
     }
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
