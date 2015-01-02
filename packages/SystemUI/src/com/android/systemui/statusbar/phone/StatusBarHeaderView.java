@@ -533,6 +533,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
                 mActivityStarter.startPendingIntentDismissingKeyguard(showIntent);
             }
         }
+        mQSPanel.vibrateTile(20);
     }
 
     private void startSettingsActivity() {
