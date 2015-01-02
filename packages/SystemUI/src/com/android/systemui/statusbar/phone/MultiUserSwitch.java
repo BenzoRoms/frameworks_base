@@ -128,6 +128,7 @@ public class MultiUserSwitch extends FrameLayout implements View.OnClickListener
                 mQsPanel.getHost().collapsePanels();
             }
         }
+        mQsPanel.vibrateTile(20);
     }
 
     @Override
