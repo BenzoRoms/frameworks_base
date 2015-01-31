@@ -41,6 +41,8 @@
     <string name="global_action_screenshot">Screenshot</string>
     <string name="global_action_screenrecord">Screenrecord</string>
     <string name="global_action_torch">Flashlight</string>
+    <!-- label for current user in phone options dialog -->
+    <string name="global_action_current_user">Current</string>
 
     <!-- Battery styles -->
     <string name="battery_style_text">Text only</string>
