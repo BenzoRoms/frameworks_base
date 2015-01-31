@@ -32,6 +32,7 @@
     <string name="reboot_soft">Soft reboot</string>
     <!-- label for item that screenshots in phone options dialog -->
     <string name="global_action_screenshot">Screenshot</string>
+    <string name="global_action_current_user">Current</string>
 
     <!-- Slimseekbar -->
     <string name="default_string">Default</string>
