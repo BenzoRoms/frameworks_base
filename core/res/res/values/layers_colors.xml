@@ -21,7 +21,9 @@
     <color name="notification_mtrl_action_textcolor">@color/secondary_text_material_light</color>
     <!-- background of the picture in the big material notification template -->
     <color name="notification_mtrl_big_picture_bg">#CCEEEEEE</color>
-    <!-- Resolver background. -->
+    <!-- Resolver background -->
     <color name="resolver_list_bg">@color/white</color>
+    <!-- Chooser grid background --> 
+    <color name="chooser_grid_bg">@color/white</color>
 
 </resources>
