@@ -58,6 +58,7 @@ import com.android.systemui.qs.tiles.RebootTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.ScreenrecordTile;
 import com.android.systemui.qs.tiles.ScreenshotTile;
+import com.android.systemui.qs.tiles.SlimActionTile;
 import com.android.systemui.qs.tiles.SubstratumTile;
 import com.android.systemui.qs.tiles.UsbTetherTile;
 import com.android.systemui.qs.tiles.ScreenOffTile;
@@ -316,6 +317,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (tileSpec.equals("navbar")) return new NavBarTile(this);
         else if (tileSpec.equals("headsup")) return new HeadsUpTile(this);
 	else if (tileSpec.equals("benzo")) return new BenzoSettingsTile(this);
+	else if (tileSpec.equals("slimaction")) return new SlimActionTile(this);
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
         else throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
     }

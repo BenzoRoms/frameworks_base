@@ -210,6 +210,8 @@
     <string name="accessibility_quick_settings_heads_up_changed_on">Heads up turned on.</string>
     <!-- Benzo Extra Tile -->
     <string name="quick_settings_benzosettings">Benzo Extras</string>
+    <!-- Slim Actions Tile -->
+    <string name="quick_settings_slimaction_label">SlimActions</string>
 
     <!-- Title shown in recents popup for showing app launch in floating mode -->
     <string name="recent_float_mode_title">Float Mode</string>

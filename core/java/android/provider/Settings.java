@@ -5150,6 +5150,13 @@ public final class Settings {
         public static final String VOLUME_UP_LEAVE_ZEN = "volume_up_leave_zen";
 
         /**
+         * Config for slim action tile
+         *
+         * @hide
+         */
+        public static final String QUICK_TILE_CONFIG = "quick_tile_config";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
