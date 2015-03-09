@@ -857,7 +857,7 @@ public abstract class PanelView extends FrameLayout {
         setExpandedHeight(currentMaxPanelHeight);
     }
 
-    public void setExpandedHeightInternal(float h) {
+    public synchronized void setExpandedHeightInternal(float h) {
         if (mExpandLatencyTracking && h != 0f) {
             DejankUtils.postAfterTraversal(() -> LatencyTracker.getInstance(mContext).onActionEnd(
                     LatencyTracker.ACTION_EXPAND_PANEL));
