@@ -2221,6 +2221,9 @@ message MetricsEvent {
     // For everything Benzo
     BENZO = 415;
 
+    // For everything Benzo
+    LOCKSCREEN_WEATHER_SETTINGS = 416;
+
     // Add new aosp constants above this line.
     // END OF AOSP CONSTANTS
   }
