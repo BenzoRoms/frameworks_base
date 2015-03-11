@@ -16,17 +16,6 @@
 -->
 <resources>
 
-    <!-- Keyguard weather colors -->
-    <color name="keyguard_default_primary_text_color">#ffffffff</color>
-    <color name="keyguard_default_secondary_text_color">#b3ffffff</color>
-    <color name="keyguard_default_icon_color">#ffffffff</color>
-
-    <!-- Passcode color -->
-    <color name="omni_kg_wrong_passcode">#fff4511e</color>
-
-    <!-- Network traffic monitor single-line text size -->
-    <dimen name="net_traffic_single_text_size">12dp</dimen>
-    <!-- Network traffic monitor multi-line text size -->
-    <dimen name="net_traffic_multi_text_size">9dp</dimen>
+    <string name="weather_info_not_available">Weather informations not available</string>
 
 </resources>
