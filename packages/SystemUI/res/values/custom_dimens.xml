@@ -69,6 +69,8 @@
     <dimen name="qs_panel_top_offset_normal">80dp</dimen>
     <dimen name="qs_panel_top_offset_header">110dp</dimen>
 
+    <dimen name="qs_detail_item_height_twoline">72dp</dimen>
+
     <!-- Slim recent -->
     <dimen name="recent_width">230dp</dimen>
     <dimen name="slim_recents_elevation">20dp</dimen>
