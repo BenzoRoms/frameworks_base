@@ -3957,6 +3957,12 @@ public final class Settings {
         public static final String LOCKSCREEN_ENABLE_POWER_MENU = "lockscreen_enable_power_menu";
 
         /**
+         * Whether the notification light will be allowed when in zen mode during downtime
+         * @hide
+         */
+        public static final String ALLOW_LIGHTS = "allow_lights";
+
+        /**
          * Disabled Transition animations of the android system
          * @hide
          */
@@ -4072,6 +4078,7 @@ public final class Settings {
             NOTIFICATION_SOUND,
             STATUS_BAR_BATTERY_STYLE,
             STATUS_BAR_SHOW_BATTERY_PERCENT,
+            ALLOW_LIGHTS
         };
 
         /**
