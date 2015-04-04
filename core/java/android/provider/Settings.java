@@ -4817,6 +4817,12 @@ public final class Settings {
          */
         public static final String QS_EDIT_TOGGLE = "qs_edit_toggle";
 
+	/**
+         * show the membar in recents
+         *  @hide
+         */
+        public static final String SYSTEMUI_RECENTS_MEM_DISPLAY = "systemui_recents_mem_display";
+
         /**
          * Whether to show or hide the multiuser switch
          * @hide
