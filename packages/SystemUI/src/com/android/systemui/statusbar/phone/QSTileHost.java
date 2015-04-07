@@ -50,6 +50,7 @@ import com.android.systemui.qs.tiles.NfcTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.ScreenOffTile;
 import com.android.systemui.qs.tiles.ScreenshotTile;
+import com.android.systemui.qs.tiles.SoundTile;
 import com.android.systemui.qs.tiles.VolumeTile;
 import com.android.systemui.qs.tiles.ScreenshotTile;
 import com.android.systemui.qs.tiles.UsbTetherTile;
@@ -292,6 +293,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (tileSpec.equals("compass")) return new CompassTile(this);
         else if (tileSpec.equals("navbar")) return new NavBarTile(this);
         else if (tileSpec.equals("kernel")) return new KernelAdiutorTile(this);
+        else if (tileSpec.equals("sound")) return new SoundTile(this);
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
         else throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
     }
