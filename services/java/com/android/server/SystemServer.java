@@ -1118,6 +1118,8 @@ public final class SystemServer {
             }
         }
 
+        mSystemServiceManager.setSafeMode(safeMode);
+
         // These are needed to propagate to the runnable below.
         final NetworkManagementService networkManagementF = networkManagement;
         final NetworkStatsService networkStatsF = networkStats;
