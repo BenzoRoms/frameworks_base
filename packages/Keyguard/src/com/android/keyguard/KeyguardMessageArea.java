@@ -124,6 +124,11 @@ class KeyguardMessageArea extends TextView implements SecurityMessageDisplay {
         mTimeout = timeoutMs;
     }
 
+    @Override
+    public boolean isEmpty() {
+        return TextUtils.isEmpty(getText());
+    }
+
     public static SecurityMessageDisplay findSecurityMessageDisplay(View v) {
         KeyguardMessageArea messageArea = (KeyguardMessageArea) v.findViewById(
                 R.id.keyguard_message_area);

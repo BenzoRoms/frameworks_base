@@ -146,6 +146,14 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
                         }
                     }
                 });
+        if (!mSecurityMessageDisplay.isEmpty()) {
+            mDisappearAnimationUtils.createAnimation((KeyguardMessageArea) mSecurityMessageDisplay,
+                    0, 200,
+                    - mDisappearAnimationUtils.getStartTranslation() * 3,
+                    false /* appearing */,
+                    mDisappearAnimationUtils.getInterpolator(),
+                    null /* finishRunnable */);
+        }
         return true;
     }
 
