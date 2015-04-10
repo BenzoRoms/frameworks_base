@@ -26,7 +26,7 @@
         android:showAsAction="always" />
     <item
         android:id="@+id/menu_cut"
-        android:icon="@*android:drawable/ic_menu_cut_material"
+        android:icon="@drawable/ic_menu_cut"
         android:title="@android:string/cut"
         android:showAsAction="always" />
     <item
