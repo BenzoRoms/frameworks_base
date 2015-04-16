@@ -2204,6 +2204,8 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
 
         // TODO: Move somewhere sane. This doesn't belong in onLayout().
         if (mFastScroll != null) {
+            mTouchMode = TOUCH_MODE_SCROLL;
+            updateSelectorState();
             mFastScroll.onItemCountChanged(getChildCount(), mItemCount);
         }
     }
@@ -2840,6 +2842,8 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         case TOUCH_MODE_TAP:
         case TOUCH_MODE_DONE_WAITING:
             return true;
+        case TOUCH_MODE_SCROLL:
+            return false;
         default:
             return false;
         }
