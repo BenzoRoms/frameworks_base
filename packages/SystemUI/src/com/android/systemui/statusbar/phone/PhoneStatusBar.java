@@ -571,6 +571,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             boolean mShow4G = Settings.System.getIntForUser(resolver,
                     Settings.System.SHOW_FOURG, 0, UserHandle.USER_CURRENT) == 1;
+
+            int sidebarPosition = Settings.System.getInt(
+                    resolver, Settings.System.APP_SIDEBAR_POSITION, AppSidebar.SIDEBAR_POSITION_LEFT);
+            if (sidebarPosition != mSidebarPosition) {
+                mSidebarPosition = sidebarPosition;
+                removeSidebarView();
+                addSidebarView();
+            }
         }
     }
 
@@ -3879,14 +3887,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     private void updateSettings() {
-        ContentResolver resolver = mContext.getContentResolver();
-        int sidebarPosition = Settings.System.getInt(resolver,
-                Settings.System.APP_SIDEBAR_POSITION, 
-                AppSidebar.SIDEBAR_POSITION_LEFT);
-        if (sidebarPosition != mSidebarPosition) {
-            mSidebarPosition = sidebarPosition;
-            mWindowManager.updateViewLayout(mAppSidebar, getAppSidebarLayoutParams(sidebarPosition));
-        }
         updateStatusBarLogoColor(false);
         setBenzoLogoVisibility();
         showKeyguardLogo();
