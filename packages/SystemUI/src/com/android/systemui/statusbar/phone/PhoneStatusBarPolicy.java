@@ -48,6 +48,8 @@ import com.android.systemui.statusbar.policy.BluetoothController.Callback;
 import com.android.systemui.statusbar.policy.CastController;
 import com.android.systemui.statusbar.policy.CastController.CastDevice;
 import com.android.systemui.statusbar.policy.HotspotController;
+import com.android.systemui.statusbar.policy.NextAlarmController;
+import com.android.systemui.statusbar.policy.NextAlarmController.NextAlarmChangeCallback;
 import com.android.systemui.statusbar.policy.UserInfoController;
 
 /**
@@ -74,6 +76,7 @@ public class PhoneStatusBarPolicy implements Callback {
     private final Handler mHandler = new Handler();
     private final CastController mCast;
     private final HotspotController mHotspot;
+    private final NextAlarmController mNextAlarm;
     private final AlarmManager mAlarmManager;
     private final UserInfoController mUserInfoController;
     private boolean mAlarmIconVisible;
@@ -98,10 +101,7 @@ public class PhoneStatusBarPolicy implements Callback {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED)) {
-                updateAlarm();
-            }
-            else if (action.equals(AudioManager.RINGER_MODE_CHANGED_ACTION) ||
+            if (action.equals(AudioManager.RINGER_MODE_CHANGED_ACTION) ||
                     action.equals(AudioManager.INTERNAL_RINGER_MODE_CHANGED_ACTION)) {
                 updateVolumeZen();
             }
@@ -126,19 +126,20 @@ public class PhoneStatusBarPolicy implements Callback {
     };
 
     public PhoneStatusBarPolicy(Context context, CastController cast, HotspotController hotspot,
-            UserInfoController userInfoController, BluetoothController bluetooth) {
+            UserInfoController userInfoController, BluetoothController bluetooth,
+            NextAlarmController nextAlarm) {
         mContext = context;
         mCast = cast;
         mHotspot = hotspot;
         mBluetooth = bluetooth;
         mBluetooth.addStateChangedCallback(this);
         mService = (StatusBarManager) context.getSystemService(Context.STATUS_BAR_SERVICE);
+        mNextAlarm = nextAlarm;
         mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         mUserInfoController = userInfoController;
 
         // listen for broadcasts
         IntentFilter filter = new IntentFilter();
-        filter.addAction(AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED);
         filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
         filter.addAction(AudioManager.INTERNAL_RINGER_MODE_CHANGED_ACTION);
         filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
@@ -166,6 +167,7 @@ public class PhoneStatusBarPolicy implements Callback {
         // Alarm clock
         mService.setIcon(SLOT_ALARM_CLOCK, R.drawable.stat_sys_alarm, 0, null);
         mService.setIconVisibility(SLOT_ALARM_CLOCK, false);
+        mNextAlarm.addStateChangedCallback(mNextAlarmCallback);
         mAlarmIconObserver.onChange(true);
         mContext.getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.SHOW_ALARM_ICON),
@@ -469,7 +471,6 @@ public class PhoneStatusBarPolicy implements Callback {
 
                 @Override
                 public void onUserSwitchComplete(int newUserId) throws RemoteException {
-                    updateAlarm();
                     profileChanged(newUserId);
                 }
 
@@ -490,6 +491,14 @@ public class PhoneStatusBarPolicy implements Callback {
         @Override
         public void onCastDevicesChanged() {
             updateCast();
+        }
+    };
+
+    private final NextAlarmController.NextAlarmChangeCallback mNextAlarmCallback =
+            new NextAlarmController.NextAlarmChangeCallback() {
+        @Override
+        public void onNextAlarmChanged(AlarmManager.AlarmClockInfo nextAlarm) {
+            updateAlarm();
         }
     };
 
