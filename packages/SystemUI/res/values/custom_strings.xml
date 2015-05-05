@@ -35,4 +35,6 @@
     <!-- Smart PullDown Warning -->
     <string name="smart_pulldown_disabled">Smart pulldown is disabled</string>
 
+    <string name="gestures_message">Draw your gesture here</string>
+
 </resources>
