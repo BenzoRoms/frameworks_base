@@ -248,4 +248,11 @@
     <!-- Android Auto 2.0x QS tile -->
     <string name="quick_settings_androidauto_label">Android Auto</string>
 
+    <!-- PA Pie controls -->
+    <string name="pie_date_format" translatable="false">ccc, dd MMM yyyy</string>
+    <string name="pie_hour_format_12">hh:mm</string>
+    <string name="pie_hour_format_24">HH:mm</string>
+    <string name="pie_am_pm">a</string>
+    <string name="app_killed_message">App Killed</string>
+
 </resources>

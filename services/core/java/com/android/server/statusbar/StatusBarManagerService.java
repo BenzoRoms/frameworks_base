@@ -659,6 +659,50 @@ public class StatusBarManagerService extends IStatusBarService.Stub {
         }
     }
 
+    @Override
+    public void toggleRecentApps() {
+        if (mBar != null) {
+            try {
+                mBar.toggleRecentApps();
+            } catch (RemoteException ex) {}
+        }
+    }
+
+    public void toggleLastApp() {
+        if (mBar != null) {
+            try {
+                mBar.toggleLastApp();
+            } catch (RemoteException ex) {}
+        }
+    }
+
+    @Override
+    public void toggleKillApp() {
+        if (mBar != null) {
+            try {
+                mBar.toggleKillApp();
+            } catch (RemoteException ex) {}
+        }
+    }
+
+    @Override
+    public void toggleScreenshot() {
+        if (mBar != null) {
+            try {
+                mBar.toggleScreenshot();
+            } catch (RemoteException ex) {}
+        }
+    }
+
+    @Override
+    public void toggleOrientationListener(boolean enable) {
+        if (mBar != null) {
+            try {
+                mBar.toggleOrientationListener(enable);
+            } catch (RemoteException ex) {}
+        }
+    }
+
     private void enforceStatusBarOrShell() {
         if (Binder.getCallingUid() == Process.SHELL_UID) {
             return;

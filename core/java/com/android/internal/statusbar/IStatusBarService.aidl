@@ -68,4 +68,9 @@ interface IStatusBarService
     void clickTile(in ComponentName tile);
     void handleSystemNavigationKey(in int key);
     void setAutoRotate(boolean enabled);
+    void toggleRecentApps();
+    void toggleLastApp();
+    void toggleKillApp();
+    void toggleScreenshot();
+    void toggleOrientationListener(boolean enable);
 }
