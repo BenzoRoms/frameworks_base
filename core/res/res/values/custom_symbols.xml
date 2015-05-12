@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-<<<<<<< HEAD
      Copyright (C) 2015 Benzo Rom
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +26,7 @@
   <java-symbol type="bool" name="config_multiColorBatteryLed" />
   <java-symbol type="array" name="notification_light_package_mapping" />
   <java-symbol type="array" name="config_notificationNoAlertsVibePattern" />
+  <java-symbol type="integer" name="config_notificationsBatteryReallyFullARGB" />
 
   <!-- Package Manager -->
   <java-symbol type="array" name="config_disabledComponents" />
