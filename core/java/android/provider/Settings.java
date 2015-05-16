@@ -7306,6 +7306,14 @@ public final class Settings {
          */
         public static final String PAYMENT_SERVICE_SEARCH_URI = "payment_service_search_uri";
 
+
+        /**
+         * Whether the reboot submenu at the power menu should trigger actions with a
+         * single click or with a confirmation.
+         * @hide
+         */
+        public static final String ADVANCED_REBOOT_ONECLICK = "advanced_reboot_oneclick";
+
         /**
          * If enabled, apps should try to skip any introductory hints on first launch. This might
          * apply to users that are already familiar with the environment or temporary users.
