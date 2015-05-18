@@ -232,4 +232,16 @@
   <java-symbol type="string" name="floating_window_snap_right"/>
   <java-symbol type="string" name="floating_window_minimize"/>
 
+  <!-- Pie controls -->
+  <java-symbol type="string" name="global_actions_pie_mode_on_status" />
+  <java-symbol type="string" name="global_actions_pie_mode_off_status" />
+  <java-symbol type="drawable" name="ic_lock_pie" />
+  <java-symbol type="string" name="disable_pie_navigation_error" />
+
+  <!-- Navigation bar -->
+  <java-symbol type="string" name="global_actions_nav_bar_mode_on_status" />
+  <java-symbol type="string" name="global_actions_nav_bar_mode_off_status" />
+  <java-symbol type="drawable" name="ic_lock_navbar" />
+  <java-symbol type="string" name="disable_navigation_pie_error" />
+
 </resources>

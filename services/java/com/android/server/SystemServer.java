@@ -1014,6 +1014,14 @@ public final class SystemServer {
             } catch (Throwable e) {
                 Slog.e(TAG, "Failure starting EdgeGesture service", e);
             }
+
+            try {
+                Slog.i(TAG, "EdgeGesture service");
+                edgeGestureService = new EdgeGestureService(context, inputManager);
+                ServiceManager.addService("edgegestureservice", edgeGestureService);
+            } catch (Throwable e) {
+                Slog.e(TAG, "Failure starting EdgeGesture service", e);
+            }
         }
 
         if (!disableNonCoreServices) {

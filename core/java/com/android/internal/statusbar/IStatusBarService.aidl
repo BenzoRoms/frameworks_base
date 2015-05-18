@@ -63,6 +63,7 @@ interface IStatusBarService
     void setSystemUiVisibility(int vis, int mask, String cause);
     void setWindowState(int window, int state);
 
+    void setPieTriggerMask(int newMask, boolean lock);
     void showRecentApps(boolean triggeredFromAltTab);
     void hideRecentApps(boolean triggeredFromAltTab, boolean triggeredFromHomeKey);
     void toggleRecentApps();
