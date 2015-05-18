@@ -205,6 +205,23 @@ public class EdgeGestureInputFilter implements IInputFilter {
         mSensitivity = sensitivity;
     }
 
+    public void setImeIsActive(boolean enabled) {
+        synchronized (mLock) {
+            if (mTracker != null) {
+                mTracker.setImeIsActive(enabled);
+            }
+        }
+    }
+
+    // called from handler thread
+    public void setOverwriteImeIsActive(boolean enabled) {
+        synchronized (mLock) {
+            if (mTracker != null) {
+                mTracker.setOverwriteImeIsActive(enabled);
+            }
+        }
+    }
+
     // called from handler thread
     public boolean unlockFilter() {
         synchronized (mLock) {

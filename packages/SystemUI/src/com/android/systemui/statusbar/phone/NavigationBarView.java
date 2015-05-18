@@ -73,6 +73,7 @@ import com.android.internal.util.slim.ActionHelper;
 import com.android.internal.util.slim.ImageHelper;
 import com.android.internal.util.slim.DeviceUtils;
 import com.android.systemui.R;
+import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.policy.DeadZone;
 import com.android.systemui.statusbar.policy.KeyButtonView;
 
@@ -83,7 +84,7 @@ import java.util.ArrayList;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NavigationBarView extends LinearLayout {
+public class NavigationBarView extends LinearLayout implements BaseStatusBar.NavigationBarCallback {
     final static boolean DEBUG = false;
     final static String TAG = "PhoneStatusBar/NavigationBarView";
 
@@ -804,6 +805,7 @@ public class NavigationBarView extends LinearLayout {
         }
     }
 
+    @Override
     public void setNavigationIconHints(int hints) {
         setNavigationIconHints(hints, false);
     }
@@ -836,6 +838,7 @@ public class NavigationBarView extends LinearLayout {
         setDisabledFlags(mDisabledFlags, true);
     }
 
+    @Override
     public void setDisabledFlags(int disabledFlags) {
         setDisabledFlags(disabledFlags, false);
     }
@@ -978,6 +981,7 @@ public class NavigationBarView extends LinearLayout {
         }
     }
 
+    @Override
     public void setMenuVisibility(final boolean show) {
         setMenuVisibility(show, false);
     }
@@ -1435,6 +1439,15 @@ public class NavigationBarView extends LinearLayout {
         // construct the navigationbar
         if (recreate) {
             makeBar();
+        }
+    }
+
+    public void setForgroundColor(Drawable drawable) {
+        if (mRot0 != null) {
+            mRot0.setForeground(drawable);
+        }
+        if (mRot90 != null) {
+            mRot90.setForeground(drawable);
         }
     }
 

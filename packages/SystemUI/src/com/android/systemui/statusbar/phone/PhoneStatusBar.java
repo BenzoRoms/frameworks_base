@@ -516,6 +516,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_CUSTOM_HEADER_SHADOW),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.PIE_CONTROLS), false, this,
+                    UserHandle.USER_ALL);
             update();
         }
 
@@ -533,6 +536,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     || uri.equals(Settings.System.getUriFor(
                     Settings.System.ACCELEROMETER_ROTATION))) {
                 mStatusBarWindowManager.updateKeyguardScreenRotation();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.PIE_CONTROLS))) {
+                attachPieContainer(isPieEnabled());
             }
             super.onChange(selfChange, uri);
 
@@ -629,6 +635,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
             mHeader.settingsChanged();
         }
+    }
+
+    private boolean isPieEnabled() {
+        return Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_CONTROLS, 0,
+                UserHandle.USER_CURRENT) == 1;
     }
 
     private void loadShowBatteryTextSetting() {
@@ -1029,6 +1041,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     R.id.header_debug_info);
             mNotificationPanelDebugText.setVisibility(View.VISIBLE);
         }*/
+
+        // Setup pie container if enabled
+        attachPieContainer(isPieEnabled());
 
         if (mNavigationBarView == null) {
             mNavigationBarView =
@@ -1489,6 +1504,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         prepareNavigationBarView();
 
         mWindowManager.addView(mNavigationBarView, getNavigationBarLayoutParams());
+        mNavigationBarOverlay.setNavigationBar(mNavigationBarView);
     }
 
     private void repositionNavigationBar() {
@@ -2262,8 +2278,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                         | StatusBarManager.DISABLE_RECENT
                         | StatusBarManager.DISABLE_BACK
                         | StatusBarManager.DISABLE_SEARCH)) != 0) {
-            // the nav bar will take care of these
-            if (mNavigationBarView != null) mNavigationBarView.setDisabledFlags(state1);
+            // All navigation bar listeners will take care of these
+            propagateDisabledFlags(state1);
 
             if ((state1 & StatusBarManager.DISABLE_RECENT) != 0) {
                 // close recents if it's visible
@@ -2826,9 +2842,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         mNavigationIconHints = hints;
 
-        if (mNavigationBarView != null) {
-            mNavigationBarView.setNavigationIconHints(hints);
-        }
+        propagateNavigationIconHints(hints);
         checkBarModes();
     }
 
