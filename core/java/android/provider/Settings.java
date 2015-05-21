@@ -3585,6 +3585,12 @@ public final class Settings {
         public static final String DIALER_OPENCNAM_AUTH_TOKEN = "dialer_opencnam_auth_token";
 
         /**
+         * Enable built in CAF task manager
+         * @hide
+         */
+        public static final String ENABLE_TASK_MANAGER = "enable_task_manager";
+
+        /**
          * I am the lolrus.
          * <p>
          * Nonzero values indicate that the user has a bukkit.
