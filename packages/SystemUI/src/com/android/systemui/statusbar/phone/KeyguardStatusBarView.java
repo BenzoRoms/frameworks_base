@@ -149,6 +149,10 @@ public class KeyguardStatusBarView extends RelativeLayout {
         mMultiUserSwitch.setKeyguardMode(keyguardSwitcherAvailable);
     }
 
+    public void setActivityStarter(ActivityStarter activityStarter) {
+        mMultiUserSwitch.setActivityStarter(activityStarter);
+    }
+
     public void setBatteryController(BatteryController batteryController) {
         mBatteryController = batteryController;
         ((BatteryMeterView) findViewById(R.id.battery)).setBatteryController(batteryController);
