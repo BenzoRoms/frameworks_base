@@ -3382,6 +3382,12 @@ public final class Settings {
         public static final Validator DOUBLE_TAP_SLEEP_NAVBAR_VALIDATOR = sBooleanValidator;
 
         /**
+         * Enable double tap gesture anywhere on the lock screen put device to sleep
+         * @hide
+         */
+        public static final String DOUBLE_TAP_SLEEP_LOCK_SCREEN = "double_tap_sleep_lock_screen";
+
+        /**
          * Status bar carrier label
          * 0: Hide
          * 1: Display on keyguard status bar
