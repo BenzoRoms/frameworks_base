@@ -140,6 +140,7 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         mAlarmStatus.setOnClickListener(this);
 
         mMultiUserSwitch = (MultiUserSwitch) findViewById(R.id.multi_user_switch);
+        mMultiUserSwitch.setOnLongClickListener(this);
         mMultiUserAvatar = (ImageView) mMultiUserSwitch.findViewById(R.id.multi_user_avatar);
 
         mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
@@ -392,6 +393,8 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
             startDateLongClickActivity();
         } else if (v == mSettingsButton) {
             startBenzoExtrasActivity();
+        } else if (v == mMultiUserSwitch) {
+            startUserLongClickActivity();
         }
         vibrateheader(20);
         return false;
@@ -428,6 +431,13 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
     private void startDateLongClickActivity() {
         Intent intent = new Intent(Intent.ACTION_INSERT);
             intent.setData(Events.CONTENT_URI);
+        mActivityStarter.startActivity(intent, true /* dismissShade */);
+    }
+
+    private void startUserLongClickActivity() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setClassName("com.android.settings",
+            "com.android.settings.Settings$UserSettingsActivity");
         mActivityStarter.startActivity(intent, true /* dismissShade */);
     }
 
