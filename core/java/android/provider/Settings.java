@@ -5198,6 +5198,12 @@ public final class Settings {
         public static final String DEVELOPMENT_SHORTCUT = "development_shortcut";
 
         /**
+         * Launch Appsidebar in floating window
+         * @hide
+         */
+        public static final String APPSIDEBAR_FLOATING = "appsidebar_floating";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
