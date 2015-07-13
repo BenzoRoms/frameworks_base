@@ -4811,6 +4811,12 @@ public final class Settings {
         public static final String ANIMATION_IME_INTERPOLATOR = "animation_ime_interpolator";
 
         /**
+         * Launch Appsidebar in floating window
+         * @hide
+         */
+        public static final String APPSIDEBAR_FLOATING = "appsidebar_floating";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
