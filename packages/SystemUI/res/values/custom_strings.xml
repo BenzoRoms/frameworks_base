@@ -242,6 +242,8 @@
     <string name="pie_hour_format_12">hh:mm</string>
     <string name="pie_hour_format_24">HH:mm</string>
     <string name="pie_am_pm">a</string>
+    <string name="quick_settings_piecontrol_on">Pie On</string>
+    <string name="quick_settings_piecontrol_label">Pie</string>
 
     <!-- Kill app toast -->
     <string name="app_killed_message">App Killed</string>
