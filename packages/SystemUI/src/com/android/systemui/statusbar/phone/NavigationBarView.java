@@ -80,6 +80,8 @@ public class NavigationBarView extends LinearLayout {
     // slippery nav bar when everything is disabled, e.g. during setup
     final static boolean SLIPPERY_WHEN_DISABLED = true;
 
+    private boolean mIsHandlerCallbackActive = false;
+
     final Display mDisplay;
     View mCurrentView = null;
     View[] mRotatedViews = new View[4];
@@ -214,7 +216,10 @@ public class NavigationBarView extends LinearLayout {
     };
 
     public void onNavButtonTouched() {
-        mHandler.removeCallbacks(mNavButtonDimmer);
+        if (mIsHandlerCallbackActive) {
+            mHandler.removeCallbacks(mNavButtonDimmer);
+            mIsHandlerCallbackActive = false;
+        }
         final boolean keyguardProbablyEnabled =
                 (mDisabledFlags & View.STATUS_BAR_DISABLE_HOME) != 0;
         if (getNavButtons() != null) {
@@ -227,6 +232,7 @@ public class NavigationBarView extends LinearLayout {
             }
             if (mDimNavButtons && !keyguardProbablyEnabled) {
                 mHandler.postDelayed(mNavButtonDimmer, mDimNavButtonsTimeout);
+                mIsHandlerCallbackActive = true;
             }
         }
     }
@@ -981,6 +987,7 @@ public class NavigationBarView extends LinearLayout {
                     UserHandle.USER_CURRENT);
             mDimNavButtonsTouchAnywhere = (Settings.System.getIntForUser(resolver,
                     Settings.System.DIM_NAV_BUTTONS_TOUCH_ANYWHERE, 0,
+                    UserHandle.USER_CURRENT) == 1);
             mDoubleTapToSleep = (Settings.System.getIntForUser(resolver,
                     Settings.System.DOUBLE_TAP_SLEEP_NAVBAR, 0,
                     UserHandle.USER_CURRENT) == 1);
@@ -989,6 +996,7 @@ public class NavigationBarView extends LinearLayout {
 
     private Runnable mNavButtonDimmer = new Runnable() {
         public void run() {
+            mIsHandlerCallbackActive = false;
             if (getNavButtons() != null && mIsDim == false) {
                 mIsDim = true;
                 if (mDimNavButtonsAnimate) {
