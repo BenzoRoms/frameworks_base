@@ -52,6 +52,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -362,6 +363,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     // Benzo Rom logo
     private boolean mBrLogo;
+    private int mBrLogoColor;
     private ImageView brLogo;
 
     // top bar
@@ -499,6 +501,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_BR_LOGO),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BR_LOGO_COLOR),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -602,7 +607,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             mBrLogo = Settings.System.getIntForUser(resolver,
                     Settings.System.STATUS_BAR_BR_LOGO, 0, mCurrentUserId) == 1;
-            showBrLogo(mBrLogo);
+            mBrLogoColor = Settings.System.getIntForUser(resolver,
+                    Settings.System.STATUS_BAR_BR_LOGO_COLOR, 0xFFFFFFFF, mCurrentUserId);
+            showBrLogo(mBrLogo, mBrLogoColor);
 
             int sidebarPosition = Settings.System.getInt(
                     resolver, Settings.System.APP_SIDEBAR_POSITION, AppSidebar.SIDEBAR_POSITION_LEFT);
@@ -3498,10 +3505,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 	}
     }
 
-    public void showBrLogo(boolean show) {
+    public void showBrLogo(boolean show, int color) {
         if (mStatusBarView == null) return;
         ContentResolver resolver = mContext.getContentResolver();
         brLogo = (ImageView) mStatusBarView.findViewById(R.id.br_logo);
+        brLogo.setColorFilter(color, Mode.SRC_IN);
         if (brLogo != null) {
             brLogo.setVisibility(show ? (mBrLogo ? View.VISIBLE : View.GONE) : View.GONE);
         }

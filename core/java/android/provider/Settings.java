@@ -4737,6 +4737,12 @@ public final class Settings {
         public static final String STATUS_BAR_BR_LOGO = "status_bar_br_logo";
 
         /**
+         * Statusbar Benzo Rom logo color setting
+         * @hide
+         */
+        public static final String STATUS_BAR_BR_LOGO_COLOR = "status_bar_br_logo_color";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
