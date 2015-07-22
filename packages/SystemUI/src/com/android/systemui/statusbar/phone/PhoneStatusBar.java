@@ -337,6 +337,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     // 4G instead of LTE
     private boolean mShow4G;
 
+    // Benzo Rom logo
+    private boolean mBrLogo;
+    private ImageView brLogo;
+
     // top bar
     StatusBarHeaderView mHeader;
     KeyguardStatusBarView mKeyguardStatusBar;
@@ -506,6 +510,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.BATTERY_SAVER_MODE_COLOR),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BR_LOGO),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -611,6 +618,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             boolean mShow4G = Settings.System.getIntForUser(resolver,
                     Settings.System.SHOW_FOURG, 0, UserHandle.USER_CURRENT) == 1;
+
+            mBrLogo = Settings.System.getIntForUser(resolver,
+                    Settings.System.STATUS_BAR_BR_LOGO, 0, mCurrentUserId) == 1;
+            showBrLogo(mBrLogo);
 
             int sidebarPosition = Settings.System.getInt(
                     resolver, Settings.System.APP_SIDEBAR_POSITION, AppSidebar.SIDEBAR_POSITION_LEFT);
@@ -3471,6 +3482,15 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
         }
     };
+
+    public void showBrLogo(boolean show) {
+        if (mStatusBarView == null) return;
+        ContentResolver resolver = mContext.getContentResolver();
+        brLogo = (ImageView) mStatusBarView.findViewById(R.id.br_logo);
+        if (brLogo != null) {
+            brLogo.setVisibility(show ? (mBrLogo ? View.VISIBLE : View.GONE) : View.GONE);
+        }
+    }
 
     private void resetUserExpandedStates() {
         ArrayList<Entry> activeNotifications = mNotificationData.getActiveNotifications();
