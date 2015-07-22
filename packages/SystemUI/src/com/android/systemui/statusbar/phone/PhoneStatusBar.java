@@ -360,6 +360,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     // task manager click state
     private boolean mShowTaskList = false;
 
+    // Benzo Rom logo
+    private boolean mBrLogo;
+    private ImageView brLogo;
+
     // top bar
     StatusBarHeaderView mHeader;
     KeyguardStatusBarView mKeyguardStatusBar;
@@ -492,6 +496,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.RECENT_CARD_TEXT_COLOR), false, this,
                     UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BR_LOGO),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -592,6 +599,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mShowStatusBarCarrier = Settings.System.getIntForUser(resolver,
                     Settings.System.STATUS_BAR_CARRIER, 0, mCurrentUserId) == 1;
             showStatusBarCarrierLabel(mShowStatusBarCarrier);	
+
+            mBrLogo = Settings.System.getIntForUser(resolver,
+                    Settings.System.STATUS_BAR_BR_LOGO, 0, mCurrentUserId) == 1;
+            showBrLogo(mBrLogo);
 
             int sidebarPosition = Settings.System.getInt(
                     resolver, Settings.System.APP_SIDEBAR_POSITION, AppSidebar.SIDEBAR_POSITION_LEFT);
@@ -3485,6 +3496,15 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (statusBarCarrierLabel != null) {
             statusBarCarrierLabel.setVisibility(show ? (mShowStatusBarCarrier ? View.VISIBLE : View.GONE) : View.GONE);
 	}
+    }
+
+    public void showBrLogo(boolean show) {
+        if (mStatusBarView == null) return;
+        ContentResolver resolver = mContext.getContentResolver();
+        brLogo = (ImageView) mStatusBarView.findViewById(R.id.br_logo);
+        if (brLogo != null) {
+            brLogo.setVisibility(show ? (mBrLogo ? View.VISIBLE : View.GONE) : View.GONE);
+        }
     }
 
     private void resetUserExpandedStates() {
