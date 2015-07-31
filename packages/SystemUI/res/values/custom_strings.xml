@@ -139,6 +139,8 @@
     <string name="accessibility_quick_settings_caffeine_on">Caffeine on</string>
     <!-- Benzo Extra Tile -->
     <string name="quick_settings_benzosettings">Benzo</string>
+    <!-- Kernel QS Tile -->
+    <string name="quick_settings_kernel_adiutor_label">Kernel</string>
 
     <!-- 4G LTE switch -->
     <string name="show_fourg_title">Show 4G instead of LTE</string>
