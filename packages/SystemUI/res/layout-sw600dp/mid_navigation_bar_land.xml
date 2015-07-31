@@ -91,6 +91,12 @@
             android:layout_height="match_parent"
             android:layout_weight="0"
             systemui:keyRepeat="true" />
+        <com.android.systemui.statusbar.policy.KeyButtonView
+            android:id="@+id/six"
+            android:layout_width="162dp" android:paddingLeft="42dp" android:paddingRight="42dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            systemui:keyRepeat="true" />
     </LinearLayout>
     <View
         android:layout_width="0dp"
@@ -108,7 +114,7 @@
             android:scaleType="fitCenter"
             systemui:keyRepeat="true"/>
         <com.android.systemui.statusbar.policy.KeyButtonView
-            android:id="@+id/six"
+            android:id="@+id/sev"
             android:layout_width="48dp"
             android:layout_height="match_parent"
             android:layout_weight="0"
