@@ -29,4 +29,4 @@
         android:drawableLeft="@drawable/ic_actionbar_accept"
         android:drawablePadding="8dp"
         android:gravity="center_vertical"
-        android:text="@string/wallpaper_instructions"/>
+        android:text="@string/keyguard_wallpaper_instructions" />
