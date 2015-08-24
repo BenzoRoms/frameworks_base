@@ -24,4 +24,7 @@
     <color name="dexopt_progressTint">#ff607d8b</color>
     <color name="dexopt_progressBackgroundTint">#ff607d8b</color>
 
+    <color name="color_control_normal_default_material_light">#8a000000</color>
+    <color name="color_control_normal_default_material_dark">#b3ffffff</color>
+
 </resources>
