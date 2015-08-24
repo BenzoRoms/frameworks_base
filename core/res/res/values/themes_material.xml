@@ -149,7 +149,7 @@ please see themes_device_defaults.xml.
         <item name="galleryItemBackground">@drawable/gallery_item_background</item>
 
         <!-- Window attributes -->
-        <item name="windowBackground">?attr/colorBackground</item>
+        <item name="windowBackground">@color/window_background_color_dark</item>
         <item name="windowClipToOutline">true</item>
         <item name="windowFrame">@null</item>
         <item name="windowNoTitle">false</item>
@@ -157,7 +157,7 @@ please see themes_device_defaults.xml.
         <item name="windowOverscan">false</item>
         <item name="windowIsFloating">false</item>
         <item name="windowContentOverlay">@null</item>
-        <item name="windowShowWallpaper">false</item>
+        <item name="windowShowWallpaper">@bool/config_windowShowWallpaper</item>
         <item name="windowTitleStyle">@style/WindowTitle.Material</item>
         <item name="windowTitleSize">@dimen/action_bar_default_height_material</item>
         <item name="windowTitleBackgroundStyle">@style/WindowTitleBackground.Material</item>
@@ -198,7 +198,7 @@ please see themes_device_defaults.xml.
         <item name="panelBackground">?attr/colorBackground</item>
         <item name="panelFullBackground">@drawable/menu_background_fill_parent_width</item>
         <!-- These three attributes do not seems to be used by the framework. Declared public though -->
-        <item name="panelColorBackground">#000</item>
+        <item name="panelColorBackground">@color/panel_color_background</item>
         <item name="panelColorForeground">?attr/textColorPrimary</item>
         <item name="panelTextAppearance">?attr/textAppearance</item>
 
@@ -505,7 +505,7 @@ please see themes_device_defaults.xml.
         <item name="galleryItemBackground">@drawable/gallery_item_background</item>
 
         <!-- Window attributes -->
-        <item name="windowBackground">?attr/colorBackground</item>
+        <item name="windowBackground">@color/window_background_color_light</item>
         <item name="windowClipToOutline">true</item>
         <item name="windowFrame">@null</item>
         <item name="windowNoTitle">false</item>
@@ -513,7 +513,7 @@ please see themes_device_defaults.xml.
         <item name="windowOverscan">false</item>
         <item name="windowIsFloating">false</item>
         <item name="windowContentOverlay">@null</item>
-        <item name="windowShowWallpaper">false</item>
+        <item name="windowShowWallpaper">@bool/config_windowShowWallpaper</item>
         <item name="windowTitleStyle">@style/WindowTitle.Material</item>
         <item name="windowTitleSize">@dimen/action_bar_default_height_material</item>
         <item name="windowTitleBackgroundStyle">@style/WindowTitleBackground.Material</item>
@@ -554,7 +554,7 @@ please see themes_device_defaults.xml.
         <item name="panelBackground">?attr/colorBackground</item>
         <item name="panelFullBackground">@drawable/menu_background_fill_parent_width</item>
         <!-- These three attributes do not seems to be used by the framework. Declared public though -->
-        <item name="panelColorBackground">#000</item>
+        <item name="panelColorBackground">@color/panel_color_background</item>
         <item name="panelColorForeground">?attr/textColorPrimary</item>
         <item name="panelTextAppearance">?attr/textAppearance</item>
 

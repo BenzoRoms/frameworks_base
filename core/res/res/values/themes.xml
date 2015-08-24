@@ -182,7 +182,7 @@ please see themes_device_defaults.xml.
         <item name="windowOverscan">false</item>
         <item name="windowIsFloating">false</item>
         <item name="windowContentOverlay">@null</item>
-        <item name="windowShowWallpaper">false</item>
+        <item name="windowShowWallpaper">@bool/config_windowShowWallpaper</item>
         <item name="windowTitleStyle">@style/WindowTitle</item>
         <item name="windowTitleSize">25dip</item>
         <item name="windowTitleBackgroundStyle">@style/WindowTitleBackground</item>
@@ -231,7 +231,7 @@ please see themes_device_defaults.xml.
         <item name="panelBackground">@drawable/menu_background</item>
         <item name="panelFullBackground">@drawable/menu_background_fill_parent_width</item>
         <!-- These three attributes do not seems to be used by the framework. Declared public though -->
-        <item name="panelColorBackground">#000</item>
+        <item name="panelColorBackground">@color/panel_color_background</item>
         <item name="panelColorForeground">?attr/textColorPrimary</item>
         <item name="panelTextAppearance">?attr/textAppearance</item>
 
