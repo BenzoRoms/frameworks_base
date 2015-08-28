@@ -412,13 +412,15 @@ public class Toast {
                 }
 
                 ImageView appIcon = (ImageView) mView.findViewById(android.R.id.icon);
-                if (appIcon != null) {
-                    PackageManager pm = context.getPackageManager();
-                    try {
-                        Drawable icon = pm.getApplicationIcon(packageName);
-                        appIcon.setImageDrawable(icon);
-                    } catch (PackageManager.NameNotFoundException e) {
-                        // Empty
+                if ((Settings.System.getInt(context.getContentResolver(), Settings.System.TOAST_ICON, 1) == 1)) {
+                    if (appIcon != null) {
+                        PackageManager pm = context.getPackageManager();
+                        try {
+                            Drawable icon = pm.getApplicationIcon(packageName);
+                            appIcon.setImageDrawable(icon);
+                        } catch (PackageManager.NameNotFoundException e) {
+                            // Empty
+                        }
                     }
                 }
                 mWM = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
