@@ -1120,6 +1120,14 @@ public final class SystemServer {
                 Slog.i(TAG, "WebViewFactory preparation");
                 WebViewFactory.prepareWebViewInSystemServer();
 
+                // Start Nfc before SystemUi to ensure NfcTile and other apps gets a
+                // valid NfcAdapter from NfcManager
+                try {
+                    startNfcService(context);
+                } catch (Throwable e) {
+                    reportWtf("starting Nfc service", e);
+                }
+
                 try {
                     startSystemUi(context);
                 } catch (Throwable e) {
@@ -1238,4 +1246,12 @@ public final class SystemServer {
         //Slog.d(TAG, "Starting service: " + intent);
         context.startServiceAsUser(intent, UserHandle.OWNER);
     }
+
+    static final void startNfcService(Context context) {
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName("com.android.nfc",
+                    "com.android.nfc.NfcBootstrapService"));
+        context.startServiceAsUser(intent, UserHandle.OWNER);
+    }
+
 }
