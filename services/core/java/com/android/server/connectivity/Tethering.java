@@ -334,12 +334,32 @@ public class Tethering extends BaseNetworkObserver {
             sm = mIfaces.get(iface);
         }
         if (sm == null) {
+            Log.e(TAG, "Check again if interface is up");
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+                Log.e(TAG, "Exception in tether!");
+            }
+            synchronized (mPublicSync) {
+                sm = mIfaces.get(iface);
+            }
+        }
+        if (sm == null) {
             Log.e(TAG, "Tried to Tether an unknown iface :" + iface + ", ignoring");
             return ConnectivityManager.TETHER_ERROR_UNKNOWN_IFACE;
         }
         if (!sm.isAvailable() && !sm.isErrored()) {
             Log.e(TAG, "Tried to Tether an unavailable iface :" + iface + ", ignoring");
-            return ConnectivityManager.TETHER_ERROR_UNAVAIL_IFACE;
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+                Log.e(TAG, "Exception in tether!");
+            }
+            if (!sm.isAvailable() && !sm.isErrored()) {
+                Log.e(TAG, " Tried to Tether an unavailable iface :" + iface +
+                " on second try, ignoring");
+                return ConnectivityManager.TETHER_ERROR_UNAVAIL_IFACE;
+            }
         }
         sm.sendMessage(TetherInterfaceSM.CMD_TETHER_REQUESTED);
         return ConnectivityManager.TETHER_ERROR_NO_ERROR;
