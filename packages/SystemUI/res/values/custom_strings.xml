@@ -20,4 +20,18 @@
          all of the currently visible notifications. [CHAR LIMIT=10]-->
    <string name="clear_recents">Close all recent</string>
 
+    <!-- Quick settings -->
+    <string name="quick_settings_brightness_label">Brightness</string>
+    <string name="quick_settings_screen_off_label">Screen off</string>
+    <string name="quick_settings_screenshot_label">Screenshot</string>
+
+    <!-- Content description of the brightness tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_brightness">Volume panel.</string>
+
+    <!-- Content description of the screen off tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_screen_off">Screen off.</string>
+
+    <!-- Content description of the screenshot tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_screenshot">Screenshot.</string>
+
 </resources>
