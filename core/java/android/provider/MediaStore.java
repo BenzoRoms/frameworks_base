@@ -37,6 +37,7 @@ import android.os.ParcelFileDescriptor;
 import android.service.media.CameraPrewarmService;
 import android.util.Log;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -1398,18 +1399,6 @@ public final class MediaStore {
         }
 
         public static final class Media implements AudioColumns {
-
-            private static final String[] EXTERNAL_PATHS;
-
-            static {
-                String secondary_storage = System.getenv("SECONDARY_STORAGE");
-                if (secondary_storage != null) {
-                    EXTERNAL_PATHS = secondary_storage.split(":");
-                } else {
-                    EXTERNAL_PATHS = new String[0];
-                }
-            }
-
             /**
              * Get the content:// style URI for the audio media table on the
              * given volume.
@@ -1423,10 +1412,12 @@ public final class MediaStore {
             }
 
             public static Uri getContentUriForPath(String path) {
-                for (String ep : EXTERNAL_PATHS) {
-                    if (path.startsWith(ep)) {
-                        return EXTERNAL_CONTENT_URI;
-                    }
+                File file = new File(path);
+                String state = Environment.getExternalStorageState(file);
+                if (Environment.MEDIA_MOUNTED.equals(state) ||
+                        Environment.MEDIA_MOUNTED_READ_ONLY.equals(state) ||
+                        Environment.MEDIA_SHARED.equals(state)) {
+                    return EXTERNAL_CONTENT_URI;
                 }
 
                 return (path.startsWith(Environment.getExternalStorageDirectory().getPath()) ?
