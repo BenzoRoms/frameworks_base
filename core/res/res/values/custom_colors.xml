@@ -18,6 +18,9 @@
 <!-- Colors specific to Material themes. -->
 <resources>
 
+     <color name="dark_material_dialog_background">#ff212021</color>
+     <drawable name="dark_material_bg">@color/dark_material_dialog_background</drawable>
+
     <color name="color_control_normal_default_material_light">@color/secondary_text_default_material_light</color>
     <color name="color_control_normal_default_material_dark">@color/secondary_text_default_material_dark</color>
 
