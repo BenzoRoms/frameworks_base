@@ -193,7 +193,7 @@ public class RecentsActivity extends Activity implements RecentsView.RecentsView
         // reconstructing the task stack
 
         boolean mRecentsSearchbar = Settings.System.getInt(
-                getContentResolver(), Settings.System.RECENTS_SEARCH_BAR, 1) == 1;
+                getContentResolver(), Settings.System.RECENTS_SEARCH_BAR, 0) == 1;
         RecentsTaskLoader loader = RecentsTaskLoader.getInstance();
         RecentsTaskLoadPlan plan = Recents.consumeInstanceLoadPlan();
         if (plan == null) {
