@@ -1570,7 +1570,7 @@ public class AudioService extends IAudioService.Stub {
                     TAG + ".onSetStreamVolume", false /*external*/);
         }
         // setting non-zero volume for a muted stream unmutes the stream and vice versa
-        mStreamStates[stream].mute(index == 0);
+        mStreamStates[stream].mute(mStreamStates[stream].getValidIndex(index) == 0);
     }
 
     /** @see AudioManager#setStreamVolume(int, int, int) */
