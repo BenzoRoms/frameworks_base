@@ -23,7 +23,11 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
+import android.net.Uri;
 import android.os.Vibrator;
+import android.provider.AlarmClock;
+import android.provider.CalendarContract;
+import android.provider.CalendarContract.Events;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -116,8 +120,10 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         mDateTimeGroup.setPivotY(0);
         mClock = findViewById(R.id.clock);
         mClock.setOnClickListener(this);
+        mClock.setOnLongClickListener(this);
         mDate = findViewById(R.id.date);
         mDate.setOnClickListener(this);
+        mDate.setOnLongClickListener(this);
 
         mShowFullAlarm = getResources().getBoolean(R.bool.quick_settings_show_full_alarm);
 
@@ -380,7 +386,11 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
 
     @Override
     public boolean onLongClick(View v) {
-        if (v == mSettingsButton) {
+        if (v == mClock) {
+            startClockLongClickActivity();
+        } else if (v == mDate) {
+            startDateLongClickActivity();
+        } else if (v == mSettingsButton) {
             startBenzoExtrasActivity();
         }
         vibrateheader(20);
@@ -399,6 +409,11 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         mActivityStarter.startActivity(nIntent, true /* dismissShade */);
     }
 
+    private void startClockLongClickActivity() {
+        mActivityStarter.startActivity(new Intent(AlarmClock.ACTION_SET_ALARM),
+                true /* dismissShade */);
+    }
+
     private void startCalendarActivity() {
         Intent calIntent = new Intent(Intent.ACTION_MAIN);
         calIntent.addCategory(Intent.CATEGORY_APP_CALENDAR);
@@ -408,6 +423,12 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
     private void startAlarmsActivity() {
         mActivityStarter.startActivity(new Intent(android.provider.AlarmClock.ACTION_SHOW_ALARMS),
                 true /* dismissShade */);
+    }
+
+    private void startDateLongClickActivity() {
+        Intent intent = new Intent(Intent.ACTION_INSERT);
+            intent.setData(Events.CONTENT_URI);
+        mActivityStarter.startActivity(intent, true /* dismissShade */);
     }
 
     @Override
