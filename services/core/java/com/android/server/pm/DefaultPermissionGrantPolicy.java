@@ -748,6 +748,22 @@ final class DefaultPermissionGrantPolicy {
                 grantRuntimePermissionsLPw(vendingPackage, SMS_PERMISSIONS, true, userId);
                 grantRuntimePermissionsLPw(vendingPackage, STORAGE_PERMISSIONS, true, userId);
             }
+
+            // Chromium
+            PackageParser.Package chromiumPackage = getDefaultProviderAuthorityPackageLPr(
+                    "org.chromium.chrome", userId);
+            if (chromiumPackage != null) {
+                grantRuntimePermissionsLPw(chromiumPackage, CONTACTS_PERMISSIONS, true, userId);
+                grantRuntimePermissionsLPw(chromiumPackage, STORAGE_PERMISSIONS, true, userId);
+            }
+
+            // Snapdragon Browser
+            PackageParser.Package snapbrowserPackage = getDefaultProviderAuthorityPackageLPr(
+                    "org.snapdragon.browser", userId);
+            if (snapbrowserPackage != null) {
+                grantRuntimePermissionsLPw(snapbrowserPackage, CONTACTS_PERMISSIONS, true, userId);
+                grantRuntimePermissionsLPw(snapbrowserPackage, STORAGE_PERMISSIONS, true, userId);
+            }
             mService.mSettings.onDefaultRuntimePermissionsGrantedLPr(userId);
         }
     }
