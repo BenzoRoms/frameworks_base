@@ -102,6 +102,6 @@ public class ViewInvertHelper {
 
     private boolean isInvertEnabled() {
         return Settings.Secure.getIntForUser(mTarget.getContext().getContentResolver(),
-                Settings.Secure.DOZE_NOTIFICATION_INVERT_ENABLED, 1, UserHandle.USER_CURRENT) == 1;
+                Settings.Secure.DOZE_NOTIFICATION_INVERT_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
     }
 }
