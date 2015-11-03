@@ -151,6 +151,9 @@ public class SystemConfig {
         // Read configuration from the old permissions dir
         readPermissions(Environment.buildPath(
                 Environment.getRootDirectory(), "etc", "permissions"), false);
+        // Read configuration from VENDOR permissions dir
+        readPermissions(Environment.buildPath(
+                Environment.getVendorDirectory(), "etc", "permissions"), false);
         // Only read features from OEM config
         readPermissions(Environment.buildPath(
                 Environment.getOemDirectory(), "etc", "sysconfig"), true);
