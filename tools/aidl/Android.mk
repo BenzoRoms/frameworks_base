@@ -21,7 +21,7 @@ LOCAL_SRC_FILES := \
 	generate_java_binder.cpp \
 	generate_java_rpc.cpp
 
-LOCAL_CFLAGS := -g
+LOCAL_CFLAGS := -g0
 LOCAL_MODULE := aidl
 
 include $(BUILD_HOST_EXECUTABLE)
