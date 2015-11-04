@@ -21,7 +21,7 @@ LOCAL_SRC_FILES := \
 	generate_java_binder.cpp \
 	generate_java_rpc.cpp
 
-LOCAL_CFLAGS := -g0
+LOCAL_CFLAGS := -g0 -Wno-deprecated-register -Wno-unused-parameter -Wno-writable-strings
 LOCAL_MODULE := aidl
 
 include $(BUILD_HOST_EXECUTABLE)
