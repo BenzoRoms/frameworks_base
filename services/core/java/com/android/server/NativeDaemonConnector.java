@@ -487,7 +487,7 @@ final class NativeDaemonConnector implements Runnable, Handler.Callback, Watchdo
         }
     }
 
-    private static class NativeDaemonFailureException extends NativeDaemonConnectorException {
+    public static class NativeDaemonFailureException extends NativeDaemonConnectorException {
         public NativeDaemonFailureException(String command, NativeDaemonEvent event) {
             super(command, event);
         }
