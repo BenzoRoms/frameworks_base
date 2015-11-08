@@ -2742,6 +2742,8 @@ public abstract class BaseStatusBar extends SystemUI implements
         boolean accessibilityForcesLaunch = isFullscreen
                 && mAccessibilityManager.isTouchExplorationEnabled();
         boolean justLaunchedFullScreenIntent = entry.hasJustLaunchedFullScreenIntent();
+        boolean doNotDisturb = mZenMode == Settings.Global.ZEN_MODE_NO_INTERRUPTIONS
+                || mZenMode == Settings.Global.ZEN_MODE_ALARMS;
 
         final InputMethodManager inputMethodManager = (InputMethodManager)
                 mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -2757,7 +2759,8 @@ public abstract class BaseStatusBar extends SystemUI implements
                 && (!mStatusBarKeyguardViewManager.isShowing()
                         || mStatusBarKeyguardViewManager.isOccluded())
                 && !mStatusBarKeyguardViewManager.isInputRestricted()
-                && !isIMEShowing;
+                && !isIMEShowing
+                && !doNotDisturb;
         try {
             interrupt = interrupt && !mDreamManager.isDreaming();
         } catch (RemoteException e) {
