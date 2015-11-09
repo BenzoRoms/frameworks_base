@@ -4062,14 +4062,7 @@ public class TelephonyManager {
     /** @hide */
     @SystemApi
     public boolean handlePinMmi(String dialString) {
-        try {
-            ITelephony telephony = getITelephony();
-            if (telephony != null)
-                return telephony.handlePinMmi(dialString);
-        } catch (RemoteException e) {
-            Log.e(TAG, "Error calling ITelephony#handlePinMmi", e);
-        }
-        return false;
+        return handlePinMmiForSubscriber(getDefaultSubscription(), dialString);   
     }
 
     /** @hide */
