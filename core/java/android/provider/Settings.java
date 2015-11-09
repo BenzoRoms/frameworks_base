@@ -3527,15 +3527,6 @@ public final class Settings {
         public static final Validator DOUBLE_TAP_SLEEP_GESTURE_VALIDATOR = sBooleanValidator;
 
         /**
-         *  Enable navigation bar double tap gesture on to put device to sleep
-         * @hide
-         */
-        public static final String DOUBLE_TAP_SLEEP_NAVBAR = "double_tap_sleep_navbar";
-
-        /** @hide */
-        public static final Validator DOUBLE_TAP_SLEEP_NAVBAR_VALIDATOR = sBooleanValidator;
-
-        /**
          * Enable double tap gesture anywhere on the lock screen put device to sleep
          * @hide
          */
