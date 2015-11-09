@@ -39,8 +39,6 @@
     <!-- Slimseekbar -->
     <string name="default_string">Default</string>
 
-    <!-- kill app long press back -->
-    <string name="app_killed_message">Application killed</string>
 
     <!-- Title of dialog to confirm rebooting. -->
     <string name="reboot_title">Reboot</string>
