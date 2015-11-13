@@ -140,4 +140,7 @@
   <java-symbol type="style" name="Animation.Toast.SlideRightLeft" />
   <java-symbol type="style" name="Animation.Toast.SlideLeftRight" />
 
+  <!-- Power menu -->
+  <java-symbol type="string" name="system_error_vendorprint" />
+
 </resources>
