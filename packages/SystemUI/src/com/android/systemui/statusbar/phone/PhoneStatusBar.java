@@ -509,7 +509,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     resolver, Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP, 0,
                     UserHandle.USER_CURRENT);
             if (oldWeatherState != mWeatherTempState) {
-                updateWeatherTextState(mWeatherController.getWeatherInfo().temp);
+                updateTempView();
             }
 
 
@@ -521,7 +521,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
 
             mShowStatusBarCarrier = Settings.System.getIntForUser(resolver,
-                    Settings.System.STATUS_BAR_CARRIER, 0, mCurrentUserId) == 1;
+                    Settings.System.STATUS_BAR_CARRIER, 1, mCurrentUserId) == 1;
             showStatusBarCarrierLabel(mShowStatusBarCarrier);	
 
             int sidebarPosition = Settings.System.getInt(
