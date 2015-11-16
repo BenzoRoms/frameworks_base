@@ -3657,7 +3657,7 @@ public final class Settings {
         public static final String SHOW_CLEAR_ALL_RECENTS = "show_clear_all_recents";
 
         /**
-         * location of the clear all rectents button
+         * location of the clear all recents button
          * @hide
          */
         public static final String RECENTS_CLEAR_ALL_LOCATION = "recents_clear_all_location";
@@ -3667,6 +3667,12 @@ public final class Settings {
          * @hide
          */
         public static final String RECENTS_SEARCH_BAR = "recents_search_bar";
+
+        /**
+         * Whether to dismiss all recents tasks
+         * @hide
+         */
+        public static final String RECENTS_CLEAR_ALL_DISMISS_ALL = "recents_clear_all_dismiss_all";
 
         /**
          * Display style of the status bar battery information
