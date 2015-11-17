@@ -142,13 +142,11 @@ public final class ShutdownThread extends Thread {
     }
 
     private static boolean isAdvancedRebootPossible(final Context context) {
-        KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
-        boolean keyguardLocked = km.inKeyguardRestrictedInputMode() && km.isKeyguardSecure();
         boolean advancedRebootEnabled = Settings.Secure.getInt(context.getContentResolver(),
             Settings.Secure.ADVANCED_REBOOT, 1) == 1;
         boolean isPrimaryUser = UserHandle.getCallingUserId() == UserHandle.USER_OWNER;
 
-        return advancedRebootEnabled && !mRebootSafeMode && !keyguardLocked && isPrimaryUser;
+        return advancedRebootEnabled && !mRebootSafeMode && isPrimaryUser;
     }
 
     static void shutdownInner(final Context context, boolean confirm) {
