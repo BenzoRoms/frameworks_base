@@ -586,7 +586,12 @@ public abstract class BaseStatusBar extends SystemUI implements
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
 
         mRecents = getComponent(Recents.class);
-        mRecents.setCallback(this);
+        if (mRecents != null) {
+            mRecents.setCallback(this);
+        } else {
+            mRecents.setCallback(null);
+        }
+
 
         final Configuration currentConfig = mContext.getResources().getConfiguration();
         mLocale = currentConfig.locale;
