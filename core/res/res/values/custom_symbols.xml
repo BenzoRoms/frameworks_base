@@ -214,4 +214,9 @@
   <!-- Proximity check timeout on screen on -->
   <java-symbol type="integer" name="config_proximityCheckTimeout" />
 
+  <!-- unlink notification and ringer -->
+  <java-symbol type="drawable" name="ic_audio_notification_new" />
+  <java-symbol type="drawable" name="ic_audio_notification_mute_new" />
+  <java-symbol type="drawable" name="ic_audio_notification_mute_alpha" />
+
 </resources>
