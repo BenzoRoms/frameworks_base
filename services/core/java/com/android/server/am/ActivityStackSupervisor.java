@@ -622,6 +622,8 @@ public final class ActivityStackSupervisor implements DisplayListener {
                     if (hr.app == null && app.uid == hr.info.applicationInfo.uid
                             && processName.equals(hr.processName)) {
                         try {
+                            app.addPackage(hr.info.packageName,
+                                    hr.info.applicationInfo.versionCode, mService.mProcessStats);
                             if (realStartActivityLocked(hr, app, true, true)) {
                                 didSomething = true;
                             }
