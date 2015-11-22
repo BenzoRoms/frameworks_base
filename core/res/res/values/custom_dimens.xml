@@ -27,4 +27,12 @@
 
      <!-- Largest size an avatar might need to be drawn in the power menu user picker -->
      <dimen name="global_actions_avatar_size">40dp</dimen>
+
+     <!-- Boot dexopt layout -->
+    <dimen name="dexopt_icon_margin">6dp</dimen>
+    <dimen name="dexopt_icon_size">42dp</dimen>
+    <dimen name="dexopt_logo_size">400dp</dimen>
+    <dimen name="dexopt_margin">10dp</dimen>
+    <dimen name="dexopt_message">10dp</dimen>
+
 </resources>

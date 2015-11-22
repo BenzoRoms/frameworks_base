@@ -22,4 +22,11 @@
 
     <color name="color_control_normal_default_material_light">@color/secondary_text_default_material_light</color>
     <color name="color_control_normal_default_material_dark">@color/secondary_text_default_material_dark</color>
+
+    <!-- Boot dexopt layout -->
+    <color name="dexopt_background">#000</color>
+    <color name="dexopt_text">#fff</color>
+    <color name="dexopt_progressTint">#ff607d8b</color>
+    <color name="dexopt_progressBackgroundTint">#ff607d8b</color>
+
 </resources>
