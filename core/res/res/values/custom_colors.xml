@@ -18,4 +18,10 @@
      <color name="dark_material_dialog_background">#ff212021</color>
      <drawable name="dark_material_bg">@color/dark_material_dialog_background</drawable>
 
+    <!-- Boot dexopt layout -->
+    <color name="dexopt_background">#000</color>
+    <color name="dexopt_text">#fff</color>
+    <color name="dexopt_progressTint">#ff607d8b</color>
+    <color name="dexopt_progressBackgroundTint">#ff607d8b</color>
+
 </resources>
