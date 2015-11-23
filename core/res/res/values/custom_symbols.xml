@@ -69,4 +69,7 @@
   <!-- Doze mode -->
   <java-symbol type="bool" name="config_doze_enabled_by_default" />
 
+  <!-- correct sensor handling -->
+  <java-symbol type="bool" name="config_useSystemClockforSensors" />
+
 </resources>
