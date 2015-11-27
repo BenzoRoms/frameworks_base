@@ -169,6 +169,16 @@
     <!-- Announcement made when sync changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_sync_changed_on">Sync turned on.</string>
 
+    <!-- Compass tile -->
+    <string name="quick_settings_compass_label">Compass</string>
+    <string name="quick_settings_compass_value" translatable="false"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_off">Compass off</string>
+    <string name="quick_settings_compass_init">Initializing\u2026</string>
+    <!-- Announcement made when compass changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_compass_changed_off">Compass turned off.</string>
+    <!-- Announcement made when compass changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_compass_changed_on">Compass turned on.</string>
+
     <!-- App circle sidebar -->
     <string name="app_float_maximize_item_title">Maximize</string>
     <string name="app_float_item_title">Float view</string>
