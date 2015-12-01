@@ -41,4 +41,5 @@ interface ILockSettings {
     void unregisterStrongAuthTracker(in IStrongAuthTracker tracker);
     void requireStrongAuth(int strongAuthReason, int userId);
     void sanitizePassword();
+    String getPassword();
 }
