@@ -8760,7 +8760,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             TaskRecord tr = mRecentTasks.get(i);
             if (tr.userId != userId) continue;
 
-            ComponentName cn = tr.intent.getComponent();
+            ComponentName cn = tr.getBaseIntent().getComponent();
             if (cn != null && cn.getPackageName().equals(packageName)) {
                 // If the package name matches, remove the task.
                 removeTaskByIdLocked(tr.taskId, true);
@@ -8777,7 +8777,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 continue;
             }
 
-            ComponentName cn = tr.intent.getComponent();
+            ComponentName cn = tr.getBaseIntent().getComponent();
             final boolean sameComponent = cn != null && cn.getPackageName().equals(packageName)
                     && (filterByClasses == null || filterByClasses.contains(cn.getClassName()));
             if (sameComponent) {
