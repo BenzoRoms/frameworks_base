@@ -72,6 +72,7 @@
             systemui:keyRepeat="true" />
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/three"
+            android:scaleType="centerInside"
             android:layout_height="80dp"
             android:layout_width="match_parent"
             systemui:keyRepeat="true"
