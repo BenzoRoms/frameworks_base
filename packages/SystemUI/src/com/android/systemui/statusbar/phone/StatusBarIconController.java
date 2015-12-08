@@ -80,11 +80,11 @@ public class StatusBarIconController implements Tunable {
     private ImageView mMoreIcon;
     private BatteryLevelTextView mBatteryLevelTextView;
     private BatteryMeterView mBatteryMeterView;
-    private TextView mClock;
+    private Clock mClock;
     // Left or center clock
     private LinearLayout mCenterClockLayout;
-    private TextView mCenterClock;
-    private TextView mLeftClock;
+    private Clock mCenterClock;
+    private Clock mLeftClock;
     private boolean mShowClock;
     private int mClockLocation;
 
@@ -132,9 +132,9 @@ public class StatusBarIconController implements Tunable {
         mBatteryLevelTextView =
                 (BatteryLevelTextView) statusBar.findViewById(R.id.battery_level_text);
         mBatteryMeterView = (BatteryMeterView) statusBar.findViewById(R.id.battery);
-        mClock = (TextView) statusBar.findViewById(R.id.clock);
-        mCenterClock = (TextView) statusBar.findViewById(R.id.center_clock);
-        mLeftClock = (TextView) statusBar.findViewById(R.id.left_clock);
+        mClock = (Clock) statusBar.findViewById(R.id.clock);
+        mCenterClock = (Clock) statusBar.findViewById(R.id.center_clock);
+        mLeftClock = (Clock) statusBar.findViewById(R.id.left_clock);
         mCenterClockLayout = (LinearLayout)statusBar.findViewById(R.id.center_clock_layout); 
         mLinearOutSlowIn = AnimationUtils.loadInterpolator(mContext,
                 android.R.interpolator.linear_out_slow_in);
@@ -144,6 +144,10 @@ public class StatusBarIconController implements Tunable {
         mLightModeIconColorSingleTone = context.getColor(R.color.light_mode_icon_color_single_tone);
         mHandler = new Handler();
         updateResources();
+
+        mClock.setIconController(this);
+        mCenterClock.setIconController(this);
+        mLeftClock.setIconController(this);
 
         TunerService.get(mContext).addTunable(this, ICON_BLACKLIST);
     }
