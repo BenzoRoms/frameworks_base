@@ -211,6 +211,7 @@ public class QsTuner extends Fragment implements Callback {
         else if (spec.equals("nfc")) return R.string.quick_settings_nfc_label;
         else if (spec.equals("sync")) return R.string.quick_settings_sync_label;
         else if (spec.equals("music")) return R.string.quick_settings_music_label;
+        else if (spec.equals("battery_saver")) return R.string.quick_settings_battery_saver;
         return 0;
     }
 
@@ -461,6 +462,7 @@ public class QsTuner extends Fragment implements Callback {
             else if (mSpec.equals("nfc")) return R.drawable.ic_qs_nfc_on;
             else if (mSpec.equals("sync")) return R.drawable.ic_qs_sync_on;
             else if (mSpec.equals("music")) return R.drawable.ic_qs_media_play;
+            else if (mSpec.equals("battery_saver")) return R.drawable.ic_qs_battery_saver_on;
             return R.drawable.android;
         }
 
