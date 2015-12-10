@@ -224,4 +224,8 @@
     <string name="onthego_front_camera">Use front camera</string>
     <string name="onthego_service_toggle">Automatically restart service</string>
 
+    <!-- SystemUI Tuner Parts -->
+    <string name="systemui_tuner_statusbar_title">Statusbar Items</string>
+    <string name="systemui_tuner_qs_title">Quick Settings</string>
+
 </resources>
