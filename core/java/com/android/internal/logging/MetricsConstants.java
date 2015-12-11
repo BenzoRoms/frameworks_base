@@ -273,6 +273,7 @@ public interface MetricsConstants {
     public static final int QS_SCREENSHOT = 241;
     public static final int QS_VOLUME = 242;
     public static final int QS_HEADSUP = 243;
+    public static final int QS_EXPANDED = 244;
 
     // Notification drawer settings
     public static final int NOTIFICATION_DRAWER_SETTINGS = 247;

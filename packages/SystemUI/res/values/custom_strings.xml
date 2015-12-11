@@ -233,6 +233,10 @@
     <string name="message_switch_fail">Cannot switch to this task, because it has no interface.</string>
     <string name="tasklist_killall">Kill All</string>
     <string name="tasklist_memory_usage">"Free/Total Memory: <xliff:g id="number">%s</xliff:g> / <xliff:g id="name">%s</xliff:g>"</string>
-   <string name="message_keep_one_launcher">Should keep at least one home activity!</string>
+    <string name="message_keep_one_launcher">Should keep at least one home activity!</string>
+
+    <!-- Expanded Desktop QS Tile -->
+    <string name="quick_settings_expanded_desktop">Expanded</string>
+    <string name="quick_settings_expanded_desktop_off">Normal</string>
 
 </resources>
