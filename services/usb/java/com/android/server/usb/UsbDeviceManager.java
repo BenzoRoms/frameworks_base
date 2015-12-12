@@ -435,7 +435,6 @@ public class UsbDeviceManager {
             if (DEBUG) Slog.d(TAG, "setUsbDataUnlocked: " + enable);
             mUsbDataUnlocked = enable;
             updateUsbNotification();
-            updateUsbStateBroadcast();
             setEnabledFunctions(mCurrentFunctions, true);
         }
 
