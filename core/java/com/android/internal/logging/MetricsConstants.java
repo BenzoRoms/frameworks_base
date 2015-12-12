@@ -278,6 +278,7 @@ public interface MetricsConstants {
     public static final int QS_COMPASS = 247;
     public static final int QS_NAVBAR = 248;
     public static final int QS_KERNEL = 249;
+    public static final int QS_LOCKSCREEN = 253;
 
     // Notification drawer settings
     public static final int NOTIFICATION_DRAWER_SETTINGS = 250;
