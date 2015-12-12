@@ -23,7 +23,7 @@
     android:layout_marginStart="4dp"
     android:layout_gravity="center"
     android:gravity="start|center_vertical"
-    android:textColor="#555555"
+    android:textColor="@color/notification_action_tombstone_text_color"
     android:singleLine="true"
     android:ellipsize="end"
     android:alpha="0.5"
