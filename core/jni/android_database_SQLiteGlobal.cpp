@@ -80,7 +80,7 @@ static jint nativeReleaseMemory(JNIEnv* env, jclass clazz) {
     return rsize;
 }
 
-static JNINativeMethod sMethods[] =
+static const JNINativeMethod sMethods[] =
 {
     /* name, signature, funcPtr */
     { "nativeReleaseMemory", "()I", (void*)nativeReleaseMemory },
