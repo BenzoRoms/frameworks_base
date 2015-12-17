@@ -4090,7 +4090,11 @@ final class ActivityStack {
                         if (r.app != null) {
                             r.app.removed = true;
                         }
-                        r.app = null;
+                        if (!r.finishing) {
+                            // If activity already finishing or request is queued then 
+                            // dont make process record null as activity destroy will not be called
+                            r.app = null;
+                        }
                     }
                     lastTask = r.task;
                     if (finishActivityLocked(r, Activity.RESULT_CANCELED, null, "force-stop",
