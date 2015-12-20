@@ -58,6 +58,7 @@ import com.android.systemui.qs.tiles.PieControlTile;
 import com.android.systemui.qs.tiles.RebootTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.ScreenOffTile;
+import com.android.systemui.qs.tiles.ScreenrecordTile;
 import com.android.systemui.qs.tiles.ScreenshotTile;
 import com.android.systemui.qs.tiles.SoundTile;
 import com.android.systemui.qs.tiles.VolumeTile;
@@ -314,6 +315,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (tileSpec.equals("reboot")) return new RebootTile(this);
         else if (tileSpec.equals("layers")) return new LayersManagerTile(this);
 	else if (tileSpec.equals("floatingwin")) return new FloatingWindowsTile(this);
+	else if (tileSpec.equals("screenrecord")) return new ScreenrecordTile(this);
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
         else throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
     }

@@ -229,6 +229,7 @@ public class QsTuner extends Fragment implements Callback {
         else if (spec.equals("reboot")) return R.string.quick_settings_reboot_label;
         else if (spec.equals("layers")) return R.string.quick_settings_layers_manager_label;
 	else if (spec.equals("floatingwin")) return R.string.recent_float_mode_title;
+	else if (spec.equals("screenrecord")) return R.string.quick_settings_screenrecord_label;
         return 0;
     }
 
@@ -495,6 +496,7 @@ public class QsTuner extends Fragment implements Callback {
             else if (mSpec.equals("reboot")) return R.drawable.ic_qs_reboot;
             else if (mSpec.equals("layers")) return R.drawable.ic_qs_layers_manager;
 	    else if (mSpec.equals("floatingwin")) return R.drawable.ic_qs_floating_on;
+	    else if (mSpec.equals("screenrecord")) return R.drawable.ic_qs_screenrecord;
             return R.drawable.android;
         }
 
