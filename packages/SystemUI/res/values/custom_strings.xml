@@ -177,5 +177,8 @@
     <!-- Layers Manager QS Tile -->
     <string name="quick_settings_layers_manager_label">Layers</string>
     <string name="accessibility_quick_settings_layers_manager">Layers.</string>
+    <!-- Screenrecord QS Tile -->
+    <string name="quick_settings_screenrecord_label">Screenrecord</string>
+    <string name="quick_settings_screenrecord_on">Recording ...</string>
 
 </resources>

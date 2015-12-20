@@ -218,6 +218,7 @@ public class QsTuner extends Fragment implements Callback {
         else if (spec.equals("kernel")) return R.string.quick_settings_kernel_adiutor_label;
         else if (spec.equals("adb_network")) return R.string.quick_settings_adb_network;
         else if (spec.equals("layers")) return R.string.quick_settings_layers_manager_label;
+	else if (spec.equals("screenrecord")) return R.string.quick_settings_screenrecord_label;
         return 0;
     }
 
@@ -480,6 +481,7 @@ public class QsTuner extends Fragment implements Callback {
             else if (mSpec.equals("kernel")) return R.drawable.ic_qs_kernel;
             else if (mSpec.equals("adb_network")) return R.drawable.ic_qs_network_adb_on;
             else if (mSpec.equals("layers")) return R.drawable.ic_qs_layers_manager;
+	    else if (mSpec.equals("screenrecord")) return R.drawable.ic_qs_screenrecord;
             return R.drawable.android;
         }
 
