@@ -545,8 +545,9 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         mMultiUserSwitch.setFocusable(mExpanded);
         mSystemIconsSuperContainer.setClickable(mExpanded);
         mSystemIconsSuperContainer.setFocusable(mExpanded);
-        mAlarmStatus.setClickable(mNextAlarm != null && mNextAlarm.getShowIntent() != null);
-        mWeatherImage.setClickable(mExpanded && mWeatherData != null);
+        mAlarmStatus.setClickable(mNextAlarm != null && mNextAlarm.getShowIntent() != null && !mShowWeatherDetailed);
+        mWeatherImage.setClickable(mExpanded && mWeatherData != null && !mShowWeatherDetailed);
+        mWeatherDetailed.setClickable(mExpanded && mWeatherData != null && mShowWeatherDetailed);
     }
 
     private void updateClockLp() {
@@ -593,6 +594,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             if (height > mExpandedHeight) {
                 height = mExpandedHeight;
             }
+            hideWeatherDetailed();
             final float heightFinal = height;
             setClipping(heightFinal);
 
@@ -654,18 +656,23 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
                 if (mWeatherData != null) {
                     mWeatherDetailed.updateWeatherData(mWeatherClient, mWeatherData);
 
-                    // meh!
-                    mAlarmStatus.setVisibility(View.INVISIBLE);
-                    mDateGroup.setVisibility(View.INVISIBLE);
-                    mClock.setVisibility(View.INVISIBLE);
-                    mWeatherImage.setVisibility(View.INVISIBLE);
-
                     int finalRadius = getWidth();
                     Animator anim = ViewAnimationUtils.createCircularReveal(mWeatherDetailed,
                             (int) mWeatherImage.getX(), (int )mWeatherImage.getY(), 0, finalRadius);
+                    // handle mAlarmStatus extra
+                    transition(mAlarmStatus, false);
+                    mWeatherDetailed.bringToFront();
                     mWeatherDetailed.setVisibility(View.VISIBLE);
+                    anim.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            updateDetailedHiddenViews(true);
+                            mShowWeatherDetailed = true;
+                            updateClickTargets();
+                        }
+                    });
                     anim.start();
-                    mShowWeatherDetailed = true;
                 }
             } catch(Exception e) {
                 Log.e(TAG, "show detailed failed", e);
@@ -679,7 +686,12 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
                     hideWeatherDetailed();
-                    updateEverything();
+                }
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    super.onAnimationStart(animation);
+                    // dont touch mAlarmStatus here
+                    updateDetailedHiddenViews(false);
                 }
             });
             anim.start();
@@ -888,6 +900,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         if (!mShowingDetail && !mDetailTransitioning) {
             // Otherwise it needs to stay invisible
             applyAlpha(mAlarmStatus, values.alarmStatusAlpha);
+            applyAlpha(mWeatherImage, values.weatherImageAlpha);
         }
         applyAlpha(mDateCollapsed, values.dateCollapsedAlpha);
         applyAlpha(mDateExpanded, values.dateExpandedAlpha);
@@ -902,7 +915,6 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             mTime.setScaleY(1f);
         }
         updateAmPmTranslation();
-        applyAlpha(mWeatherImage, values.weatherImageAlpha);
     }
 
     /**
@@ -1023,18 +1035,19 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         private void handleShowingDetail(final QSTile.DetailAdapter detail) {
             final boolean showingDetail = detail != null;
 
-            hideWeatherDetailed();
-
-            transition(mClock, !showingDetail);
-            transition(mDateGroup, !showingDetail);
-            if (mShowWeather) {
-                transition(mWeatherContainer, !showingDetail);
-            }
-            if (mAlarmShowing) {
-                transition(mAlarmStatus, !showingDetail);
-            }
-            transition(mWeatherImage, !showingDetail);
             transition(mQsDetailHeader, showingDetail);
+            if (mExpanded && mShowWeatherDetailed) {
+                transition(mWeatherDetailed, !showingDetail);
+            } else {
+                transition(mClock, !showingDetail);
+                if (mExpanded) {
+                    transition(mWeatherImage, !showingDetail);
+                }
+                transition(mDateGroup, !showingDetail);
+                if (mExpanded && mAlarmShowing) {
+                    transition(mAlarmStatus, !showingDetail);
+                }
+            }
             mShowingDetail = showingDetail;
             if (showingDetail) {
                 mQsDetailHeaderTitle.setText(detail.getTitle());
@@ -1058,28 +1071,6 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             } else {
                 mQsDetailHeader.setClickable(false);
             }
-        }
-
-        private void transition(final View v, final boolean in) {
-            if (in) {
-                v.bringToFront();
-                v.setVisibility(VISIBLE);
-            }
-            if (v.hasOverlappingRendering()) {
-                v.animate().withLayer();
-            }
-            v.animate()
-                    .alpha(in ? 1 : 0)
-                    .withEndAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!in) {
-                                v.setVisibility(INVISIBLE);
-                            }
-                            mDetailTransitioning = false;
-                        }
-                    })
-                    .start();
         }
     };
 
@@ -1213,23 +1204,42 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     private void hideWeatherDetailed() {
         if (mShowWeatherDetailed) {
             mWeatherDetailed.setVisibility(View.INVISIBLE);
+            mWeatherDetailed.setAlpha(1f);
             mShowWeatherDetailed = false;
-
-            // meh!
             mAlarmStatus.setVisibility(mExpanded && mAlarmShowing ? View.VISIBLE : View.INVISIBLE);
+            updateDetailedHiddenViews(false);
+            updateEverything();
+        }
+    }
+
+    private void updateDetailedHiddenViews(boolean hide) {
+        // mAlarmStatus is special
+        if (hide) {
+            mDateGroup.setVisibility(View.INVISIBLE);
+            mClock.setVisibility(View.INVISIBLE);
+            mWeatherImage.setVisibility(View.INVISIBLE);
+        } else {
             mDateGroup.setVisibility(View.VISIBLE);
             mClock.setVisibility(View.VISIBLE);
             mWeatherImage.setVisibility((mExpanded && mWeatherData != null)? View.VISIBLE : View.INVISIBLE);
         }
     }
 
+    private void hideWeatherDetailedOnly() {
+        if (mShowWeatherDetailed) {
+            mWeatherDetailed.setVisibility(View.INVISIBLE);
+            mWeatherDetailed.setAlpha(1f);
+            mShowWeatherDetailed = false;
+            updateClickTargets();
+        }
+    }
+
     public void notifyScreenOn(boolean screenOn) {
-        if (screenOn) {
+        if (screenOn && mWeatherData != null) {
             mHandler.postDelayed(new Runnable() {
                 public void run() {
-                    Log.d(TAG, "WeatherService: notifyScreenOn");
                     // just check early if an update is due
-                    // but wait - network needs some time too
+                    // but wait a little bit
                     mWeatherClient.updateWeather(false);
                 }
             }, 2000);
@@ -1265,6 +1275,40 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
                 mWeatherImage.setVisibility(View.INVISIBLE);
                 hideWeatherDetailed();
             }
+        }
+    }
+
+    private void transition(final View v, final boolean in) {
+        if (in) {
+            v.bringToFront();
+            v.setVisibility(VISIBLE);
+        }
+        if (v.hasOverlappingRendering()) {
+            v.animate().withLayer();
+        }
+        v.animate()
+                .alpha(in ? 1 : 0)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!in) {
+                            if (v == mWeatherDetailed) {
+                                hideWeatherDetailedOnly();
+                            } else {
+                                v.setVisibility(INVISIBLE);
+                            }
+                        }
+                        mDetailTransitioning = false;
+                    }
+                })
+                .start();
+    }
+
+    public void setQsExpanded(boolean expanded) {
+        if (!expanded) {
+            // if not hidden until now - e.g. on keyguard
+            // cant use setExpanded since this will not change if not animating
+            hideWeatherDetailed();
         }
     }
 
