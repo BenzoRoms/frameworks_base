@@ -121,6 +121,10 @@
     <string name="qs_lte_label">LTE</string>
     <string name="lte_on">LTE ON </string>
     <string name="lte_off">LTE OFF</string>
+    <!-- Navigation Bar tile -->
+    <string name="quick_settings_navbar_title">NavBar</string>
+    <string name="quick_settings_navbar">NavBar Enabled</string>
+    <string name="quick_settings_navbar_off">NavBar Disabled</string>
 
     <!-- statusbar items tuner -->
     <string name="statusbar_icons_blacklist">Status bar icons</string>
