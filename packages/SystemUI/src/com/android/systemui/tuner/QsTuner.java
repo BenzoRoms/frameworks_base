@@ -227,6 +227,7 @@ public class QsTuner extends Fragment implements Callback {
         else if (spec.equals("caffeine")) return R.string.quick_settings_caffeine_label;
 	else if (spec.equals("floatingwin")) return R.string.recent_float_mode_title;
 	else if (spec.equals("pie")) return R.string.quick_settings_piecontrol_label;
+        else if (spec.equals("navbar")) return R.string.quick_settings_navbar;
         return 0;
     }
 
@@ -491,6 +492,7 @@ public class QsTuner extends Fragment implements Callback {
             else if (mSpec.equals("caffeine")) return R.drawable.ic_qs_caffeine_on;
 	    else if (mSpec.equals("floatingwin")) return R.drawable.ic_qs_floating_on;
             else if (mSpec.equals("pie")) return R.drawable.ic_qs_pie_on;
+            else if (mSpec.equals("navbar")) return R.drawable.ic_qs_navbar;
             return R.drawable.android;
         }
 
