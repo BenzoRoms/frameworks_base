@@ -105,7 +105,7 @@
 
     <!-- The default tiles to display in QuickSettings -->
     <string name="quick_settings_tiles_extra" translatable="false">
-        sync,expanded_desktop,usb_tether,adb_network,nfc,ime
+        sync,expanded_desktop,usb_tether,adb_network,nfc,ime,navbar
     </string>
 
     <!-- Tiles native to System UI. Order should match "quick_settings_tiles_default" -->
