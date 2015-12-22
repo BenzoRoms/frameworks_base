@@ -237,4 +237,8 @@
     <string name="pie_phone_status_airplane_mode">Airplane mode on</string>
     <string name="pie_phone_status_emergency_only">Emergency calls only</string>
 
+    <!-- Navigation Bar tile -->
+    <string name="quick_settings_navbar">NavBar</string>
+    <string name="quick_settings_navbar_off">NavBar Disabled</string>
+
 </resources>
