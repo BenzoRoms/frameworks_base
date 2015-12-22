@@ -113,6 +113,10 @@
     <string name="accessibility_quick_settings_nfc_changed_on">NFC turned on.</string>
     <!-- IME selector QS tile -->
     <string name="quick_settings_ime_label">IME</string>
+    <!-- Navigation Bar tile -->
+    <string name="quick_settings_navbar_title">NavBar</string>
+    <string name="quick_settings_navbar">NavBar Enabled</string>
+    <string name="quick_settings_navbar_off">NavBar Disabled</string>
 
     <!-- 4G LTE switch -->
     <string name="show_fourg_title">Show 4G instead of LTE</string>
