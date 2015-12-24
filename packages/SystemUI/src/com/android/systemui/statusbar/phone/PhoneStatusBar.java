@@ -368,6 +368,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private int mBrLogoColor;
     private ImageView brLogo;
 
+    // 4G instead of LTE
+    private boolean mShow4G;
+
     // top bar
     StatusBarHeaderView mHeader;
     KeyguardStatusBarView mKeyguardStatusBar;
@@ -512,6 +515,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_MAX_NOTIF_CONFIG),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SHOW_FOURG),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -558,6 +564,17 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                             updateSpeedbump();
                             updateClearAll();
                             updateEmptyShadeView();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.SHOW_FOURG))) {
+                    mShow4G = Settings.System.getIntForUser(
+                            mContext.getContentResolver(),
+                            Settings.System.SHOW_FOURG,
+                            0, UserHandle.USER_CURRENT) == 1;
+                            Helpers.restartSystemUI();
+                            updateRowStates();
+                            updateSpeedbump();
+                            updateClearAll();
+                            updateEmptyShadeView();
             }
 
             update();
@@ -572,6 +589,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mAutomaticBrightness = mode != Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL;
             mBrightnessControl = Settings.System.getInt(
                     resolver, Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0) == 1;
+
+            boolean mShow4G = Settings.System.getIntForUser(resolver,
+                    Settings.System.SHOW_FOURG, 0, UserHandle.USER_CURRENT) == 1;
 
             boolean showTaskManager = Settings.System.getIntForUser(resolver,
                     Settings.System.ENABLE_TASK_MANAGER, 0, UserHandle.USER_CURRENT) == 1;
