@@ -195,6 +195,9 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
+    <!-- Show4G -->
+    <uses-permission android:name="android.permission.RESTART_UI" />
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"
