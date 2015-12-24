@@ -113,6 +113,7 @@ import com.android.keyguard.KeyguardHostView.OnDismissAction;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
 import com.android.keyguard.ViewMediatorCallback;
+import com.android.internal.util.benzo.Helpers;
 import com.android.internal.util.slim.ActionConfig;
 import com.android.internal.util.slim.ActionConstants;
 import com.android.internal.util.slim.ActionHelper;
@@ -332,6 +333,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     // settings
     private QSPanel mQSPanel;
 
+    // 4G instead of LTE
+    private boolean mShow4G;
+
     // top bar
     StatusBarHeaderView mHeader;
     KeyguardStatusBarView mKeyguardStatusBar;
@@ -492,6 +496,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_ROTATION),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SHOW_FOURG),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -564,6 +571,17 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     || uri.equals(Settings.System.getUriFor(
                     Settings.System.RECENT_CARD_TEXT_COLOR))) {
                 rebuildRecentsScreen();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.SHOW_FOURG))) {
+                    mShow4G = Settings.System.getIntForUser(
+                            mContext.getContentResolver(),
+                            Settings.System.SHOW_FOURG,
+                            0, UserHandle.USER_CURRENT) == 1;
+                            Helpers.restartSystemUI();
+                            updateRowStates();
+                            updateSpeedbump();
+                            updateClearAll();
+                            updateEmptyShadeView();
             }
         }
 
@@ -577,6 +595,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mBrightnessControl = Settings.System.getIntForUser(
 			        resolver, Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0,
 					UserHandle.USER_CURRENT) == 1;
+
+            boolean mShow4G = Settings.System.getIntForUser(resolver,
+                    Settings.System.SHOW_FOURG, 0, UserHandle.USER_CURRENT) == 1;
 
             loadShowBatteryTextSetting();
             updateBatteryLevelText();

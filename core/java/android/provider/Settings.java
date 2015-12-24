@@ -4411,6 +4411,12 @@ public final class Settings {
                 "lockscreen_shortcuts_longpress";
 
         /**
+         * Show four g instead of lte
+         * @hide
+         */
+        public static final String SHOW_FOURG = "show_fourg";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
