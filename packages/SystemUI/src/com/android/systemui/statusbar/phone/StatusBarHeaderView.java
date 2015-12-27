@@ -1122,7 +1122,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             boolean showExpandedBatteryPercentage = Settings.System.getIntForUser(resolver,
                     Settings.System.STATUS_BAR_SHOW_BATTERY_PERCENT, 0, currentUserId) == 0;
             mShowWeather = Settings.System.getInt(
-                    resolver, Settings.System.STATUS_BAR_SHOW_WEATHER, 1) == 1;
+                    resolver, Settings.System.STATUS_BAR_SHOW_WEATHER, 0) == 1;
 
             switch (batteryStyle) {
                 case 4: //BATTERY_METER_GONE
