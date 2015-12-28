@@ -247,4 +247,8 @@
   <!-- IME animations -->
   <java-symbol type="array" name="anim_controls_entries" />
 
+  <!-- Power menu Animations  -->
+  <java-symbol type="style" name="PowerMenuBottomAnimation" />
+  <java-symbol type="style" name="PowerMenuTopAnimation" />
+
 </resources>
