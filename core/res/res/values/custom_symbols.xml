@@ -244,4 +244,7 @@
   <java-symbol type="drawable" name="ic_lock_navbar" />
   <java-symbol type="string" name="disable_navigation_pie_error" />
 
+  <!-- IME animations -->
+  <java-symbol type="array" name="anim_controls_entries" />
+
 </resources>
