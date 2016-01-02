@@ -75,6 +75,7 @@ public class CommandQueue extends IStatusBar.Stub {
     private static final int MSG_TOGGLE_APP_SPLIT_SCREEN       = 30 << MSG_SHIFT;
     private static final int MSG_APP_TRANSITION_FINISHED       = 31 << MSG_SHIFT;
     private static final int MSG_DISMISS_KEYBOARD_SHORTCUTS    = 32 << MSG_SHIFT;
+    private static final int MSG_SET_AUTOROTATE_STATUS         = 33 << MSG_SHIFT;
 
     public static final int FLAG_EXCLUDE_NONE = 0;
     public static final int FLAG_EXCLUDE_SEARCH_PANEL = 1 << 0;
@@ -125,6 +126,7 @@ public class CommandQueue extends IStatusBar.Stub {
         void startAssist(Bundle args);
         void onCameraLaunchGestureDetected(int source);
         void showTvPictureInPictureMenu();
+        void setAutoRotate(boolean enabled);
 
         void addQsTile(ComponentName tile);
         void remQsTile(ComponentName tile);
@@ -388,6 +390,14 @@ public class CommandQueue extends IStatusBar.Stub {
         }
     }
 
+    public void setAutoRotate(boolean enabled) {
+        synchronized (mLock) {
+            mHandler.removeMessages(MSG_SET_AUTOROTATE_STATUS);
+            mHandler.obtainMessage(MSG_SET_AUTOROTATE_STATUS,
+                enabled ? 1 : 0, 0, null).sendToTarget();
+        }
+    }
+
     private final class H extends Handler {
         public void handleMessage(Message msg) {
             final int what = msg.what & MSG_MASK;
@@ -502,6 +512,9 @@ public class CommandQueue extends IStatusBar.Stub {
                     break;
                 case MSG_TOGGLE_APP_SPLIT_SCREEN:
                     mCallbacks.toggleSplitScreen();
+                    break;
+                case MSG_SET_AUTOROTATE_STATUS:
+                    mCallbacks.setAutoRotate(msg.arg1 != 0);
                     break;
             }
         }
