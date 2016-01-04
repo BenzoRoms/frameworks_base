@@ -64,7 +64,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:includeFontPadding="false"
-                android:textSize="12sp"
+                android:textSize="14sp"
+                android:textStyle="bold"
                 android:textColor="@color/keyguard_default_secondary_text_color" />
 
         </LinearLayout>
@@ -78,8 +79,8 @@
 
             <ImageView
                 android:id="@+id/weather_image"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true" />
 
