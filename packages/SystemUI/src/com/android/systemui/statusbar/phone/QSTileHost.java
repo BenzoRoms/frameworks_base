@@ -31,6 +31,7 @@ import com.android.systemui.qs.tiles.AdbOverNetworkTile;
 import com.android.systemui.qs.tiles.AirplaneModeTile;
 import com.android.systemui.qs.tiles.AmbientDisplayTile;
 import com.android.systemui.qs.tiles.BatterySaverTile;
+import com.android.systemui.qs.tiles.BenzoSettingsTile;
 import com.android.systemui.qs.tiles.BluetoothTile;
 import com.android.systemui.qs.tiles.BrightnessTile;
 import com.android.systemui.qs.tiles.CaffeineTile;
@@ -314,6 +315,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
 	else if (tileSpec.equals("pie")) return new PieControlTile(this);
         else if (tileSpec.equals("navbar")) return new NavBarTile(this);
         else if (tileSpec.equals("headsup")) return new HeadsUpTile(this);
+	else if (tileSpec.equals("benzo")) return new BenzoSettingsTile(this);
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
         else throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
     }

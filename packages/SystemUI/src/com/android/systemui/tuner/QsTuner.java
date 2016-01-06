@@ -229,6 +229,7 @@ public class QsTuner extends Fragment implements Callback {
 	else if (spec.equals("pie")) return R.string.quick_settings_piecontrol_label;
         else if (spec.equals("navbar")) return R.string.quick_settings_navbar;
         else if (spec.equals("headsup")) return R.string.quick_settings_heads_up_label;
+	else if (spec.equals("benzo")) return R.string.quick_settings_benzosettings;
         return 0;
     }
 
@@ -494,6 +495,7 @@ public class QsTuner extends Fragment implements Callback {
             else if (mSpec.equals("pie")) return R.drawable.ic_qs_pie_on;
             else if (mSpec.equals("navbar")) return R.drawable.ic_qs_navbar;
             else if (mSpec.equals("headsup")) return R.drawable.ic_qs_heads_up_on;
+	    else if (mSpec.equals("benzo")) return R.drawable.ic_qs_benzosettings;
             return R.drawable.android;
         }
 
