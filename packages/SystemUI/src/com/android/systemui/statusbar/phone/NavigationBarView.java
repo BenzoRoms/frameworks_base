@@ -1242,6 +1242,10 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         updateTaskSwitchHelper();
     }
 
+    protected void updateResources() {
+        updateSettings(false);
+    }
+
     /**
      * In landscape, the LinearLayout is not auto mirrored since it is vertical. Therefore we
      * have to do it manually
