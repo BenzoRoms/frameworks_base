@@ -67,6 +67,8 @@ public class KeyguardStatusBarView extends RelativeLayout {
     private int mSystemIconsSwitcherHiddenExpandedMargin;
     private Interpolator mFastOutSlowInInterpolator;
 
+    private UserInfoController mUserInfoController;
+
     private ContentObserver mObserver = new ContentObserver(new Handler()) {
         public void onChange(boolean selfChange, Uri uri) {
             showKeyguardClock();
@@ -160,13 +162,17 @@ public class KeyguardStatusBarView extends RelativeLayout {
         mMultiUserSwitch.setUserSwitcherController(controller);
     }
 
+    private UserInfoController.OnUserInfoChangedListener mUserInfoChangedListener =
+            new UserInfoController.OnUserInfoChangedListener() {
+        @Override
+        public void onUserInfoChanged(String name, Drawable picture) {
+            mMultiUserAvatar.setImageDrawable(picture);
+        }
+    };
+
     public void setUserInfoController(UserInfoController userInfoController) {
-        userInfoController.addListener(new UserInfoController.OnUserInfoChangedListener() {
-            @Override
-            public void onUserInfoChanged(String name, Drawable picture) {
-                mMultiUserAvatar.setImageDrawable(picture);
-            }
-        });
+        mUserInfoController = userInfoController;
+        userInfoController.addListener(mUserInfoChangedListener);
     }
 
     public void setQSPanel(QSPanel qsp) {
@@ -259,5 +265,8 @@ public class KeyguardStatusBarView extends RelativeLayout {
     @Override
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        if (mUserInfoController != null) {
+            mUserInfoController.removeListener(mUserInfoChangedListener);
+        }
     }
 }
