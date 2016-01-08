@@ -47,6 +47,7 @@ public class DisplayListCanvas extends Canvas {
     RenderNode mNode;
     private int mWidth;
     private int mHeight;
+    private HardwareRenderer mHwRenderer;
 
     static DisplayListCanvas obtain(@NonNull RenderNode node) {
         if (node == null) throw new IllegalArgumentException("node cannot be null");
@@ -70,6 +71,10 @@ public class DisplayListCanvas extends Canvas {
     @Override
     public boolean isRecordingFor(Object o) {
         return o == mNode;
+    }
+
+    void setHardwareRenderer(HardwareRenderer renderer) {
+        mHwRenderer = renderer;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -131,11 +136,17 @@ public class DisplayListCanvas extends Canvas {
 
     @Override
     public int getMaximumBitmapWidth() {
+        if (mHwRenderer != null) {
+            mHwRenderer.fence();
+        }
         return nGetMaximumTextureWidth();
     }
 
     @Override
     public int getMaximumBitmapHeight() {
+        if (mHwRenderer != null) {
+            mHwRenderer.fence();
+        }
         return nGetMaximumTextureHeight();
     }
 
