@@ -179,6 +179,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     private OmniJawsClient.WeatherInfo mWeatherData;
     private boolean mShowWeatherDetailed;
     private boolean mShowWeatherHeader;
+    private boolean mWeatherDataInvalid;
 
     private final class WeatherContentObserver extends ContentObserver {
         WeatherContentObserver(Handler handler) {
@@ -301,8 +302,11 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
 
         mWeatherClient = new OmniJawsClient(mContext);
         mWeatherImage.setOnClickListener(this);
+        mWeatherImage.setOnLongClickListener(this);
         mWeatherDetailed.setOnClickListener(this);
+        mWeatherDetailed.setOnLongClickListener(this);
         mWeatherDetailed.setVisibility(View.INVISIBLE);
+        mWeatherDetailed.setWeatherClient(mWeatherClient);
         mShowWeatherDetailed = false;
     }
 
@@ -458,7 +462,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             mBatteryLevel.setVisibility(
                     mExpanded ? (mShowBatteryTextExpanded ? View.VISIBLE : View.GONE)
                               : (mShowBatteryText         ? View.VISIBLE : View.GONE));
-            mWeatherImage.setVisibility((mExpanded && mWeatherData != null)? View.VISIBLE : View.INVISIBLE);
+            mWeatherImage.setVisibility((mExpanded && isShowWeatherHeader())? View.VISIBLE : View.INVISIBLE);
         }
         updateSomcQuickSettingsVisibility();
     }
@@ -575,8 +579,8 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         mSystemIconsSuperContainer.setClickable(mExpanded);
         mSystemIconsSuperContainer.setFocusable(mExpanded);
         mAlarmStatus.setClickable(mNextAlarm != null && mNextAlarm.getShowIntent() != null && !mShowWeatherDetailed);
-        mWeatherImage.setClickable(mExpanded && mWeatherData != null && !mShowWeatherDetailed);
-        mWeatherDetailed.setClickable(mExpanded && mWeatherData != null && mShowWeatherDetailed);
+        mWeatherImage.setClickable(mExpanded && isShowWeatherHeader() && !mShowWeatherDetailed);
+        mWeatherDetailed.setClickable(mExpanded && isShowWeatherHeader() && mShowWeatherDetailed);
     }
 
     private void updateClockLp() {
@@ -682,8 +686,8 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             startDateActivity();
         } else if (v == mWeatherImage) {
             try {
-                if (mWeatherData != null) {
-                    mWeatherDetailed.updateWeatherData(mWeatherClient, mWeatherData);
+                if (!mWeatherDataInvalid && mWeatherData != null) {
+                    mWeatherDetailed.updateWeatherData(mWeatherData);
 
                     int finalRadius = getWidth();
                     Animator anim = ViewAnimationUtils.createCircularReveal(mWeatherDetailed,
@@ -702,6 +706,8 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
                         }
                     });
                     anim.start();
+                } else if (mWeatherDataInvalid) {
+                    showWeatherSettings();
                 }
             } catch(Exception e) {
                 Log.e(TAG, "show detailed failed", e);
@@ -738,6 +744,13 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             startDateLongClickActivity();
         } else if (v == mMultiUserSwitch) {
             startUserLongClickActivity();
+        } else if (v == mWeatherDetailed) {
+            showWeatherSettings();
+            return true;
+        } else if (v == mWeatherImage) {
+            mWeatherImage.showRefresh();
+            forceRefreshWeatherSettings();
+            return true;
         }
         return false;
     }
@@ -1173,20 +1186,24 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
 
     public void queryAndUpdateWeather() {
         try {
+            mWeatherImage.stopRefresh();
+            mWeatherDataInvalid = false;
             mWeatherClient.queryWeather();
             mWeatherData = mWeatherClient.getWeatherInfo();
             if (mWeatherData != null) {
                 mWeatherImage.setConditionImage(mWeatherClient.getWeatherConditionImage(mWeatherData.conditionCode));
                 mWeatherImage.updateWeatherData(mWeatherData);
             } else {
+                mWeatherDataInvalid = true;
                 hideWeatherDetailed();
-                mWeatherImage.setVisibility(View.INVISIBLE);
+                mWeatherImage.setShowError(mWeatherClient.getErrorWeatherConditionImage());
             }
         } catch(Exception e) {
             Log.e(TAG, "queryAndUpdateWeather failed", e);
+            mWeatherDataInvalid = true;
             mWeatherData = null;
             hideWeatherDetailed();
-            mWeatherImage.setVisibility(View.INVISIBLE);
+            mWeatherImage.setShowError(mWeatherClient.getErrorWeatherConditionImage());
         }
     }
 
@@ -1210,7 +1227,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         } else {
             mDateGroup.setVisibility(View.VISIBLE);
             mClock.setVisibility(View.VISIBLE);
-            mWeatherImage.setVisibility((mExpanded && mWeatherData != null)? View.VISIBLE : View.INVISIBLE);
+            mWeatherImage.setVisibility((mExpanded && isShowWeatherHeader())? View.VISIBLE : View.INVISIBLE);
         }
     }
 
@@ -1224,7 +1241,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     }
 
     public void notifyScreenOn(boolean screenOn) {
-        if (screenOn && mWeatherData != null) {
+        if (screenOn && isShowWeatherHeader()) {
             mHandler.postDelayed(new Runnable() {
                 public void run() {
                     // just check early if an update is due
@@ -1235,24 +1252,46 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         }
     }
 
+    private boolean isShowWeatherHeader() {
+        return mShowWeatherHeader && mWeatherClient.isOmniJawsEnabled();
+    }
+
+    private void showWeatherSettings() {
+        if (isShowWeatherHeader()) {
+            Intent settingsIntent = mWeatherClient.getSettingsIntent();
+            if (settingsIntent != null) {
+                mActivityStarter.startActivity(settingsIntent, true /* dismissShade */);
+            }
+        }
+    }
+
+    private void forceRefreshWeatherSettings() {
+        if (isShowWeatherHeader()) {
+            mWeatherClient.updateWeather(true);
+        }
+    }
+
     public void settingsChanged() {
         final boolean value = Settings.System.getIntForUser(
                 mContext.getContentResolver(), Settings.System.STATUS_BAR_HEADER_WEATHER,
                 0, UserHandle.USER_CURRENT) == 1;
 
-        mWeatherClient.settingsChanged();
-        if (mShowWeatherHeader && value) {
+        if (mWeatherClient.isOmniJawsEnabled()) {
+            mWeatherClient.settingsChanged();
+        }
+        // show icon pack change
+        if (isShowWeatherHeader() && value) {
             if (mWeatherData != null) {
                 mWeatherImage.setConditionImage(mWeatherClient.getWeatherConditionImage(mWeatherData.conditionCode));
             }
         }
 
-        // setting is not visible else - so it wont change
         if (mShowWeatherHeader != value) {
             mShowWeatherHeader = value;
             if (value) {
                 mContext.getContentResolver().registerContentObserver(OmniJawsClient.WEATHER_URI,
                         false, mContentObserver);
+                // trigger
                 queryAndUpdateWeather();
             } else {
                 try {
@@ -1311,6 +1350,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         mDateExpanded.setShadowLayer(5, 0, 0, Color.BLACK);
         mBatteryLevel.setShadowLayer(5, 0, 0, Color.BLACK);
         mAlarmStatus.setShadowLayer(5, 0, 0, Color.BLACK);
+        mWeatherImage.enableTextShadow();
     }
 
     /**
@@ -1323,5 +1363,6 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         mDateExpanded.setShadowLayer(0, 0, 0, Color.BLACK);
         mBatteryLevel.setShadowLayer(0, 0, 0, Color.BLACK);
         mAlarmStatus.setShadowLayer(0, 0, 0, Color.BLACK);
+        mWeatherImage.disableTextShadow();
     }
 }
