@@ -81,6 +81,7 @@ public class QSPanel extends ViewGroup {
     private boolean mClosingDetail;
 
     private boolean mBrightnessSliderEnabled;
+    private boolean mBrightnessIconEnabled;
     private boolean mUseFourColumns;
     private boolean mVibrationEnabled;
 
@@ -143,19 +144,27 @@ public class QSPanel extends ViewGroup {
      * Enable/disable brightness slider.
      */
     private boolean showBrightnessSlider() {
+        boolean brightnessIconEnabled = isbrightnessIconEnabled();
         ToggleSlider brightnessSlider = (ToggleSlider) findViewById(R.id.brightness_slider);
         ImageView brightnessIcon = (ImageView) findViewById(R.id.brightness_icon);
         if (mBrightnessSliderEnabled) {
             mBrightnessView.setVisibility(VISIBLE);
             brightnessSlider.setVisibility(VISIBLE);
-            brightnessIcon.setVisibility(View.VISIBLE);
+            if (brightnessIconEnabled) {
+                brightnessIcon.setVisibility(VISIBLE);
+            } else {
+                brightnessIcon.setVisibility(GONE);
+            }
         } else {
             mBrightnessView.setVisibility(GONE);
             brightnessSlider.setVisibility(GONE);
-            brightnessIcon.setVisibility(View.GONE);
         }
         updateResources();
         return mBrightnessSliderEnabled;
+    }
+
+    public boolean isbrightnessIconEnabled() {
+        return mBrightnessIconEnabled;
     }
 
     /**
@@ -739,6 +748,9 @@ public class QSPanel extends ViewGroup {
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.QS_USE_MAIN_TILES),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BRIGHTNESS_ICON),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -763,6 +775,9 @@ public class QSPanel extends ViewGroup {
             mUseMainTiles = Settings.Secure.getIntForUser(
             mContext.getContentResolver(), Settings.Secure.QS_USE_MAIN_TILES,
                 1, UserHandle.USER_CURRENT) == 1;
+            mBrightnessIconEnabled = Settings.System.getIntForUser(
+            mContext.getContentResolver(), Settings.System.BRIGHTNESS_ICON,
+                0, UserHandle.USER_CURRENT) == 1;
         }
     }
 }
