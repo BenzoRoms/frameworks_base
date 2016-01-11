@@ -152,6 +152,10 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
+    <!-- Development shortcut -->
+    <uses-permission android:name="android.permission.CLEAR_APP_USER_DATA" />
+    <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />
+
     <!-- weather -->
     <uses-permission android:name="org.omnirom.omnijaws.READ_WEATHER" />
 
