@@ -51,4 +51,7 @@
     <color name="battery_background">#ffffff</color>
     <color name="status">#ffffff</color>
 
+    <!-- Recents membar text color -->
+    <color name="recents_membar_text_color">@android:color/white</color>
+
 </resources>
