@@ -222,17 +222,11 @@ public class PackageInstallerSession extends IPackageInstallerSession.Stub {
         // waived if the installer is the device owner.
         DevicePolicyManager dpm = (DevicePolicyManager) mContext.getSystemService(
                 Context.DEVICE_POLICY_SERVICE);
-        final boolean isPermissionGranted =
-                (mPm.checkUidPermission(android.Manifest.permission.INSTALL_PACKAGES, installerUid)
-                        == PackageManager.PERMISSION_GRANTED);
-        final boolean isInstallerRoot = (installerUid == Process.ROOT_UID);
-        final boolean forcePermissionPrompt =
-                (params.installFlags & PackageManager.INSTALL_FORCE_PERMISSION_PROMPT) != 0;
         mIsInstallerDeviceOwner = (dpm != null) && dpm.isDeviceOwnerApp(installerPackageName);
-        if ((isPermissionGranted
-                        || isInstallerRoot
-                        || mIsInstallerDeviceOwner)
-                && !forcePermissionPrompt) {
+        if ((mPm.checkUidPermission(android.Manifest.permission.INSTALL_PACKAGES, installerUid)
+                == PackageManager.PERMISSION_GRANTED)
+                || (installerUid == Process.ROOT_UID)
+                || mIsInstallerDeviceOwner) {
             mPermissionsAccepted = true;
         } else {
             mPermissionsAccepted = false;
@@ -961,9 +955,7 @@ public class PackageInstallerSession extends IPackageInstallerSession.Stub {
 
         if (accepted) {
             // Mark and kick off another install pass
-            synchronized (mLock) {
-                mPermissionsAccepted = true;
-            }
+            mPermissionsAccepted = true;
             mHandler.obtainMessage(MSG_COMMIT).sendToTarget();
         } else {
             destroyInternal();
