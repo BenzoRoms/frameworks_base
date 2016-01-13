@@ -275,18 +275,18 @@ public interface MetricsConstants {
     public static final int QS_VOLUME = 242;
     public static final int QS_HEADSUP = 243;
     public static final int QS_EXPANDED = 244;
-    public static final int QS_COMPASS = 245;
-    public static final int QS_NAVBAR = 246;
+    public static final int QS_COMPASS = 247;
+    public static final int QS_NAVBAR = 248;
     public static final int QS_KERNEL = 249;
 
     // Notification drawer settings
-    public static final int NOTIFICATION_DRAWER_SETTINGS = 247;
+    public static final int NOTIFICATION_DRAWER_SETTINGS = 250;
 
     // Lock screen weather settings
-    public static final int LOCKSCREEN_WEATHER_SETTINGS = 248;
+    public static final int LOCKSCREEN_WEATHER_SETTINGS = 251;
 
     // Location tile
-    public static final int QS_LOCATION_DETAILS = 249;
+    public static final int QS_LOCATION_DETAILS = 252;
 
     // These constants must match those in the analytic pipeline, do not edit.
     // Add temporary values to the top of MetricsLogger instead.
