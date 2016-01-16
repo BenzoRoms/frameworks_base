@@ -4783,6 +4783,16 @@ public final class Settings {
         public static final String FINGERPRINT_SUCCESS_VIB = "fingerprint_success_vib";
 
         /**
+         * Immersive recents options
+         * 0 = Default AOSP look
+         * 1 = Statusbar only
+         * 2 = Navbar only
+         * 3 = Fullscreen
+         * @hide
+         */
+        public static final String IMMERSIVE_RECENTS = "immersive_recents";
+
+        /**
          * whether to enable torch on lockscreen
          * @hide
          */
