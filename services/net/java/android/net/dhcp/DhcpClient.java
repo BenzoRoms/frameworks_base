@@ -613,6 +613,8 @@ public class DhcpClient extends StateMachine {
     }
 
     public boolean isValidPacket(DhcpPacket packet) {
+        if (packet == null)
+            return false;
         // TODO: check checksum.
         if (packet == null)
             return false;
