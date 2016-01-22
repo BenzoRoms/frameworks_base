@@ -94,6 +94,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     private boolean mExpanded;
     private boolean mListening;
 
+    private View mHeaderView;
     private ViewGroup mSystemIconsContainer;
     private View mSystemIconsSuperContainer;
     private View mDateGroup;
@@ -134,6 +135,9 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
 
     private int mClockCollapsedSize;
     private int mClockExpandedSize;
+
+    // QS header alpha
+    private int mQSHeaderAlpha;
 
     /**
      * In collapsed QS, the clock and avatar are scaled down a bit post-layout to allow for a nice
@@ -182,6 +186,8 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     private boolean mShowWeatherDetailed;
     private boolean mShowWeatherHeader;
     private boolean mWeatherDataInvalid;
+
+    private SettingsObserver mSettingsObserver;
 
     private final class WeatherContentObserver extends ContentObserver {
         WeatherContentObserver(Handler handler) {
@@ -233,6 +239,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        mHeaderView = findViewById(R.id.header);
         mSystemIconsSuperContainer = findViewById(R.id.system_icons_super_container);
         mSystemIconsContainer = (ViewGroup) findViewById(R.id.system_icons_container);
         mSystemIconsSuperContainer.setOnClickListener(this);
@@ -270,10 +277,12 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         mBackgroundImage = (ImageView) findViewById(R.id.background_image);
         mWeatherImage = (CurrentWeatherView) findViewById(R.id.current_weather_view);
         mWeatherDetailed = (DetailedWeatherView) findViewById(R.id.detailed_weather_view);
+        mSettingsObserver = new SettingsObserver(new Handler());
         loadDimens();
         updateVisibilities();
         updateClockScale();
         updateAvatarScale();
+        setQSHeaderAlpha();
         addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right,
@@ -504,10 +513,12 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             mBatteryController.addStateChangedCallback(this);
             mNextAlarmController.addStateChangedCallback(this);
             mKeyguard.addCallback(mKeyguardCallback);
+            mSettingsObserver.observe();
         } else {
             mBatteryController.removeStateChangedCallback(this);
             mNextAlarmController.removeStateChangedCallback(this);
             mKeyguard.removeCallback(mKeyguardCallback);
+            mSettingsObserver.unobserve();
         }
     }
 
@@ -1101,6 +1112,44 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         }
     };
 
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_TRANSPARENT_HEADER), false, this, UserHandle.USER_ALL);
+            update();
+        }
+
+        void unobserve() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.unregisterContentObserver(this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            update();
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            update();
+        }
+
+        public void update() {
+            ContentResolver resolver = mContext.getContentResolver();
+            mQSHeaderAlpha = Settings.System.getInt(
+                    resolver, Settings.System.QS_TRANSPARENT_HEADER, 255);
+
+            setQSHeaderAlpha();
+            updateVisibilities();
+            requestCaptureValues();
+        }
+    }
+
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -1124,6 +1173,15 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             }
         } else {
             mSomcQuickSettings.setVisibility(View.GONE);
+        }
+    }
+
+    private void setQSHeaderAlpha() {
+        if (mHeaderView != null) {
+            mHeaderView.getBackground().setAlpha(mQSHeaderAlpha);
+        }
+        if (mBackgroundImage != null) {
+            mBackgroundImage.setAlpha(mQSHeaderAlpha);
         }
     }
 
