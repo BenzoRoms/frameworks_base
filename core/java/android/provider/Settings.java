@@ -4836,11 +4836,17 @@ public final class Settings {
          */
         public static final String DASHBOARD_COLUMNS = "dashboard_columns";
 		
-		/**
+        /**
          * Whether to display dashboard tiles in a double line layout
          * @hide
          */
         public static final String DASHBOARD_TILEVIEW_DOUBLE_LINES = "dashboard_tileview_double_lines";
+
+        /**
+         * Enable or disable the Quick Settings Edit Icon
+         * @hide
+         */
+        public static final String ENABLE_QS_EDIT_BUTTON = "quick_settings_edit_icon";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
