@@ -925,12 +925,17 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
 
     private void updateSomcQuickSettingsVisibility() {
         boolean isLocked = mKeyguard != null && mKeyguard.isSecure() && mKeyguard.isShowing();
-        if (isLocked) {
-            mSomcQuickSettings.setVisibility(View.GONE);
-        } else if (mExpanded) {
-            mSomcQuickSettings.setVisibility(View.VISIBLE);
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.ENABLE_QS_EDIT_BUTTON, 1) == 1) {
+            if (isLocked) {
+                mSomcQuickSettings.setVisibility(View.GONE);
+            } else if (mExpanded) {
+                mSomcQuickSettings.setVisibility(View.VISIBLE);
+            } else {
+                mSomcQuickSettings.setVisibility(View.INVISIBLE);
+            }
         } else {
-            mSomcQuickSettings.setVisibility(View.INVISIBLE);
+            mSomcQuickSettings.setVisibility(View.GONE);
         }
     }
 
