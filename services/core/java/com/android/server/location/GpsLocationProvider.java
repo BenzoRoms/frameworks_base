@@ -74,13 +74,6 @@ import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
-import android.telephony.CellIdentityGsm;
-import android.telephony.CellIdentityLte;
-import android.telephony.CellIdentityWcdma;
-import android.telephony.CellInfo;
-import android.telephony.CellInfoGsm;
-import android.telephony.CellInfoLte;
-import android.telephony.CellInfoWcdma;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.NtpTrustedTime;
@@ -96,7 +89,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -221,7 +213,6 @@ public class GpsLocationProvider implements LocationProviderInterface {
     private static final int AGPS_REF_LOCATION_TYPE_GSM_CELLID = 1;
     private static final int AGPS_REF_LOCATION_TYPE_UMTS_CELLID = 2;
     private static final int AGPS_REG_LOCATION_TYPE_MAC        = 3;
-    private static final int AGPS_REF_LOCATION_TYPE_LTE_CELLID = 4;
 
     // set id info
     private static final int AGPS_SETID_TYPE_NONE = 0;
@@ -1938,32 +1929,31 @@ public class GpsLocationProvider implements LocationProviderInterface {
     private void requestRefLocation(int flags) {
         TelephonyManager phone = (TelephonyManager)
                 mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        List<CellInfo> info = phone.getAllCellInfo();
-        if (info != null) {
-            for (CellInfo cellInfo : info) {
-                if (cellInfo.isRegistered()) {
-                    if (cellInfo instanceof CellInfoGsm) {
-                        CellIdentityGsm cellId = ((CellInfoGsm) cellInfo).getCellIdentity();
-                        native_agps_set_ref_location_cellid(AGPS_REF_LOCATION_TYPE_GSM_CELLID,
-                            cellId.getMcc(), cellId.getMnc(), cellId.getLac(), cellId.getCid(), 0);
-                        break;
-                    } else if (cellInfo instanceof CellInfoWcdma) {
-                        CellIdentityWcdma cellId = ((CellInfoWcdma) cellInfo).getCellIdentity();
-                        native_agps_set_ref_location_cellid(AGPS_REF_LOCATION_TYPE_UMTS_CELLID,
-                            cellId.getMcc(), cellId.getMnc(), cellId.getLac(), cellId.getCid(), 0);
-                        break;
-                    } else if (cellInfo instanceof CellInfoLte) {
-                        CellIdentityLte cellId = ((CellInfoLte) cellInfo).getCellIdentity();
-                        native_agps_set_ref_location_cellid(AGPS_REF_LOCATION_TYPE_LTE_CELLID,
-                            cellId.getMcc(), cellId.getMnc(), cellId.getTac(), cellId.getCi(), cellId.getPci());
-                        break;
-                    } else {
-                        Log.i(TAG, "cellInfo not supported" );
-                    }
+        final int phoneType = phone.getPhoneType();
+        if (phoneType == TelephonyManager.PHONE_TYPE_GSM) {
+            GsmCellLocation gsm_cell = (GsmCellLocation) phone.getCellLocation();
+            if ((gsm_cell != null) && (phone.getNetworkOperator() != null)
+                    && (phone.getNetworkOperator().length() > 3)) {
+                int type;
+                int mcc = Integer.parseInt(phone.getNetworkOperator().substring(0,3));
+                int mnc = Integer.parseInt(phone.getNetworkOperator().substring(3));
+                int networkType = phone.getNetworkType();
+                if (networkType == TelephonyManager.NETWORK_TYPE_UMTS
+                    || networkType == TelephonyManager.NETWORK_TYPE_HSDPA
+                    || networkType == TelephonyManager.NETWORK_TYPE_HSUPA
+                    || networkType == TelephonyManager.NETWORK_TYPE_HSPA
+                    || networkType == TelephonyManager.NETWORK_TYPE_HSPAP) {
+                    type = AGPS_REF_LOCATION_TYPE_UMTS_CELLID;
+                } else {
+                    type = AGPS_REF_LOCATION_TYPE_GSM_CELLID;
                 }
+                native_agps_set_ref_location_cellid(type, mcc, mnc,
+                        gsm_cell.getLac(), gsm_cell.getCid());
+            } else {
+                Log.e(TAG,"Error getting cell location info.");
             }
-        } else {
-            Log.i(TAG, "no cellInfo available" );
+        } else if (phoneType == TelephonyManager.PHONE_TYPE_CDMA) {
+            Log.e(TAG, "CDMA not supported.");
         }
     }
 
@@ -2317,7 +2307,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
 
     // AGPS ril suport
     private native void native_agps_set_ref_location_cellid(int type, int mcc, int mnc,
-            int lac_tac, int cid, int pcid);
+            int lac, int cid);
     private native void native_agps_set_id(int type, String setid);
 
     private native void native_update_network_state(boolean connected, int type,
