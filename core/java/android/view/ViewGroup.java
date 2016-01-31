@@ -1541,7 +1541,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
         final View[] children = mChildren;
         for (int i = count - 1; i >= 0; i--) {
             final View child = children[i];
-            if (!child.canAcceptDrag()) {
+            if (!child.canAcceptDrag() || child.getVisibility() != VISIBLE) {
                 continue;
             }
 
