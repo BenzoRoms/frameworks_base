@@ -4321,6 +4321,12 @@ public final class Settings {
         public static final String STATUS_BAR_CARRIER_COLOR = "status_bar_carrier_color";
 
         /**
+         * Navigation bar button color master switch
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_TINT_SWITCH = "navigation_bar_tint_switch";
+
+        /**
          * Navigation bar button color
          * @hide
          */
