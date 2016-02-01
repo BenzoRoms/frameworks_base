@@ -228,11 +228,8 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         mSettingsButton = findViewById(R.id.settings_button);
         mSettingsButton.setOnClickListener(this);
         mSettingsButton.setOnLongClickListener(this);
-        if (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.ENABLE_QS_EDIT_BUTTON, 1) == 1) {
-            mSomcQuickSettings = findViewById(R.id.somc_qs_button);
-            mSomcQuickSettings.setOnClickListener(this);
-        }
+        mSomcQuickSettings = findViewById(R.id.somc_qs_button);
+        mSomcQuickSettings.setOnClickListener(this);
         mTaskManagerButton = findViewById(R.id.task_manager_button);
         mQsDetailHeader = findViewById(R.id.qs_detail_header);
         mQsDetailHeader.setAlpha(0);
