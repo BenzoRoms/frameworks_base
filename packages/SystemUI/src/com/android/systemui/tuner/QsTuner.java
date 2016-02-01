@@ -266,7 +266,7 @@ public class QsTuner extends Fragment implements Callback {
 
         public void reset() {
             Secure.putStringForUser(getContext().getContentResolver(), TILES_SETTING,
-                    "wifi,bt,dnd,cell,airplane,rotation,flashlight,location,cast",
+                    "wifi,bt,cell,location,sync,expanded_desktop,cast,flashlight",
                     ActivityManager.getCurrentUser());
         }
 
