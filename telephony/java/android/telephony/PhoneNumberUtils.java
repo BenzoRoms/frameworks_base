@@ -21,9 +21,11 @@ import com.android.i18n.phonenumbers.PhoneNumberUtil;
 import com.android.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
 import com.android.i18n.phonenumbers.Phonenumber.PhoneNumber;
 import com.android.i18n.phonenumbers.ShortNumberInfo;
+import com.android.internal.telephony.TelephonyIntents;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.location.Country;
 import android.location.CountryDetector;
@@ -31,6 +33,7 @@ import android.net.Uri;
 import android.os.SystemProperties;
 import android.provider.Contacts;
 import android.provider.ContactsContract;
+import android.telecom.PhoneAccount;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -3001,4 +3004,113 @@ public class PhoneNumberUtils
         return SubscriptionManager.getDefaultVoiceSubId();
     }
     //==== End of utility methods used only in compareStrictly() =====
+
+    /*
+     * Returns true when conversion of emergency numbers is enabled
+     */
+    private static boolean isEmergencyNumberConvertEnabled(Context context) {
+        return context.getResources().getBoolean(
+                com.android.internal.R.bool.config_emergency_call_convert_enabled);
+    }
+
+    /**
+     * Converts the emergency number based on the conversion map.
+     * The conversion map is declared as config_emergency_call_convert_map.
+     *
+     * @return The converted emergency number if the number matches conversion map,
+     * otherwise original number.
+     *
+     * @hide
+     */
+    public static String convertEmergencyNumber(Context context, String number) {
+        if (context == null || !isEmergencyNumberConvertEnabled(context)
+                || TextUtils.isEmpty(number)) {
+            return number;
+        }
+        String[] convertMaps = context.getResources().getStringArray(
+                com.android.internal.R.array.config_emergency_call_convert_map);
+        if (DBG) log("convertEmergencyNumber: " + "convertMaps.length = " + convertMaps.length);
+        if (convertMaps == null || convertMaps.length < 1) {
+            return number;
+        }
+
+        String normalizedNumber = normalizeNumber(number);
+        // The number is not emergency number. Skip conversion.
+        if (!isEmergencyNumber(normalizedNumber)) {
+            return number;
+        }
+        for (String convertMap : convertMaps) {
+            if (DBG) log("convertEmergencyNumber: " + convertMap);
+            String[] entry = null;
+            String[] filterNumbers = null;
+            String convertedNumber = null;
+            if (!TextUtils.isEmpty(convertMap)) {
+                entry = convertMap.split(":");
+            }
+            if (entry != null && entry.length == 2) {
+                convertedNumber = entry[1];
+                if (!TextUtils.isEmpty(entry[0])) {
+                    filterNumbers = entry[0].split(",");
+                }
+            }
+            // Skip if the format of entry is invalid
+            if (TextUtils.isEmpty(convertedNumber) || filterNumbers == null
+                    || filterNumbers.length == 0) {
+                continue;
+            }
+
+            for (String filterNumber : filterNumbers) {
+                if (DBG) log("convertEmergencyNumber: filterNumber = " + filterNumber
+                        + ", convertedNumber = " + convertedNumber);
+                if (!TextUtils.isEmpty(filterNumber) && filterNumber.equals(normalizedNumber)) {
+                    if (DBG) log("convertEmergencyNumber: Matched. Successfully converted to: "
+                            + convertedNumber);
+                    return convertedNumber;
+                }
+            }
+        }
+
+        return number;
+    }
+
+    /**
+     * Converts the emergency number held by intent based on the conversion map.
+     * The conversion map is declared as config_emergency_call_convert_map.
+     *
+     * Conversion will take place only when all of following conditions are met:
+     *  - Scheme is {@link PhoneAccount#SCHEME_TEL}
+     *  - The call number matches the conversion map
+     *
+     * Note that we should make sure voice registration is not in STATE_IN_SERVICE
+     * before calling this method.
+     *
+     * @return true if conversion is handled, otherwise false.
+     *
+     * @hide
+     */
+    public static boolean convertEmergencyNumberForIntent(Context context, Intent intent) {
+        if (context == null || intent == null|| !isEmergencyNumberConvertEnabled(context)) {
+            return false;
+        }
+        Uri uri = intent.getData();
+        final String schema = (uri == null) ? null : uri.getScheme();
+        if (schema == null || schema != null && !PhoneAccount.SCHEME_TEL.equals(schema)) {
+            // If the schema is null or NOT telephone number URIs, skip conversion
+            if (DBG) log("convertEmergencyNumberForIntent: skip due to scheme is NOT tel");
+            return false;
+        }
+        String number = getNumberFromIntent(intent, context);
+        String convertedNumber = convertEmergencyNumber(context, number);
+        if (!TextUtils.isEmpty(convertedNumber)
+                && !TextUtils.isEmpty(number)
+                && !number.equals(convertedNumber)) {
+            if (DBG) log("convertEmergencyNumberForIntent convert " + number
+                    + " to " + convertedNumber);
+            number = convertedNumber;
+            intent.setAction(Intent.ACTION_CALL_EMERGENCY);
+            intent.setData(Uri.fromParts(PhoneAccount.SCHEME_TEL, number, null));
+            return true;
+        }
+        return false;
+    }
 }

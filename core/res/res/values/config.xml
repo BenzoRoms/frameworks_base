@@ -2436,4 +2436,17 @@
         <item>com.google.android.gms/com.google.android.gms.update.SystemUpdateService$SecretCodeReceiver</item>
     </string-array>
 
+    <!-- Set to true if some emergency numbers need to be converted in airplane mode,
+         during out of service mode, in emergency only mode or in case of phone call
+         from Emergency dialer. Define the conversion map in config_emergency_call_convert_map -->
+    <bool name="config_emergency_call_convert_enabled">false</bool>
+
+    <!-- This config is used for emgergency number conversion. Formats for this config as below:
+         <item>[dialstring1],[dialstring2],[dialstring3]:[replacement]</item>
+
+         E.g. for Taiwan Type Approval, 110 and 119 should be converted to 112.
+         <item>110,119:112</item>
+    -->
+    <string-array translatable="false" name="config_emergency_call_convert_map" />
+
 </resources>

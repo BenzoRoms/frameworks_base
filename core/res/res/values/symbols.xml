@@ -2348,4 +2348,8 @@
   <java-symbol type="integer" name="config_backKillTimeout" />
   <java-symbol type="string" name="app_killed_message" />
 
+  <!-- Emergency number  -->
+  <java-symbol type="bool" name="config_emergency_call_convert_enabled" />
+  <java-symbol type="array" name="config_emergency_call_convert_map" />
+
 </resources>
