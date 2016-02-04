@@ -133,6 +133,10 @@
     <!-- Screenshot QS Tile -->
     <string name="accessibility_quick_settings_screenshot">Screenshot.</string>
     <string name="quick_settings_screenshot_label">Screenshot</string>
+    <!-- Caffiene -->
+    <string name="quick_settings_caffeine_label">Caffeine</string>
+    <string name="accessibility_quick_settings_caffeine_off">Caffeine off</string>
+    <string name="accessibility_quick_settings_caffeine_on">Caffeine on</string>
 
     <!-- 4G LTE switch -->
     <string name="show_fourg_title">Show 4G instead of LTE</string>
