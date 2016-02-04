@@ -168,6 +168,18 @@
     <string name="accessibility_dpad_left">Cursor left</string>
     <string name="accessibility_dpad_right">Cursor right</string>
 
+    <!-- Dialog title for navigation bar button selection -->
+    <string name="navbar_torch">Torch</string>
+    <string name="navbar_camera">Camera</string>
+    <string name="navbar_screenshot">ScreenShot</string>
+    <string name="navbar_expand">Immersive Mode</string>
+
+    <!-- Content description of the navbar buttons for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_torch">Torch</string>
+    <string name="accessibility_camera">Camera</string>
+    <string name="accessibility_screenshot">ScreenShot</string>
+    <string name="accessibility_expand">Immersive Mode</string>
+
     <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_data_connection_HP">HSPA+</string>
 
