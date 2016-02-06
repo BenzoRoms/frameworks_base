@@ -3701,6 +3701,18 @@ public final class Settings {
          */
         public static final String DOZE_SCHEDULE = "doze_schedule";
 
+	/*
+         * Hide lockscreen date
+         * @hide
+         */
+        public static final String HIDE_LOCKSCREEN_DATE = "hide_lockscreen_date";
+
+        /**
+         * Hide lockscreen clock
+         * @hide
+         */
+        public static final String HIDE_LOCKSCREEN_CLOCK = "hide_lockscreen_clock";
+
         /**
          * Doze pulse screen brightness level
          * @hide
