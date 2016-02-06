@@ -166,6 +166,25 @@ public class KeyguardStatusView extends GridLayout {
                 Settings.System.LOCK_CLOCK_FONTS, 0);
     }
 
+    public void hideLockscreenItems() {
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.HIDE_LOCKSCREEN_CLOCK, 1) == 1) {
+            mClockView = (TextClock) findViewById(R.id.clock_view);
+            mClockView.setVisibility(View.VISIBLE);
+        } else {
+            mClockView = (TextClock) findViewById(R.id.clock_view);
+            mClockView.setVisibility(View.GONE);
+        }
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.HIDE_LOCKSCREEN_DATE, 1) == 1) {
+            mDateView = (TextClock) findViewById(R.id.date_view);
+            mDateView.setVisibility(View.VISIBLE);
+        } else {
+            mDateView = (TextClock) findViewById(R.id.date_view);
+            mDateView.setVisibility(View.GONE);
+        }
+    }
+
     public void refreshTime() {
         mDateView.setFormat24Hour(Patterns.dateView);
         mDateView.setFormat12Hour(Patterns.dateView);
@@ -182,6 +201,7 @@ public class KeyguardStatusView extends GridLayout {
         refreshTime();
         refreshAlarmStatus(nextAlarm);
         refreshLockFont();
+        hideLockscreenItems();
     }
 
     void refreshAlarmStatus(AlarmManager.AlarmClockInfo nextAlarm) {
@@ -222,6 +242,7 @@ public class KeyguardStatusView extends GridLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mInfoCallback);
+        hideLockscreenItems();
     }
 
     @Override
@@ -298,7 +319,7 @@ public class KeyguardStatusView extends GridLayout {
         Drawable icon = resId > 0 ? res.getDrawable(resId).mutate() : null;
         if (icon != null) {
             icon.setTintList(ColorStateList.valueOf(useWarningColor ? mWarningColor : mIconColor));
-
+        }
         mAmbientDisplayBatteryView.setText(percentage);
         mAmbientDisplayBatteryView.setTextColor(useWarningColor
                 ? mWarningColor : mPrimaryTextColor);

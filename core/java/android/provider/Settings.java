@@ -3598,6 +3598,18 @@ public final class Settings {
          */
         public static final String BATTERY_LIGHT_FULL_COLOR = "battery_light_full_color";
 
+	/*
+         * Hide lockscreen date
+         * @hide
+         */
+        public static final String HIDE_LOCKSCREEN_DATE = "hide_lockscreen_date";
+
+        /**
+         * Hide lockscreen clock
+         * @hide
+         */
+        public static final String HIDE_LOCKSCREEN_CLOCK = "hide_lockscreen_clock";
+
         /**
          * Whether the battery light should be enabled (if hardware supports it)
          * The value is boolean (1 or 0).
