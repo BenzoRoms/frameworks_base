@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
+<<<<<<< HEAD
      Copyright (C) 2016 Benzo Rom
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,5 +37,8 @@
     <dimen name="folder_width">290dp</dimen>
     <dimen name="folder_height">480dp</dimen>
     <dimen name="setup_sidebar_width">90dp</dimen>
+
+    <dimen name="keyguard_shortcut_item_margin">10dp</dimen>
+    <dimen name="battery_level_text_size_small">12sp</dimen>
 
 </resources>
