@@ -153,6 +153,7 @@ public class NavigationBarView extends LinearLayout {
     private OnLongClickListener mNotificationsLongListener;
     private OnClickListener mTorchClickListener;
     private OnClickListener mCameraClickListener;
+    private OnLongClickListener mCameraLongClickListener;
     private OnClickListener mScreenShotClickListener;
     private OnClickListener mImmersiveClickListener;
     private OnClickListener mAppPickerClickListener;
@@ -857,8 +858,9 @@ public class NavigationBarView extends LinearLayout {
                       OnLongClickListener recentsBackListener, OnTouchListener homeSearchActionListener,
                       OnLongClickListener longPressHomeListener, OnClickListener notificationsClickListener,
                       OnLongClickListener notificationsLongListener, OnClickListener torchClickListener,
-                      OnClickListener cameraClickListener, OnClickListener screenshotClickListener,
-                      OnClickListener immersiveClickListener, OnClickListener appPickerClickListener) {
+                      OnClickListener cameraClickListener, OnLongClickListener cameraLongClickListener,
+                      OnClickListener screenshotClickListener, OnClickListener immersiveClickListener,
+                      OnClickListener appPickerClickListener) {
         mRecentsClickListener = recentsClickListener;
         mRecentsPreloadListener = recentsPreloadListener;
         mHomeSearchActionListener = homeSearchActionListener;
@@ -868,6 +870,7 @@ public class NavigationBarView extends LinearLayout {
         mNotificationsLongListener = notificationsLongListener;
         mTorchClickListener = torchClickListener;
         mCameraClickListener = cameraClickListener;
+        mCameraLongClickListener = cameraLongClickListener;
         mScreenShotClickListener = screenshotClickListener;
         mImmersiveClickListener = immersiveClickListener;
         mAppPickerClickListener = appPickerClickListener;
@@ -925,6 +928,8 @@ public class NavigationBarView extends LinearLayout {
         View cameraView = mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_CAMERA);
         if (cameraView != null) {
             cameraView.setOnClickListener(mCameraClickListener);
+            cameraView.setLongClickable(true);
+            cameraView.setOnLongClickListener(mCameraLongClickListener);
         }
         View screenshotView = mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_SCREENSHOT);
         if (screenshotView != null) {
