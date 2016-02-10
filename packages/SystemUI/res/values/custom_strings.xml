@@ -180,5 +180,7 @@
     <!-- Screenrecord QS Tile -->
     <string name="quick_settings_screenrecord_label">Screenrecord</string>
     <string name="quick_settings_screenrecord_on">Recording ...</string>
+    <!-- Kill App QS Tile -->
+    <string name="quick_settings_kill_app_label">Kill App</string>
 
 </resources>
