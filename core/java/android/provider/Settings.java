@@ -4951,20 +4951,6 @@ public final class Settings {
         public static final String TRANSPARENT_VOLUME_DIALOG = "transparent_volume_dialog";
 
         /**
-         * Timeout for Heads Up
-         *
-         * @hide
-         */
-        public static final String HEADS_UP_TIMEOUT = "heads_up_timeout";
-
-        /**
-         * Snooze time for heads up
-         *
-         * @hide
-         */
-        public static final String HEADS_UP_SNOOZE_LENGTH_MS = "heads_up_snooze_length_ms";
-
-        /**
          *
          * @hide
          */
@@ -5023,6 +5009,8 @@ public final class Settings {
         public static final String STREAM_VOLUME_STEPS_CHANGED = "stream_volume_steps_changed";
 
         /**
+=======
+>>>>>>> parent of fb25996... Heads Up Timeout && Snooze  2/2
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
