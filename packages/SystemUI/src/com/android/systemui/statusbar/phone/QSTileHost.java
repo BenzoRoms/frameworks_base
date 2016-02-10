@@ -48,6 +48,7 @@ import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.ImeTile;
 import com.android.systemui.qs.tiles.IntentTile;
 import com.android.systemui.qs.tiles.KernelAdiutorTile;
+import com.android.systemui.qs.tiles.KillAppTile;
 import com.android.systemui.qs.tiles.LayersManagerTile;
 import com.android.systemui.qs.tiles.LocationTile;
 import com.android.systemui.qs.tiles.LockscreenToggleTile;
@@ -316,6 +317,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (tileSpec.equals("layers")) return new LayersManagerTile(this);
 	else if (tileSpec.equals("floatingwin")) return new FloatingWindowsTile(this);
 	else if (tileSpec.equals("screenrecord")) return new ScreenrecordTile(this);
+	else if (tileSpec.equals("kill_app")) return new KillAppTile(this);
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
         else throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
     }
