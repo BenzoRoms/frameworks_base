@@ -2366,8 +2366,14 @@ public class PrintActivity extends Activity implements RemotePrintDocument.Updat
                 if (TextUtils.isEmpty(numericString)) {
                     continue;
                 }
-                final int pageIndex = Integer.parseInt(numericString);
-                if (pageIndex < 1 || pageIndex > pageCount) {
+                try{
+                    final int pageIndex = Integer.parseInt(numericString);
+                    if (pageIndex < 1 || pageIndex > pageCount) {
+                        mPageRangeEditText.setError("");
+                        updateOptionsUi();
+                        return;
+                    }
+                } catch (NumberFormatException nfe){
                     mPageRangeEditText.setError("");
                     updateOptionsUi();
                     return;
