@@ -321,4 +321,7 @@
     <!-- Announcement made when lock screen changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_lock_screen_changed_on">Lock screen turned on.</string>
 
+    <!-- IME selector Tile -->
+    <string name="quick_settings_ime_label">IME</string>
+
 </resources>
