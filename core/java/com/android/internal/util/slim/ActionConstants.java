@@ -60,6 +60,7 @@ public class ActionConstants {
     public static final String ACTION_LOCKDOWN             = "**lockdown**";
     public static final String ACTION_SOUND                = "**sound**";
     public static final String ACTION_USERS                = "**users**";
+    public static final String ACTION_SMART_PULLDOWN       = "**smart_pulldown**";
     public static final String ACTION_NOWONTAP             = "**nowontap**";
 
     // no action

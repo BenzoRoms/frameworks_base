@@ -32,4 +32,7 @@
          all of the currently visible notifications. [CHAR LIMIT=10]-->
    <string name="clear_recents">Close all recent</string>
 
+    <!-- Smart PullDown Warning -->
+    <string name="smart_pulldown_disabled">Smart pulldown is disabled</string>
+
 </resources>
