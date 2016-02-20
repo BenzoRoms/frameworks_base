@@ -205,6 +205,9 @@ public class ZenModePanel extends LinearLayout {
         if (mZenButtons != null) {
             mZenButtons.updateLocale();
         }
+        if (mZenIntroductionCustomize != null) {
+            mZenIntroductionCustomize.setText(R.string.zen_priority_customize_button);
+        }
     }
 
     private void confirmZenIntroduction() {
