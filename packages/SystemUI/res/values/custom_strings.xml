@@ -185,6 +185,10 @@
     <!-- ViPER4Android -->
     <string name="quick_settings_v4a_label">ViPER4Android</string>
     <string name="accessibility_quick_settings_v4a">ViPER4Android.</string>
+    <!-- Music QS Tile -->
+    <string name="quick_settings_music_label">Music</string>
+    <string name="quick_settings_music_play">Play</string>
+    <string name="quick_settings_music_pause">Pause</string>
 
     <!-- Advanced Location QS Tile -->
     <string name="accessibility_quick_settings_location_battery_saving">Location reporting: battery saving mode.</string>
