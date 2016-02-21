@@ -66,4 +66,8 @@
     <dimen name="recent_app_sidebar_item_padding">2dp</dimen>
     <dimen name="recent_app_sidebar_item_title_text_size">11sp</dimen>
 
+    <!-- Advanced QS Location tile -->
+    <dimen name="detail_radio_group_padding_left">16dp</dimen>
+    <dimen name="detail_radio_group_padding">8dp</dimen>
+
 </resources>
