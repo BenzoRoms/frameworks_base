@@ -47,6 +47,7 @@ import com.android.systemui.qs.tiles.KernelAdiutorTile;
 import com.android.systemui.qs.tiles.KillAppTile;
 import com.android.systemui.qs.tiles.LayersManagerTile;
 import com.android.systemui.qs.tiles.LocationTile;
+import com.android.systemui.qs.tiles.MusicTile;
 import com.android.systemui.qs.tiles.NfcTile;
 import com.android.systemui.qs.tiles.RebootTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
@@ -302,6 +303,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
 	else if (tileSpec.equals("screenrecord")) return new ScreenrecordTile(this);
 	else if (tileSpec.equals("kill_app")) return new KillAppTile(this);
         else if (tileSpec.equals("v4a")) return  new Viper4AndroidTile(this);
+        else if (tileSpec.equals("music")) return new MusicTile(this);
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
         else throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
     }
