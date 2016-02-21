@@ -225,6 +225,7 @@ public class QsTuner extends Fragment implements Callback {
         else if (spec.equals("adb_network")) return R.string.quick_settings_adb_network;
 	else if (spec.equals("benzo")) return R.string.quick_settings_benzosettings;
 	else if (spec.equals("pie")) return R.string.quick_settings_piecontrol_label;
+        else if (spec.equals("timeout")) return R.string.quick_settings_timeout_label;
         return 0;
     }
 
@@ -487,6 +488,7 @@ public class QsTuner extends Fragment implements Callback {
             else if (mSpec.equals("adb_network")) return R.drawable.ic_qs_network_adb_on;
 	    else if (mSpec.equals("benzo")) return R.drawable.ic_qs_benzosettings;
             else if (mSpec.equals("pie")) return R.drawable.ic_qs_pie_on;
+            else if (mSpec.equals("timeout")) return R.drawable.ic_qs_screen_timeout_vector;
             return R.drawable.android;
         }
 
