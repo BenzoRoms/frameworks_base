@@ -62,6 +62,7 @@
     <!-- SystemUI Tuner Parts -->
     <string name="systemui_tuner_statusbar_title">Statusbar Items</string>
     <string name="systemui_tuner_qs_title">Quick Settings</string>
+    <string name="status_bar_silent">Silent mode</string>
 
     <!-- Strings for lockscreen shortcut hints -->
     <string name="left_shortcut_hint">Swipe right for %1$s</string>
