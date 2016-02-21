@@ -3171,6 +3171,12 @@ public final class Settings {
         public static final Validator SIP_ADDRESS_ONLY_VALIDATOR = sBooleanValidator;
 
         /**
+         * Whether to control brightness from status bar
+         * @hide
+         */
+        public static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
+
+        /**
          * @deprecated Use SIP_ALWAYS or SIP_ADDRESS_ONLY instead.  Formerly used to indicate that
          * the user should be prompted each time a call is made whether it should be placed using
          * SIP.  The {@link com.android.providers.settings.DatabaseHelper} replaces this with
