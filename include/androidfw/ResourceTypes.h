@@ -1885,6 +1885,8 @@ private:
 
     void print_value(const Package* pkg, const Res_value& value) const;
     
+    void verifyInvariants() const;
+
     mutable Mutex               mLock;
 
     status_t                    mError;
