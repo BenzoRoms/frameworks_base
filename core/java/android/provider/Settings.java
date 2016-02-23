@@ -5096,12 +5096,6 @@ public final class Settings {
         public static final String TRANSPARENT_POWER_DIALOG_DIM = "transparent_power_dialog_dim";
 
         /**
-         * Whether to display dashboard dividers
-         * @hide
-         */
-        public static final String DASHBOARD_TILEVIEW_DIVIDERS = "dashboard_tileview_dividers";
-
-        /**
          * What color to use for the battery LED while charging - really full (100%)
          * @hide
          */
