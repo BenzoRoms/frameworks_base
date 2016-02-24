@@ -5161,6 +5161,11 @@ public final class Settings {
         public static final String BLOCKED_BY_RECENTS = "blocked_by_recents";
 
         /**
+         * Define when Nfc polling is activated.
+         */
+        public static final String NFC_POLLING_MODE = "nfc_polling";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
