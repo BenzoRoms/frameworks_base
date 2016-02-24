@@ -1174,7 +1174,7 @@ final class WindowState implements WindowManagerPolicy.WindowState {
         }
     }
 
-    private void setConfiguration(
+    void setConfiguration(
             final Configuration newConfig, final Configuration newOverrideConfig) {
         mConfiguration = newConfig;
         mOverrideConfig = newOverrideConfig;
