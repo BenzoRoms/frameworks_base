@@ -63,4 +63,8 @@ interface IPowerManager
 
     // blocked wakelock support
     String getSeenWakeLocks();
+
+    // sets the delai after which to check the proximity to decide whether
+    // to wake the device
+    void wakeUpWithProximityCheck(long time, String reason, String opPackageName);
 }
