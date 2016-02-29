@@ -28,32 +28,36 @@
             android:title="@string/statusbar_tuner_category_title">
 
         <com.android.systemui.tuner.StatusBarSwitch
-            android:key="cast"
-            android:title="@string/quick_settings_cast_title" />
+            android:key="airplane"
+            android:title="@string/status_bar_airplane" />
 
         <com.android.systemui.tuner.StatusBarSwitch
-            android:key="headset"
-            android:title="@string/status_bar_headset" />
-
-        <com.android.systemui.tuner.StatusBarSwitch
-            android:key="hotspot"
-            android:title="@string/quick_settings_hotspot_label" />
+            android:key="alarm_clock"
+            android:title="@string/status_bar_alarm" />
 
         <com.android.systemui.tuner.StatusBarSwitch
             android:key="bluetooth"
             android:title="@string/quick_settings_bluetooth_label" />
 
         <com.android.systemui.tuner.StatusBarSwitch
+            android:key="cast"
+            android:title="@string/quick_settings_cast_title" />
+
+        <com.android.systemui.tuner.StatusBarSwitch
+            android:key="mobile"
+            android:title="@string/quick_settings_cellular_detail_title" />
+
+        <com.android.systemui.tuner.StatusBarSwitch
             android:key="zen"
             android:title="@string/quick_settings_dnd_label" />
 
         <com.android.systemui.tuner.StatusBarSwitch
-            android:key="volume"
-            android:title="@string/status_bar_vibsil" />
+            android:key="ethernet"
+            android:title="@string/status_bar_ethernet" />
 
         <com.android.systemui.tuner.StatusBarSwitch
-            android:key="alarm_clock"
-            android:title="@string/status_bar_alarm" />
+            android:key="hotspot"
+            android:title="@string/quick_settings_hotspot_label" />
 
         <com.android.systemui.tuner.StatusBarSwitch
             android:key="volume"
@@ -64,24 +68,16 @@
             android:title="@string/status_bar_work" />
 
         <com.android.systemui.tuner.StatusBarSwitch
-            android:key="wifi"
-            android:title="@string/quick_settings_wifi_label" />
-
-        <com.android.systemui.tuner.StatusBarSwitch
-            android:key="ethernet"
-            android:title="@string/status_bar_ethernet" />
-
-        <com.android.systemui.tuner.StatusBarSwitch
             android:key="vpn"
             android:title="@string/status_bar_vpn" />
 
         <com.android.systemui.tuner.StatusBarSwitch
-            android:key="mobile"
-            android:title="@string/quick_settings_cellular_detail_title" />
+            android:key="wifi"
+            android:title="@string/quick_settings_wifi_label" />
 
         <com.android.systemui.tuner.StatusBarSwitch
-            android:key="airplane"
-            android:title="@string/status_bar_airplane" />
+            android:key="headset"
+            android:title="@string/status_bar_headset" />
 
         </PreferenceCategory>
 
