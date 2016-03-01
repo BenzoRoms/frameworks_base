@@ -1286,10 +1286,25 @@ public class WindowManagerService extends IWindowManager.Stub
         // Figure out where window should go, based on layer.
         final int myLayer = win.mBaseLayer;
         int i;
+        int firstLowerFloatingIndex = -1;
         for (i = windows.size() - 1; i >= 0; i--) {
-            if (windows.get(i).mBaseLayer <= myLayer) {
-                break;
+            final WindowState w = windows.get(i);
+            if (w.mBaseLayer <= myLayer) {
+                if (w.mIsFloatingLayer) {
+                    // We cannot rely on this floating-layer window unless there is no higher-layer
+                    // window under it.
+                    if (firstLowerFloatingIndex < 0) {
+                        firstLowerFloatingIndex = i;
+                    }
+                } else {
+                    break;
+                }
+            } else {
+                firstLowerFloatingIndex = -1;
             }
+        }
+        if (firstLowerFloatingIndex >= 0) {
+            i = firstLowerFloatingIndex;
         }
         i++;
         if (DEBUG_FOCUS_LIGHT || DEBUG_WINDOW_MOVEMENT || DEBUG_ADD_REMOVE) Slog.v(TAG,
