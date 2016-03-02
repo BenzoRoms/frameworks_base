@@ -250,6 +250,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
     private static final int MSG_RESTRICT_BACKGROUND_CHANGED = 6;
     private static final int MSG_ADVISE_PERSIST_THRESHOLD = 7;
     private static final int MSG_SCREEN_ON_CHANGED = 8;
+    private static final int MSG_PROCESS_LOW_POWER_CHANGED = 9;
 
     private final Context mContext;
     private final IActivityManager mActivityManager;
@@ -449,12 +450,9 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                     new PowerManagerInternal.LowPowerModeListener() {
                 @Override
                 public void onLowPowerModeChanged(boolean enabled) {
-                    synchronized (mRulesLock) {
-                        if (mRestrictPower != enabled) {
-                            mRestrictPower = enabled;
-                            updateRulesForGlobalChangeLocked(true);
-                        }
-                    }
+                    mHandler.removeMessages(MSG_PROCESS_LOW_POWER_CHANGED);
+                    Message msg = Message.obtain(mHandler, MSG_PROCESS_LOW_POWER_CHANGED, enabled);
+                    mHandler.sendMessage(msg);
                 }
             });
             mRestrictPower = mPowerManagerInternal.getLowPowerModeEnabled();
@@ -2532,6 +2530,16 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                 }
                 case MSG_SCREEN_ON_CHANGED: {
                     updateScreenOn();
+                    return true;
+                }
+                case MSG_PROCESS_LOW_POWER_CHANGED: {
+                    boolean enabled = (Boolean) msg.obj;
+                    synchronized (mRulesLock) {
+                        if (mRestrictPower != enabled) {
+                            mRestrictPower = enabled;
+                            updateRulesForGlobalChangeLocked(true);
+                        }
+                    }
                     return true;
                 }
                 default: {
