@@ -36,6 +36,7 @@
     <string name="global_action_screenshot">Screenshot</string>
     <string name="global_action_screenrecord">Screenrecord</string>
     <string name="global_action_current_user">Current</string>
+    <string name="global_action_torch">Flashlight</string>
     <!-- Slimseekbar -->
     <string name="default_string">Default</string>
 
