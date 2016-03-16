@@ -22,4 +22,11 @@
 
     <color name="color_control_normal_default_material_light">@color/secondary_text_default_material_light</color>
     <color name="color_control_normal_default_material_dark">@color/secondary_text_default_material_dark</color>
+
+    <!-- Dexopt dialog -->
+    <color name="dexopt_background">#ff21272b</color>
+    <color name="dexopt_primary_text">#ffffffff</color>
+    <color name="dexopt_secondary_text">#b3ffffff</color>
+    <color name="dexopt_progress_tint">#ff607d8b</color>
+
 </resources>

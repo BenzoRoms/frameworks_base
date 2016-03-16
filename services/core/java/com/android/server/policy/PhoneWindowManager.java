@@ -24,7 +24,6 @@ import android.app.ActivityManagerNative;
 import android.app.IActivityManager;
 import android.app.AppOpsManager;
 import android.app.IUiModeManager;
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.app.StatusBarManager;
 import android.app.UiModeManager;
@@ -38,6 +37,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.CompatibilityInfo;
@@ -111,6 +111,7 @@ import android.view.KeyCharacterMap.FallbackAction;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.WindowManagerPolicyControl;
+import android.view.animation.Animation;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.policy.PhoneWindow;
@@ -133,6 +134,7 @@ import android.widget.Toast;
 import com.android.internal.R;
 import com.android.internal.os.DeviceKeyHandler;
 import com.android.internal.statusbar.IStatusBarService;
+import com.android.internal.util.benzo.DexoptDialog;
 import com.android.internal.util.benzo.DimensionConverter;
 import com.android.internal.util.gesture.EdgeGesturePosition;
 import com.android.internal.util.gesture.EdgeServiceConstants;
@@ -325,6 +327,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     AccessibilityManager mAccessibilityManager;
     BurnInProtectionHelper mBurnInProtectionHelper;
     AppOpsManager mAppOpsManager;
+    WindowManager mWm;
 
     // Vibrator pattern for haptic feedback of a long press.
     long[] mLongPressVibePattern;
@@ -1694,6 +1697,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mDreamManagerInternal = LocalServices.getService(DreamManagerInternal.class);
         mPowerManagerInternal = LocalServices.getService(PowerManagerInternal.class);
         mAppOpsManager = (AppOpsManager) mContext.getSystemService(Context.APP_OPS_SERVICE);
+<<<<<<< HEAD
+=======
+        mWm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        mCameraManager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
+>>>>>>> 4e53855... Sexy up the dexopting dialog
         mPowerManagerInternal = LocalServices.getService(PowerManagerInternal.class);
         mCameraManager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
 
@@ -2400,10 +2408,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
             lp.format = PixelFormat.TRANSLUCENT;
             lp.setTitle("PointerLocation");
-            WindowManager wm = (WindowManager)
-                    mContext.getSystemService(Context.WINDOW_SERVICE);
             lp.inputFeatures |= WindowManager.LayoutParams.INPUT_FEATURE_NO_INPUT_CHANNEL;
-            wm.addView(mPointerLocationView, lp);
+            mWm.addView(mPointerLocationView, lp);
             mWindowManagerFuncs.registerPointerEventListener(mPointerLocationView);
         }
     }
@@ -2411,8 +2417,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private void disablePointerLocation() {
         if (mPointerLocationView != null) {
             mWindowManagerFuncs.unregisterPointerEventListener(mPointerLocationView);
-            WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-            wm.removeView(mPointerLocationView);
+            mWm.removeView(mPointerLocationView);
             mPointerLocationView = null;
         }
     }
@@ -2927,7 +2932,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
             params.setTitle("Starting " + packageName);
 
-            wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
             view = win.getDecorView();
 
             if (win.isFloating()) {
@@ -2945,7 +2949,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 + " / " + appToken + ": "
                 + (view.getParent() != null ? view : null));
 
-            wm.addView(view, params);
+            mWm.addView(view, params);
 
             // Only return the view if it was successfully added to the
             // window manager... which we can tell by it having a parent.
@@ -2962,7 +2966,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         } finally {
             if (view != null && view.getParent() == null) {
                 Log.w(TAG, "view not successfully added to wm, removing view");
-                wm.removeViewImmediate(view);
+                mWm.removeViewImmediate(view);
             }
         }
 
@@ -2977,7 +2981,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         if (window != null) {
             WindowManager wm = (WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE);
-            wm.removeView(window);
+            mWm.removeView(window);
         }
     }
 
@@ -6622,8 +6626,28 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         if (mBootMsgDialog != null) {
             if (DEBUG_WAKEUP) Slog.d(TAG, "handleHideBootMessage: dismissing");
-            mBootMsgDialog.dismiss();
-            mBootMsgDialog = null;
+            Animation.AnimationListener mListener = new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    //do nothing
+                }
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    Handler animHandler = new Handler();
+                    animHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mBootMsgDialog.dismiss();
+                            mBootMsgDialog = null;
+                        }
+                    }, 100);
+                }
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                    //do nothing
+                }
+            };
+            mBootMsgDialog.startFinalAnimation(mListener);
         }
     }
 
@@ -7040,7 +7064,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         screenTurnedOn();
     }
 
-    ProgressDialog mBootMsgDialog = null;
+    DexoptDialog mBootMsgDialog = null;
 
     /**
      * name of package currently being dex optimized
@@ -7056,83 +7080,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     /** {@inheritDoc} */
     @Override
-    public void showBootMessage(final CharSequence msg, final boolean always) {
+    public void showBootMessage(final ApplicationInfo appInfo, final int currentApp, final int totalApps, final boolean always) {
         mHandler.post(new Runnable() {
             @Override public void run() {
                 if (mBootMsgDialog == null) {
-                    int theme;
-                    if (mContext.getPackageManager().hasSystemFeature(
-                            PackageManager.FEATURE_WATCH)) {
-                        theme = com.android.internal.R.style.Theme_Micro_Dialog_Alert;
-                    } else if (mContext.getPackageManager().hasSystemFeature(
-                            PackageManager.FEATURE_TELEVISION)) {
-                        theme = com.android.internal.R.style.Theme_Leanback_Dialog_Alert;
-                    } else {
-                        theme = 0;
-                    }
-
-                    mBootMsgDialog = new ProgressDialog(mContext, theme) {
-                        // This dialog will consume all events coming in to
-                        // it, to avoid it trying to do things too early in boot.
-                        @Override public boolean dispatchKeyEvent(KeyEvent event) {
-                            return true;
-                        }
-                        @Override public boolean dispatchKeyShortcutEvent(KeyEvent event) {
-                            return true;
-                        }
-                        @Override public boolean dispatchTouchEvent(MotionEvent ev) {
-                            return true;
-                        }
-                        @Override public boolean dispatchTrackballEvent(MotionEvent ev) {
-                            return true;
-                        }
-                        @Override public boolean dispatchGenericMotionEvent(MotionEvent ev) {
-                            return true;
-                        }
-                        @Override public boolean dispatchPopulateAccessibilityEvent(
-                                AccessibilityEvent event) {
-                            return true;
-                        }
-                    };
-                    if (mContext.getPackageManager().isUpgrade()) {
-                        mBootMsgDialog.setTitle(R.string.android_upgrading_title);
-                    } else {
-                        mBootMsgDialog.setTitle(R.string.android_start_title);
-                    }
-                    mBootMsgDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                    mBootMsgDialog.setIcon(com.android.internal.R.drawable.boot_logo);
-                    mBootMsgDialog.setIndeterminate(true);
-                    mBootMsgDialog.getWindow().setType(
-                            WindowManager.LayoutParams.TYPE_BOOT_PROGRESS);
-                    mBootMsgDialog.getWindow().addFlags(
-                            WindowManager.LayoutParams.FLAG_DIM_BEHIND
-                            | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
-                    mBootMsgDialog.getWindow().setDimAmount(1);
-                    WindowManager.LayoutParams lp = mBootMsgDialog.getWindow().getAttributes();
-                    lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR;
-                    mBootMsgDialog.getWindow().setAttributes(lp);
-                    mBootMsgDialog.setCancelable(false);
-                    mBootMsgDialog.show();
-
-                    // Reduce animation to 15 FPS to improve boot time
-                    ProgressBar spinner = (ProgressBar) mBootMsgDialog.findViewById(R.id.progress);
-                    if (spinner != null) {
-                        Drawable d = spinner.getIndeterminateDrawable();
-                        if (d != null && d instanceof AnimatedRotateDrawable) {
-                            AnimatedRotateDrawable ard = (AnimatedRotateDrawable) d;
-                            ard.setFramesDuration(66);
-                        }
-                    }
+                    mBootMsgDialog = DexoptDialog.create(mContext);
                 }
-
-                if (always && (currentPackageName != null)) {
-                    // Only display the current package name if the main message says "Optimizing app N of M".
-                    // We don't want to do this when the message says "Starting apps" or "Finishing boot", etc.
-                    mBootMsgDialog.setMessage(Html.fromHtml(msg + "<br><b>" + currentPackageName + "</b>"));
-                }
-                else {
-                    mBootMsgDialog.setMessage(msg);
-                }
+                mBootMsgDialog.setProgress(appInfo, currentApp, totalApps);
             }
         });
     }
