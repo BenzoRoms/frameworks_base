@@ -58,6 +58,7 @@ public class QSTileView extends ViewGroup {
     private final int mTilePaddingBelowIconPx;
     private final int mDualTileVerticalPaddingPx;
     private final View mTopBackgroundView;
+    private final Drawable mTileTopBackground;
 
     private TextView mLabel;
     private QSDualTileLabel mDualLabel;
@@ -67,6 +68,7 @@ public class QSTileView extends ViewGroup {
     private OnLongClickListener mLongClick;
     private Drawable mTileBackground;
     private RippleDrawable mRipple;
+    private RippleDrawable mTopRipple;
 
     public QSTileView(Context context) {
         super(context);
@@ -79,6 +81,7 @@ public class QSTileView extends ViewGroup {
         mDualTileVerticalPaddingPx =
                 res.getDimensionPixelSize(R.dimen.qs_dual_tile_padding_vertical);
         mTileBackground = newTileBackground();
+        mTileTopBackground = newTileBackground();
         recreateLabel();
         setClipChildren(false);
 
@@ -179,8 +182,12 @@ public class QSTileView extends ViewGroup {
     public boolean setDual(boolean dual) {
         final boolean changed = dual != mDual;
         mDual = dual;
-        if (mTileBackground instanceof RippleDrawable) {
-            setRipple((RippleDrawable) mTileBackground);
+        mRipple = (mTileBackground instanceof RippleDrawable)
+                ? ((RippleDrawable) mTileBackground) : null;
+        mTopRipple = (mTileTopBackground instanceof RippleDrawable)
+                ? ((RippleDrawable) mTileTopBackground) : null;
+        if (getWidth() != 0) {
+            updateRippleSize(getWidth(), getHeight());
         }
         if (dual) {
             mTopBackgroundView.setOnClickListener(mClickPrimary);
@@ -205,13 +212,6 @@ public class QSTileView extends ViewGroup {
         }
         postInvalidate();
         return changed;
-    }
-
-    private void setRipple(RippleDrawable tileBackground) {
-        mRipple = tileBackground;
-        if (getWidth() != 0) {
-            updateRippleSize(getWidth(), getHeight());
-        }
     }
 
     public void init(OnClickListener clickPrimary, OnClickListener clickSecondary,
@@ -272,10 +272,7 @@ public class QSTileView extends ViewGroup {
         top += mTilePaddingTopPx;
         final int iconLeft = (w - mIcon.getMeasuredWidth()) / 2;
         layout(mIcon, iconLeft, top);
-        if (mRipple != null) {
-            updateRippleSize(w, h);
-
-        }
+        updateRippleSize(w, h);
         top = mIcon.getBottom();
         top += mTilePaddingBelowIconPx;
         if (mDual) {
@@ -290,7 +287,12 @@ public class QSTileView extends ViewGroup {
         final int cx = width / 2;
         final int cy = mDual ? mIcon.getTop() + mIcon.getHeight() : height / 2;
         final int rad = (int)(mIcon.getHeight() * 1.25f);
-        mRipple.setHotspotBounds(cx - rad, cy - rad, cx + rad, cy + rad);
+        if (mRipple != null) {
+            mRipple.setHotspotBounds(cx - rad, cy - rad, cx + rad, cy + rad);
+        }
+        if (mTopRipple != null) {
+            mTopRipple.setHotspotBounds(cx - rad, cy - rad, cx + rad, cy + rad);
+        }
     }
 
     private static void layout(View child, int left, int top) {
