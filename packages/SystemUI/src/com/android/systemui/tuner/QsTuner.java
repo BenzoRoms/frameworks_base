@@ -227,6 +227,7 @@ public class QsTuner extends Fragment implements Callback {
 	else if (spec.equals("pie")) return R.string.quick_settings_piecontrol_label;
         else if (spec.equals("timeout")) return R.string.quick_settings_timeout_label;
         else if (spec.equals("reboot")) return R.string.quick_settings_reboot_label;
+        else if (spec.equals("layers")) return R.string.quick_settings_layers_manager_label;
         return 0;
     }
 
@@ -491,6 +492,7 @@ public class QsTuner extends Fragment implements Callback {
             else if (mSpec.equals("pie")) return R.drawable.ic_qs_pie_on;
             else if (mSpec.equals("timeout")) return R.drawable.ic_qs_screen_timeout_vector;
             else if (mSpec.equals("reboot")) return R.drawable.ic_qs_reboot;
+            else if (mSpec.equals("layers")) return R.drawable.ic_qs_layers_manager;
             return R.drawable.android;
         }
 
