@@ -440,7 +440,4 @@ interface INetworkManagementService
 
     void addInterfaceToLocalNetwork(String iface, in List<RouteInfo> routes);
     void removeInterfaceFromLocalNetwork(String iface);
-
-    void restrictAppOnData(int uid, boolean restrict);
-    void restrictAppOnWlan(int uid, boolean restrict);
 }
