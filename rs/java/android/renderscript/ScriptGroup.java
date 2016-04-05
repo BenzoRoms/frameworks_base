@@ -1042,4 +1042,15 @@ public final class ScriptGroup extends BaseObj {
 
     }
 
+    /**
+     * Destroy all Closures in this ScriptGroup, and Allocations for their return values.
+     */
+    public void destroy() {
+        super.destroy();
+        for(Closure c : mClosures) {
+            Allocation returnValue = (Allocation)c.getReturn().getValue();
+            returnValue.destroy();
+            c.destroy();
+        }
+    }
 }
