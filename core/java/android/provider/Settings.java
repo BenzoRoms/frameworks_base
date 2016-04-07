@@ -3799,6 +3799,11 @@ public final class Settings {
         public static final String POWER_MENU_ANIMATIONS = "power_menu_animations";
 
         /**
+         * @hide
+         */
+        public static final String AMBIENT_DISPLAY_SHOW_BATTERY = "ambient_display_show_battery";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *

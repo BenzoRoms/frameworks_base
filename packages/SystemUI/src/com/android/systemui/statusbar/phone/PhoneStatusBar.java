@@ -122,6 +122,7 @@ import com.android.internal.logging.MetricsProto.MetricsEvent;
 import com.android.internal.statusbar.NotificationVisibility;
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.keyguard.KeyguardHostView.OnDismissAction;
+import com.android.keyguard.KeyguardStatusView;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
 import com.android.keyguard.ViewMediatorCallback;
@@ -362,7 +363,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     // top bar
     BaseStatusBarHeader mHeader;
     protected KeyguardStatusBarView mKeyguardStatusBar;
-    View mKeyguardStatusView;
+    KeyguardStatusView mKeyguardStatusView;
     KeyguardBottomAreaView mKeyguardBottomArea;
     boolean mLeaveOpenOnKeyguardHide;
     KeyguardIndicationController mKeyguardIndicationController;
@@ -843,7 +844,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mDozeScrimController = new DozeScrimController(mScrimController, context);
 
         mKeyguardStatusBar = (KeyguardStatusBarView) mStatusBarWindow.findViewById(R.id.keyguard_header);
-        mKeyguardStatusView = mStatusBarWindow.findViewById(R.id.keyguard_status_view);
+        mKeyguardStatusView = (KeyguardStatusView) mStatusBarWindow.findViewById(R.id.keyguard_status_view);
         mKeyguardBottomArea =
                 (KeyguardBottomAreaView) mStatusBarWindow.findViewById(R.id.keyguard_bottom_area);
         mKeyguardBottomArea.setActivityStarter(this);
@@ -4369,6 +4370,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mDozeScrimController.setDozing(mDozing &&
                 mFingerprintUnlockController.getMode()
                         != FingerprintUnlockController.MODE_WAKE_AND_UNLOCK_PULSING, animate);
+        mKeyguardStatusView.setDozing(mDozing);
         Trace.endSection();
     }
 
