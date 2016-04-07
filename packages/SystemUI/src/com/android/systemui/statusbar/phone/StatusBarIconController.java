@@ -20,6 +20,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -435,6 +436,7 @@ public class StatusBarIconController implements Tunable {
         for (int i = 0; i < mStatusIcons.getChildCount(); i++) {
             StatusBarIconView v = (StatusBarIconView) mStatusIcons.getChildAt(i);
             v.setImageTintList(ColorStateList.valueOf(mIconTint));
+            v.setImageTintMode(PorterDuff.Mode.MULTIPLY);
         }
         mSignalCluster.setIconTint(mIconTint, mDarkIntensity);
         mMoreIcon.setImageTintList(ColorStateList.valueOf(mIconTint));
@@ -453,6 +455,7 @@ public class StatusBarIconController implements Tunable {
             boolean colorize = !isPreL || isGrayscale(v);
             if (colorize) {
                 v.setImageTintList(ColorStateList.valueOf(mIconTint));
+                v.setImageTintMode(PorterDuff.Mode.MULTIPLY);
             }
         }
     }
