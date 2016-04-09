@@ -255,4 +255,7 @@
     <string name="battery_circle_full" translatable="false">M12,12m-10,0a10,10 0,1 1,20 0a10,10 0,1 1,-20 0</string>
     <string name="battery_circle_empty" translatable="false">M12,12m0,0a0,0 0,1 1,0 0a0,0 0,1 1,0 0</string>
 
+    <!-- Heads up snooze toast -->
+    <string name="heads_up_snooze_message">Heads up is snoozing for <xliff:g id="number">%d</xliff:g> minutes.</string>
+
 </resources>
