@@ -623,7 +623,9 @@ public final class RemoteConnection {
         mRingbackRequested = connection.isRingbackRequested();
         mConnectionCapabilities = connection.getConnectionCapabilities();
         mVideoState = connection.getVideoState();
-        mVideoProvider = new RemoteConnection.VideoProvider(connection.getVideoProvider());
+        if (connection.getVideoProvider() != null) {
+            mVideoProvider = new RemoteConnection.VideoProvider(connection.getVideoProvider());
+        }
         mIsVoipAudioMode = connection.getIsVoipAudioMode();
         mStatusHints = connection.getStatusHints();
         mAddress = connection.getHandle();
