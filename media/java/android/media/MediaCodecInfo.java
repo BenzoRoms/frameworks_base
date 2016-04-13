@@ -804,7 +804,7 @@ public final class MediaCodecInfo {
             mBitrateRange = Range.create(0, Integer.MAX_VALUE);
             mMaxInputChannelCount = MAX_INPUT_CHANNEL_COUNT;
             // mBitrateRange = Range.create(1, 320000);
-            mSampleRateRanges = new Range[] { Range.create(8000, 96000) };
+            mSampleRateRanges = new Range[] { Range.create(7350, 2822400) };
             mSampleRates = null;
         }
 
