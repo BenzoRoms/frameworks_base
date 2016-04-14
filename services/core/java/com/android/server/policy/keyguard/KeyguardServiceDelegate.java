@@ -183,7 +183,13 @@ public class KeyguardServiceDelegate {
         @Override
         public void onServiceDisconnected(ComponentName name) {
             if (DEBUG) Log.v(TAG, "*** Keyguard disconnected (boo!)");
-            mKeyguardService = null;
+            if (mKeyguardService != null && mKeyguardService.asBinder() != null) {
+                if (!mKeyguardService.asBinder().isBinderAlive()) {
+                    mKeyguardService = null;
+                } else {
+                    Log.w(TAG, "mKeyguardService is alive");
+                }
+            }
         }
 
     };
