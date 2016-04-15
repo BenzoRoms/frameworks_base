@@ -940,7 +940,7 @@ public class AppOpsService extends IAppOpsService.Stub {
     @Override
     public int checkPackage(int uid, String packageName) {
         synchronized (this) {
-            if (getOpsRawLocked(uid, packageName, true) != null) {
+            if (packageName != null && getOpsRawLocked(uid, packageName, true) != null) {
                 return AppOpsManager.MODE_ALLOWED;
             } else {
                 return AppOpsManager.MODE_ERRORED;
