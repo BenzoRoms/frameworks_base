@@ -23,7 +23,6 @@ import static org.xmlpull.v1.XmlPullParser.END_DOCUMENT;
 import static org.xmlpull.v1.XmlPullParser.END_TAG;
 import static org.xmlpull.v1.XmlPullParser.START_TAG;
 
-import android.annotation.Nullable;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.AppGlobals;
@@ -60,9 +59,6 @@ import android.media.AudioManager;
 import android.media.AudioManagerInternal;
 import android.media.AudioSystem;
 import android.media.IRingtonePlayer;
-import android.media.session.MediaController;
-import android.media.session.MediaSessionManager;
-import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
@@ -260,9 +256,6 @@ public class NotificationManagerService extends SystemService {
     // The last key in this list owns the hardware.
     ArrayList<String> mLights = new ArrayList<>();
 
-    private HashMap<String, Long> mAnnoyingNotifications = new HashMap<String, Long>();
-    private long mAnnoyingNotificationThreshold = -1;
-
     private AppOpsManager mAppOps;
     private UsageStatsManagerInternal mAppUsageStats;
 
@@ -290,8 +283,6 @@ public class NotificationManagerService extends SystemService {
     private NotificationListeners mListeners;
     private ConditionProviders mConditionProviders;
     private NotificationUsageStats mUsageStats;
-    private boolean mDisableDuckingWhileMedia;
-    private boolean mActiveMedia;
 
     private static final int MY_UID = Process.myUid();
     private static final int MY_PID = Process.myPid();
@@ -828,15 +819,13 @@ public class NotificationManagerService extends SystemService {
         }
     };
 
-    class SettingsObserver extends ContentObserver {
+    private final class LEDSettingsObserver extends ContentObserver {
         private final Uri NOTIFICATION_LIGHT_PULSE_URI
                 = Settings.System.getUriFor(Settings.System.NOTIFICATION_LIGHT_PULSE);
         private final Uri ENABLED_NOTIFICATION_LISTENERS_URI
                 = Settings.Secure.getUriFor(Settings.Secure.ENABLED_NOTIFICATION_LISTENERS);
-        private final Uri MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD_URI
-                = Settings.System.getUriFor(Settings.System.MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD);
 
-        SettingsObserver(Handler handler) {
+        LEDSettingsObserver(Handler handler) {
             super(handler);
         }
 
@@ -860,11 +849,6 @@ public class NotificationManagerService extends SystemService {
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES),
-                    false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.Global.ZEN_DISABLE_DUCKING_DURING_MEDIA_PLAYBACK), false,
-                    this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD_URI,
                     false, this, UserHandle.USER_ALL);
             update(null);
         }
@@ -905,33 +889,11 @@ public class NotificationManagerService extends SystemService {
                         UserHandle.USER_CURRENT));
             }
 
-            if (uri == null || MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD_URI.equals(uri)) {
-                mAnnoyingNotificationThreshold = Settings.System.getLongForUser(resolver,
-                       Settings.System.MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD, 0,
-                       UserHandle.USER_CURRENT_OR_SELF);
-            }
-
             updateNotificationPulse();
-
-            mDisableDuckingWhileMedia = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.Global.ZEN_DISABLE_DUCKING_DURING_MEDIA_PLAYBACK, 0) == 1;
-            updateDisableDucking();
         }
     }
 
-    private void updateDisableDucking() {
-        if (!mSystemReady) {
-            return;
-        }
-        final MediaSessionManager mediaSessionManager = (MediaSessionManager) mContext
-                .getSystemService(Context.MEDIA_SESSION_SERVICE);
-        mediaSessionManager.removeOnActiveSessionsChangedListener(mSessionListener);
-        if (mDisableDuckingWhileMedia) {
-            mediaSessionManager.addOnActiveSessionsChangedListener(mSessionListener, null);
-        }
-    }
-
-    private SettingsObserver mSettingsObserver;
+    private LEDSettingsObserver mSettingsObserver;
     private ZenModeHelper mZenModeHelper;
 
     private final Runnable mBuzzBeepBlinked = new Runnable() {
@@ -1086,7 +1048,7 @@ public class NotificationManagerService extends SystemService {
         getContext().registerReceiverAsUser(mPackageIntentReceiver, UserHandle.ALL, sdFilter, null,
                 null);
 
-        mSettingsObserver = new SettingsObserver(mHandler);
+        mSettingsObserver = new LEDSettingsObserver(mHandler);
         mSettingsObserver.observe();
 
         mArchive = new Archive(resources.getInteger(
@@ -1130,8 +1092,6 @@ public class NotificationManagerService extends SystemService {
             mAudioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
             mAudioManagerInternal = getLocalService(AudioManagerInternal.class);
             mZenModeHelper.onSystemReady();
-
-            updateDisableDucking();
         } else if (phase == SystemService.PHASE_THIRD_PARTY_APPS_CAN_START) {
             // This observer will force an update when observe is called, causing us to
             // bind to listener services.
@@ -2351,21 +2311,6 @@ public class NotificationManagerService extends SystemService {
         idOut[0] = id;
     }
 
-    private MediaSessionManager.OnActiveSessionsChangedListener mSessionListener =
-            new MediaSessionManager.OnActiveSessionsChangedListener() {
-        @Override
-        public void onActiveSessionsChanged(@Nullable List<MediaController> controllers) {
-            for (MediaController activeSession : controllers) {
-                PlaybackState playbackState = activeSession.getPlaybackState();
-                if (playbackState != null && playbackState.getState() == PlaybackState.STATE_PLAYING) {
-                    mActiveMedia = true;
-                    return;
-                }
-            }
-            mActiveMedia = false;
-        }
-    };
-
     /**
      * Ensures that grouped notification receive their special treatment.
      *
@@ -2460,40 +2405,19 @@ public class NotificationManagerService extends SystemService {
         return false;
     }
 
-    private boolean notificationIsAnnoying(String pkg) {
-        if (pkg == null
-                || mAnnoyingNotificationThreshold <= 0
-                || "android".equals(pkg)) {
-            return false;
-        }
-
-        long currentTime = System.currentTimeMillis();
-        if (mAnnoyingNotifications.containsKey(pkg)
-                && (currentTime - mAnnoyingNotifications.get(pkg)
-                < mAnnoyingNotificationThreshold)) {
-            // less than threshold; it's an annoying notification!!
-            return true;
-        } else {
-            // not in map or time to re-add
-            mAnnoyingNotifications.put(pkg, currentTime);
-            return false;
-        }
-    }
-
     private void buzzBeepBlinkLocked(NotificationRecord record) {
         boolean buzz = false;
         boolean beep = false;
         boolean blink = false;
 
         final Notification notification = record.sbn.getNotification();
-        final String pkg = record.sbn.getPackageName();
 
         // Should this notification make noise, vibe, or use the LED?
         final boolean aboveThreshold = record.score >= SCORE_INTERRUPTION_THRESHOLD;
         final boolean canInterrupt = aboveThreshold && !record.isIntercepted();
         if (DBG || record.isIntercepted())
             Slog.v(TAG,
-                    "pkg=" + pkg + " canInterrupt=" + canInterrupt +
+                    "pkg=" + record.sbn.getPackageName() + " canInterrupt=" + canInterrupt +
                             " intercept=" + record.isIntercepted()
             );
 
@@ -2518,7 +2442,6 @@ public class NotificationManagerService extends SystemService {
                     mUserProfiles.isCurrentProfile(record.getUserId()))
                 && canInterrupt
                 && mSystemReady
-                && !notificationIsAnnoying(pkg)
                 && mAudioManager != null) {
             if (DBG) Slog.v(TAG, "Interrupting!");
 
@@ -2549,7 +2472,7 @@ public class NotificationManagerService extends SystemService {
                 hasValidSound = (soundUri != null);
             }
 
-            if (hasValidSound && (!mDisableDuckingWhileMedia || !mActiveMedia)) {
+            if (hasValidSound) {
                 boolean looping =
                         (notification.flags & Notification.FLAG_INSISTENT) != 0;
                 AudioAttributes audioAttributes = audioAttributesForNotification(notification);

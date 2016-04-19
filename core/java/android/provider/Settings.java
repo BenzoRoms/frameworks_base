@@ -4859,12 +4859,6 @@ public final class Settings {
         public static final String INCREASING_RING_RAMP_UP_TIME = "increasing_ring_ramp_up_time";
 
         /**
-         * Whether to mute annoying notifications
-         * @hide
-         */
-        public static final String MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD = "mute_annoying_notifications_threshold";
-
-        /**
          * Show four g instead of lte
          * @hide
          */
@@ -9723,12 +9717,6 @@ public final class Settings {
          * @hide
          */
         public static final String POLICY_CONTROL_SELECTED = "policy_control_selected";
-
-        /**
-         * @hide
-         */
-        public static final String ZEN_DISABLE_DUCKING_DURING_MEDIA_PLAYBACK =
-                "zen_disable_ducking_during_media_playback";
 
         /**
          * Defines global zen mode.  ZEN_MODE_OFF, ZEN_MODE_IMPORTANT_INTERRUPTIONS,
