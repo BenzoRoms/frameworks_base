@@ -6127,7 +6127,8 @@ public class PackageManagerService extends IPackageManager.Stub {
                     if (!isFirstBoot()) {
                         try {
                             ActivityManagerNative.getDefault().showBootMessage(
-                                    null, Integer.MIN_VALUE + 1, Integer.MIN_VALUE + 1, true);
+                                    mContext.getResources().getString(
+                                            R.string.android_upgrading_fstrim), true);
                         } catch (RemoteException e) {
                         }
                     }
@@ -6249,9 +6250,9 @@ public class PackageManagerService extends IPackageManager.Stub {
         return pkgNames;
     }
 
-    private void performBootDexOpt(PackageParser.Package pkg, int currentApp, int totalApps) {
+    private void performBootDexOpt(PackageParser.Package pkg, int curr, int total) {
         if (DEBUG_DEXOPT) {
-            Log.i(TAG, "Optimizing app " + currentApp + " of " + totalApps + ": " + pkg.packageName);
+            Log.i(TAG, "Optimizing app " + curr + " of " + total + ": " + pkg.packageName);
         }
         try {
             // give the packagename to the PhoneWindowManager
@@ -6263,7 +6264,9 @@ public class PackageManagerService extends IPackageManager.Stub {
             }
             mPolicy.setPackageName((String) (ai != null ? mContext.getPackageManager().getApplicationLabel(ai) : pkg.packageName));
 
-            ActivityManagerNative.getDefault().showBootMessage(pkg.applicationInfo, currentApp, totalApps, true);
+            ActivityManagerNative.getDefault().showBootMessage(
+                    mContext.getResources().getString(R.string.android_upgrading_apk,
+                            curr, total), true);
         } catch (RemoteException e) {
         }
 

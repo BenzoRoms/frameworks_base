@@ -2089,11 +2089,9 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
 
         case SHOW_BOOT_MESSAGE_TRANSACTION: {
             data.enforceInterface(IActivityManager.descriptor);
-            ApplicationInfo appInfo = ApplicationInfo.CREATOR.createFromParcel(data);
-            int currentApp = data.readInt();
-            int totalApps = data.readInt();
+            CharSequence msg = TextUtils.CHAR_SEQUENCE_CREATOR.createFromParcel(data);
             boolean always = data.readInt() != 0;
-            showBootMessage(appInfo, currentApp, totalApps, always);
+            showBootMessage(msg, always);
             reply.writeNoException();
             return true;
         }
@@ -5263,13 +5261,11 @@ class ActivityManagerProxy implements IActivityManager
         return res;
     }
 
-    public void showBootMessage(ApplicationInfo appInfo, int currentApp, int totalApps, boolean always) throws RemoteException {
+    public void showBootMessage(CharSequence msg, boolean always) throws RemoteException {
         Parcel data = Parcel.obtain();
         Parcel reply = Parcel.obtain();
         data.writeInterfaceToken(IActivityManager.descriptor);
-        appInfo.writeToParcel(data, 0);
-        data.writeInt(currentApp);
-        data.writeInt(totalApps);
+        TextUtils.writeToParcel(msg, data, 0);
         data.writeInt(always ? 1 : 0);
         mRemote.transact(SHOW_BOOT_MESSAGE_TRANSACTION, data, reply, 0);
         reply.readException();
