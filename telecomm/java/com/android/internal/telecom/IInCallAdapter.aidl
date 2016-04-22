@@ -60,4 +60,6 @@ oneway interface IInCallAdapter {
     void turnOnProximitySensor();
 
     void turnOffProximitySensor(boolean screenOnImmediately);
+
+    void answerCallRevised(String callId, int videoState, int callWaitingResponseType);
 }
