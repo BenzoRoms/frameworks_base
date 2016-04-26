@@ -141,6 +141,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
     // Power menu customizations
     String mActions;
+    private int mScreenshotDelay;
 
     /**
      * @param context everything needs a context :(
@@ -213,6 +214,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
     private void handleShow() {
         awakenIfNecessary();
+	checkSettings();
         prepareDialog();
         WindowManager.LayoutParams attrs = mDialog.getWindow().getAttributes();
             attrs.setTitle("GlobalActions");
@@ -829,7 +831,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
                         /* wait for the dialog box to close */
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(mScreenshotDelay * 1000);
                         } catch (InterruptedException ie) {
                             // Do nothing
                         }
@@ -1506,6 +1508,11 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             mContext.startActivityAsUser(intent,UserHandle.CURRENT);
         } catch (ActivityNotFoundException e) {
         }
+    }
+
+    private void checkSettings() {
+        mScreenshotDelay = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SCREENSHOT_DELAY, 1);
     }
 
     /**
