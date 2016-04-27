@@ -1731,7 +1731,7 @@ final class ActivityStack {
         // can be resumed...
         boolean dontWaitForPause = (next.info.flags&ActivityInfo.FLAG_RESUME_WHILE_PAUSING) != 0;
         boolean pausing = mStackSupervisor.pauseBackStacks(userLeaving, true, dontWaitForPause);
-        if (mResumedActivity != null && !next.floatingWindow) {
+        if (mResumedActivity != null && (pauseUnderApp() || !next.floatingWindow)) {
             if (DEBUG_STATES) Slog.d(TAG_STATES,
                     "resumeTopActivityLocked: Pausing " + mResumedActivity);
             pausing |= startPausingLocked(userLeaving, false, true, dontWaitForPause);
@@ -4191,6 +4191,10 @@ final class ActivityStack {
             ci.numRunning = numRunning;
             list.add(ci);
         }
+    }
+
+    private boolean pauseUnderApp() {
+        return true;
     }
 
     public void unhandledBackLocked() {
