@@ -5141,6 +5141,18 @@ public final class Settings {
         public static final String DOZE_SCREEN_BRIGHTNESS = "doze_screen_brightness";
 
         /**
+         * Whether to show the weather on ambient display
+         * @hide
+         */
+        public static final String AMBIENT_DISPLAY_SHOW_WEATHER = "ambient_display_show_weather";
+
+        /**
+         * Whether to show the weather location on ambient display
+         * @hide
+         */
+        public static final String AMBIENT_DISPLAY_SHOW_WEATHER_LOCATION = "ambient_display_show_weather_location";
+
+        /**
          * Whether to attach a queue to media notifications.
          * 0 = 0ff, 1 = on
          * @hide

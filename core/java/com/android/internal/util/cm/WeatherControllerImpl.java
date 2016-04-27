@@ -89,13 +89,7 @@ public class WeatherControllerImpl implements WeatherController {
                 Settings.System.LOCK_SCREEN_WEATHER_CONDITION_ICON, 0);
         String iconName;
 
-        if (iconNameValue == WEATHER_ICON_MONOCHROME) {
-            iconName = "weather_";
-        } else if (iconNameValue == WEATHER_ICON_COLORED) {
-            iconName = "weather_color_";
-        } else {
-            iconName = "weather_vclouds_";
-        }
+        iconName = "weather_";
 
         try {
             Resources resources =
