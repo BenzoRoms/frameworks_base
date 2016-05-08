@@ -400,4 +400,8 @@
     <string name="advanced_dev_option_force_stop">Force stop</string>
     <string name="advanced_dev_option_uninstall">Uninstall</string>
 
+    <!-- ViPER4Android -->
+    <string name="quick_settings_v4a_label">ViPER4Android</string>
+    <string name="accessibility_quick_settings_v4a">ViPER4Android.</string>
+
 </resources>

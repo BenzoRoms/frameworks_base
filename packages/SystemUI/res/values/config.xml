@@ -119,7 +119,7 @@
 
     <!-- The default tiles to display in QuickSettings -->
     <string name="quick_settings_tiles_default" translatable="false">
-        wifi,bt,adb_network,airplane,ambient_display,battery_saver,benzo,caffeine,cast,cell,compass,dnd,expanded_desktop,flashlight,floatingwin,headsup,hotspot,ime,inversion,kernel,kill_app,layers,location,lockscreen,music,navbar,nfc,pie,reboot,rotation,screenrecord,screenshot,sound,sync,timeout,usb_tether,
+        wifi,bt,adb_network,airplane,ambient_display,battery_saver,benzo,caffeine,cast,cell,compass,dnd,expanded_desktop,flashlight,floatingwin,headsup,hotspot,ime,inversion,kernel,kill_app,layers,location,lockscreen,music,navbar,nfc,pie,reboot,rotation,screenrecord,screenshot,sound,sync,timeout,usb_tether,v4a
     </string>
 
     <!-- The tiles to display in QuickSettings -->
