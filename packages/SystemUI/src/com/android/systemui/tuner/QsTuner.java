@@ -220,6 +220,7 @@ public class QsTuner extends Fragment implements Callback {
         else if (spec.equals("layers")) return R.string.quick_settings_layers_manager_label;
 	else if (spec.equals("screenrecord")) return R.string.quick_settings_screenrecord_label;
 	else if (spec.equals("kill_app")) return R.string.quick_settings_kill_app_label;
+        else if (spec.equals("v4a")) return R.string.quick_settings_v4a_label;
         return 0;
     }
 
@@ -484,6 +485,7 @@ public class QsTuner extends Fragment implements Callback {
             else if (mSpec.equals("layers")) return R.drawable.ic_qs_layers_manager;
 	    else if (mSpec.equals("screenrecord")) return R.drawable.ic_qs_screenrecord;
  	    else if (mSpec.equals("kill_app")) return R.drawable.ic_qs_app_kill;
+            else if (mSpec.equals("v4a")) return R.drawable.ic_qs_v4a;
             return R.drawable.android;
         }
 
