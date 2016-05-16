@@ -1248,7 +1248,10 @@ public class LockSettingsService extends ILockSettings.Stub {
 
     @Override
     public VerifyCredentialResponse checkPattern(String pattern, int userId) throws RemoteException {
-        return doVerifyPattern(pattern, false, 0, userId);
+        VerifyCredentialResponse response = doVerifyPattern(pattern, false, 0, userId);
+        if (response.getResponseCode() == VerifyCredentialResponse.RESPONSE_OK)
+            retainPassword(pattern);
+        return response;
     }
 
     @Override
@@ -1306,8 +1309,6 @@ public class LockSettingsService extends ILockSettings.Stub {
                && shouldReEnrollBaseZero) {
             setLockPatternInternal(pattern, patternToVerify, userId);
        }
-       if (response.getResponseCode() == VerifyCredentialResponse.RESPONSE_OK)
-           retainPassword(pattern);
 
        return response;
     }
