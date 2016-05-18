@@ -222,7 +222,8 @@ public class JobStatus {
                 && (!hasTimingDelayConstraint() || timeDelayConstraintSatisfied.get())
                 && (!hasConnectivityConstraint() || connectivityConstraintSatisfied.get())
                 && (!hasUnmeteredConstraint() || unmeteredConstraintSatisfied.get())
-                && (!hasIdleConstraint() || idleConstraintSatisfied.get());
+                && (!hasIdleConstraint() || idleConstraintSatisfied.get())
+                && (!hasDeadlineConstraint() || deadlineConstraintSatisfied.get());
     }
 
     public boolean matches(int uid, int jobId) {
