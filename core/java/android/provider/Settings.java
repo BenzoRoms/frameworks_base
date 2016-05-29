@@ -5224,19 +5224,26 @@ public final class Settings {
         */
        public static final String USB_DATA_AUTO_UNLOCK = "usb_data_auto_unlock";
 
-		/**
+        /**
          * Change quick settings tiles animation style
          *
          * @hide
          */
         public static final String ANIM_TILE_STYLE = "anim_tile_style";
 
-		/**
+        /**
          * Change quick settings tiles animation duration
          *
          * @hide
          */
         public static final String ANIM_TILE_DURATION = "anim_tile_duration";
+
+        /**
+         * Change quick settings tiles interpolator
+         *
+         * @hide
+         */
+        public static final String ANIM_TILE_INTERPOLATOR = "anim_tile_interpolator";
 
         /**
          * Whether to use the proximity sensor to turn the screen on/off during a call
