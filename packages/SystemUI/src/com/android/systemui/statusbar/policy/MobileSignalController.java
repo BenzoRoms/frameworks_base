@@ -267,7 +267,7 @@ public class MobileSignalController extends SignalController<
     }
 
     private boolean isCdma() {
-        return (mSignalStrength != null) && !mSignalStrength.isGsm();
+        return (mServiceState != null) && (mSignalStrength != null) && !mSignalStrength.isGsm();
     }
 
     public boolean isEmergencyOnly() {
