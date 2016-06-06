@@ -22,12 +22,6 @@
     <!-- Screenshot -->
     <string name="shortcut_screenshot">Screenshot</string>
 
-    <!-- Battery level for expanded quick settings [CHAR LIMIT=2] -->
-    <string name="battery_level_template"><xliff:g id="level" example="45">%d</xliff:g>%%</string>
-
-    <!-- Battery level text while charging [CHAR LIMIT=2] -->
-    <string name="battery_level_template_charging"><xliff:g id="level" example="45">%d</xliff:g>~</string>
-
     <!-- The text for the button in the notification window-shade that clears
          all of the currently visible notifications. [CHAR LIMIT=10]-->
    <string name="clear_recents">Close all recent</string>
@@ -241,4 +235,6 @@
     <string name="quick_settings_navbar">NavBar</string>
     <string name="quick_settings_navbar_off">NavBar Disabled</string>
 
+=======
+>>>>>>> parent of fc92b91... [2/2] frameworks_base: Code: Add options for battery icon and text in status bar
 </resources>
