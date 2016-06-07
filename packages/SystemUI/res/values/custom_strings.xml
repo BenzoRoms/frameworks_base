@@ -178,8 +178,8 @@
     <!-- Kill App QS Tile -->
     <string name="quick_settings_kill_app_label">Kill App</string>
     <!-- ViPER4Android -->
-    <string name="quick_settings_v4a_label">ViPER4Android</string>
-    <string name="accessibility_quick_settings_v4a">ViPER4Android.</string>
+    <string name="quick_settings_v4a_label">ViPER</string>
+    <string name="accessibility_quick_settings_v4a">ViPER4.</string>
     <!-- Music QS Tile -->
     <string name="quick_settings_music_label">Music</string>
     <string name="quick_settings_music_play">Play</string>
