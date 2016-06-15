@@ -1777,6 +1777,11 @@ public class SyncStorageEngine extends Handler {
         final AuthorityInfo authorityInfo;
         synchronized (mAuthorities) {
             authorityInfo = mAuthorities.get(authorityId);
+            if (authorityInfo == null) {
+                Log.e(TAG_FILE, "No authority found for " + authorityId
+                        + ", fail to set periodic sync time!");
+                return;
+            }
             for (int i = 0; i < authorityInfo.periodicSyncs.size(); i++) {
                 PeriodicSync periodicSync = authorityInfo.periodicSyncs.get(i);
                 if (targetPeriodicSync.equals(periodicSync)) {
