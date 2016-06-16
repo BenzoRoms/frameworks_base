@@ -105,6 +105,8 @@ public class CreateShortcut extends LauncherActivity {
     private int returnIconResId(String c) {
         if (c.equals("ChamberOfSecrets")) {
             return R.drawable.ic_shortcut_chamberofsecrets;
+        } else if (c.equals("ClearNotifications")) {
+            return R.drawable.ic_qs_clear_notifications;
         } else {
             // Oh-Noes, you found a wild derp.
             return R.drawable.ic_shortcut_null;
