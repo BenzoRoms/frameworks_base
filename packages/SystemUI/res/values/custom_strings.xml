@@ -329,6 +329,7 @@
     <string name="chamber_name_title">Shortcut name</string>
     <string name="chamber_name_message">Give the shortcut a name to display with the icon.</string>
     <string name="chamber_name_toast">Using default name</string>
+    <string name="shortcut_clear_notifications">Clear notifications</string>
 
     <!-- 4G LTE switch -->
     <string name="show_fourg_title">Show 4G instead of LTE</string>

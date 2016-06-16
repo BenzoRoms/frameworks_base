@@ -121,6 +121,8 @@ public class CreateShortcut extends LauncherActivity {
             return R.drawable.ic_qs_reboot_recovery;
         } else if (c.equals("ChamberOfSecrets")) {
             return R.drawable.ic_qs_slim_action;
+        } else if (c.equals("ClearNotifications")) {
+            return R.drawable.ic_qs_clear_notifications;
         } else {
             // Oh-Noes, you found a wild derp.
             return R.drawable.ic_sysbar_null;
