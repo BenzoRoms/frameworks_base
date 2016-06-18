@@ -7939,6 +7939,12 @@ public final class Settings {
         public static final String STATUS_BAR_LOCKED_ON_SECURE_KEYGUARD = "status_bar_locked_on_secure_keyguard";
 
         /**
+         * Configure whether notification actions on secure lockscreen require authentication.
+         * @hide
+         */
+        public static final String LOCK_SCREEN_PROTECT_NOTIFICATION_ACTIONS = "lock_screen_notification_protect_actions";
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
