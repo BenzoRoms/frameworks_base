@@ -3758,18 +3758,6 @@ public final class Settings {
          */
         public static final String SYSTEMUI_RECENTS_MEM_DISPLAY = "systemui_recents_mem_display";
 
-	/**
-         * Whether to display clock while recents are in full screen
-         * @hide
-         */
-        public static final String RECENTS_FULL_SCREEN_CLOCK = "recents_full_screen_clock";
-
-        /**
-         * Whether to display clock while recents are in full screen
-         * @hide
-         */
-        public static final String RECENTS_FULL_SCREEN_DATE = "recents_full_screen_date";
-
         /**
          * Whether to use the custom status bar header or not
          * @hide
@@ -4400,12 +4388,6 @@ public final class Settings {
          * @hide
          */
         public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
-
-        /**
-         * Whether to display recents in full screen
-         * @hide
-         */
-        public static final String RECENTS_FULL_SCREEN = "recents_full_screen";
 
         /**
          * Whether to enable status and navigation bar color in battery saver mode.
