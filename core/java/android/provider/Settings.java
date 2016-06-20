@@ -3624,17 +3624,6 @@ public final class Settings {
         };
 
         /**
-         * Quick Settings Quick Pulldown
-         * 0 = off, 1 = right, 2 = left
-         * @hide
-         */
-        public static final String QS_QUICK_PULLDOWN = "qs_quick_pulldown";
-
-        /** @hide */
-        private static final Validator QS_QUICK_PULLDOWN_VALIDATOR =
-                new InclusiveIntegerRangeValidator(0, 2);
-
-        /**
          *  Enable statusbar double tap gesture on to put device to sleep
          * @hide
          */
@@ -4971,12 +4960,6 @@ public final class Settings {
         public static final String STREAM_VOLUME_STEPS_CHANGED = "stream_volume_steps_changed";
 
         /**
-         * Quick Settings Smart Pulldown
-         * @hide
-         */
-        public static final String QS_SMART_PULLDOWN = "qs_smart_pulldown";
-
-        /**
          * Whether or not to launch default music player when headset is connected
          */
         public static final String HEADSET_CONNECT_PLAYER = "headset_connect_player";
@@ -5437,7 +5420,6 @@ public final class Settings {
             PRIVATE_SETTINGS.add(POINTER_SPEED);
             PRIVATE_SETTINGS.add(LOCK_TO_APP_ENABLED);
             PRIVATE_SETTINGS.add(EGG_MODE);
-            PRIVATE_SETTINGS.add(QS_QUICK_PULLDOWN);
             PRIVATE_SETTINGS.add(DOUBLE_TAP_SLEEP_GESTURE);
         }
 
@@ -7938,12 +7920,6 @@ public final class Settings {
         public static final String LOCKSCREEN_INTERNALLY_ENABLED = "lockscreen_internally_enabled";
 
         /**
-         * Whether user is allowed to pull down quick settings on secure keyguard.
-         * @hide
-         */
-        public static final String STATUS_BAR_LOCKED_ON_SECURE_KEYGUARD = "status_bar_locked_on_secure_keyguard";
-
-        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
@@ -8001,7 +7977,6 @@ public final class Settings {
             DOUBLE_TAP_TO_WAKE,
             CAMERA_GESTURE_DISABLED,
             ADVANCED_REBOOT,
-            STATUS_BAR_LOCKED_ON_SECURE_KEYGUARD
         };
 
         /**

@@ -20,6 +20,7 @@ import android.app.StatusBarManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.database.ContentObserver;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -48,7 +49,6 @@ import android.view.WindowManagerGlobal;
 import android.widget.FrameLayout;
 
 import com.android.systemui.R;
-import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.DragDownHelper;
 import com.android.systemui.statusbar.StatusBarState;
@@ -388,14 +388,12 @@ public class StatusBarWindowView extends FrameLayout {
         }
     }
 
-    private class SettingsObserver extends UserContentObserver {
+    class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
         }
 
-        @Override
-        protected void observe() {
-            super.observe();
+        void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.DOUBLE_TAP_SLEEP_GESTURE), false, this, UserHandle.USER_ALL);
@@ -406,13 +404,21 @@ public class StatusBarWindowView extends FrameLayout {
             update();
         }
 
-        @Override
-        protected void unobserve() {
-            super.unobserve();
-            mContext.getContentResolver().unregisterContentObserver(this);
+        void unobserve() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.unregisterContentObserver(this);
         }
 
         @Override
+        public void onChange(boolean selfChange) {
+            update();
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            update();
+        }
+
         public void update() {
             ContentResolver resolver = mContext.getContentResolver();
             mDoubleTapToSleepEnabled = Settings.System.getIntForUser(resolver,
