@@ -85,9 +85,6 @@
     <dimen name="pie_tab_title_height">24dp</dimen>
     <dimen name="pie_panel_padding">20dp</dimen>
 
-    <!-- The task item height in task list. -->
-    <dimen name="task_manager_item_height">40dip</dimen>
-    
     <!-- Slim recent -->
     <dimen name="recent_width">230dp</dimen>
     <dimen name="slim_recents_elevation">20dp</dimen>

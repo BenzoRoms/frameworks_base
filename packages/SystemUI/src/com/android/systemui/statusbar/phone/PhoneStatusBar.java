@@ -106,7 +106,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
-import android.view.View.OnClickListener;
 import android.view.ThreadedRenderer;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -125,13 +124,13 @@ import android.view.animation.PathInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.LinearLayout;
+
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.statusbar.NotificationVisibility;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.statusbar.StatusBarIcon;
-import com.android.internal.util.benzo.Helpers;
 import com.android.internal.util.benzo.DUPackageMonitor;
+import com.android.internal.util.benzo.Helpers;
 import com.android.keyguard.KeyguardHostView.OnDismissAction;
 import com.android.keyguard.KeyguardStatusView;
 import com.android.keyguard.KeyguardUpdateMonitor;
@@ -378,15 +377,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     // settings
     private QSPanel mQSPanel;
 
-    // task manager
-    private TaskManager mTaskManager;
-    private LinearLayout mTaskManagerPanel;
-    private ImageButton mTaskManagerButton;
-    // task manager enabled
-    private boolean mShowTaskManager;
-    // task manager click state
-    private boolean mShowTaskList = false;
-
     // Benzo Rom logo
     private boolean mBrLogo;
     private int mBrLogoColor;
@@ -515,9 +505,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.BATTERY_SAVER_MODE_COLOR),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.ENABLE_TASK_MANAGER),
-                    false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_HEADER_WEATHER),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -589,17 +576,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.RECENT_CARD_TEXT_COLOR))) {
                 rebuildRecentsScreen();
             } else if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.ENABLE_TASK_MANAGER))) {
-                    mShowTaskManager = Settings.System.getIntForUser(
-                            mContext.getContentResolver(),
-                            Settings.System.ENABLE_TASK_MANAGER,
-                            0, UserHandle.USER_CURRENT) == 1;
-                            Helpers.restartSystemUI();
-                            updateRowStates();
-                            updateSpeedbump();
-                            updateClearAll();
-                            updateEmptyShadeView();
-            } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.SHOW_FOURG))) {
                     mShow4G = Settings.System.getIntForUser(
                             mContext.getContentResolver(),
@@ -611,7 +587,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                             updateClearAll();
                             updateEmptyShadeView();
             }
-
             update();
         }
 
@@ -627,23 +602,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             boolean mShow4G = Settings.System.getIntForUser(resolver,
                     Settings.System.SHOW_FOURG, 0, UserHandle.USER_CURRENT) == 1;
-
-            boolean showTaskManager = Settings.System.getIntForUser(resolver,
-                    Settings.System.ENABLE_TASK_MANAGER, 0, UserHandle.USER_CURRENT) == 1;
-	    if (mShowTaskManager != showTaskManager) {
-                if (!mShowTaskManager) {
-                    // explicitly reset click state when disabled
-                    mShowTaskList = false;
-                }
-                mShowTaskManager = showTaskManager;
-                if (mHeader != null) {
-                    mHeader.setTaskManagerEnabled(showTaskManager);
-                }
-                if (mNotificationPanel != null) {
-                    mNotificationPanel.setTaskManagerEnabled(showTaskManager);
-                }
-
-            }
 
             mBlurRadius = Settings.System.getInt(resolver,
                     Settings.System.LOCKSCREEN_BLUR_RADIUS, 14);
@@ -1324,20 +1282,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 }
             });
         }
-
-        // Task manager
-        mTaskManagerPanel =
-                (LinearLayout) mStatusBarWindow.findViewById(R.id.task_manager_panel);
-        mTaskManager = new TaskManager(mContext, mTaskManagerPanel);
-        mTaskManager.setActivityStarter(this);
-        mTaskManagerButton = (ImageButton) mHeader.findViewById(R.id.task_manager_button);
-        mTaskManagerButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                mShowTaskList = !mShowTaskList;
-                mNotificationPanel.setTaskManagerVisibility(mShowTaskList);
-            }
-        });
 
         // User info. Trigger first load.
         mHeader.setUserInfoController(mUserInfoController);
@@ -2905,9 +2849,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mWaitingForKeyguardExit = false;
         disable(mDisabledUnmodified1, mDisabledUnmodified2, !force /* animate */);
         setInteracting(StatusBarManager.WINDOW_STATUS_BAR, true);
-        if (mShowTaskManager) {
-            mTaskManager.refreshTaskManagerView();
-        }
     }
 
     public void animateCollapsePanels() {
@@ -3967,15 +3908,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mContext.getContentResolver().registerContentObserver(
                 Settings.Secure.getUriFor(Settings.Secure.USER_SETUP_COMPLETE), true,
                 mUserSetupObserver, mCurrentUserId);
-    }
-
-    public void resetQsPanelVisibility() {
-        mShowTaskList = mShowTaskList;
-        if (mShowTaskList) {
-            mQSPanel.setVisibility(View.VISIBLE);
-            mTaskManagerPanel.setVisibility(View.GONE);
-            mShowTaskList = false;
-        }
     }
 
     /**
