@@ -16841,44 +16841,4 @@ public class PackageManagerService extends IPackageManager.Stub {
                     "Cannot call " + tag + " from UID " + callingUid);
         }
     }
-
-    private void removeFromOverlaysLP(PackageParser.Package pkg) {
-        if (pkg == null) {
-            return;
-        }
-        if (pkg.mOverlayTarget == null) {
-            // regular package
-            ArrayMap<String, PackageParser.Package> map = mOverlays.get(pkg.mOverlayTarget);
-            int N = map.size();
-            for (int i = 0; i < N; i++) {
-                PackageParser.Package opkg = map.valueAt(i);
-                mInstaller.removeIdmap(opkg.baseCodePath);
-            }
-            mOverlays.remove(pkg.packageName);
-        } else {
-            // overlay package
-            PackageParser.Package target = mPackages.get(pkg.mOverlayTarget);
-            if (target != null && target.applicationInfo.resourceDirs != null) {
-                killApplication(pkg.mOverlayTarget, target.applicationInfo.uid,
-                        "overlay package removed");
-                int N = target.applicationInfo.resourceDirs.length;
-                int i = 0;
-                for (; i < N; i++) {
-                    if (target.applicationInfo.resourceDirs[i].equals(pkg.applicationInfo.sourceDir)) {
-                        break;
-                    }
-                }
-                System.arraycopy(target.applicationInfo.resourceDirs, i + 1,
-                                 target.applicationInfo.resourceDirs, i, N - 1 - i);
-                String[] tmp = Arrays.copyOfRange(target.applicationInfo.resourceDirs, 0, N - 1);
-                target.applicationInfo.resourceDirs = tmp;
-            }
-
-            mInstaller.removeIdmap(pkg.baseCodePath);
-
-            for (ArrayMap<String, PackageParser.Package> map : mOverlays.values()) {
-                    map.remove(pkg.packageName);
-            }
-        }
-    }
 }
