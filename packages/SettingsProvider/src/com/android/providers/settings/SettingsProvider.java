@@ -18,6 +18,7 @@ package com.android.providers.settings;
 
 import android.Manifest;
 import android.app.ActivityManager;
+import android.app.ActivityThread;
 import android.app.AppOpsManager;
 import android.app.backup.BackupManager;
 import android.content.BroadcastReceiver;
@@ -27,6 +28,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.IPackageManager;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.UserInfo;
@@ -47,6 +49,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
+import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
@@ -902,11 +905,11 @@ public class SettingsProvider extends ContentProvider {
             }
         }
 
-        // Enforce what the calling package can mutate the system settings.
-        enforceRestrictedSystemSettingsMutationForCallingPackage(operation, name);
-
         // Resolve the userId on whose behalf the call is made.
         final int callingUserId = resolveCallingUserIdEnforcingPermissionsLocked(runAsUserId);
+
+        // Enforce what the calling package can mutate the system settings.
+        enforceRestrictedSystemSettingsMutationForCallingPackage(operation, name, callingUserId);
 
         // Determine the owning user as some profile settings are cloned from the parent.
         final int owningUserId = resolveOwningUserIdForSystemSettingLocked(callingUserId, name);
@@ -1001,7 +1004,7 @@ public class SettingsProvider extends ContentProvider {
     }
 
     private void enforceRestrictedSystemSettingsMutationForCallingPackage(int operation,
-            String name) {
+            String name, int userId) {
         // System/root/shell can mutate whatever secure settings they want.
         final int callingUid = Binder.getCallingUid();
         if (callingUid == android.os.Process.SYSTEM_UID
@@ -1019,7 +1022,7 @@ public class SettingsProvider extends ContentProvider {
                 }
 
                 // The calling package is already verified.
-                PackageInfo packageInfo = getCallingPackageInfoOrThrow();
+                PackageInfo packageInfo = getCallingPackageInfoOrThrow(userId);
 
                 // Privileged apps can do whatever they want.
                 if ((packageInfo.applicationInfo.privateFlags
@@ -1039,7 +1042,7 @@ public class SettingsProvider extends ContentProvider {
                 }
 
                 // The calling package is already verified.
-                PackageInfo packageInfo = getCallingPackageInfoOrThrow();
+                PackageInfo packageInfo = getCallingPackageInfoOrThrow(userId);
 
                 // Privileged apps can do whatever they want.
                 if ((packageInfo.applicationInfo.privateFlags &
@@ -1053,12 +1056,18 @@ public class SettingsProvider extends ContentProvider {
         }
     }
 
-    private PackageInfo getCallingPackageInfoOrThrow() {
+    private PackageInfo getCallingPackageInfoOrThrow(int userId) {
         try {
-            return mPackageManager.getPackageInfo(getCallingPackage(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            throw new IllegalStateException("Calling package doesn't exist");
+            IPackageManager pm = ActivityThread.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(getCallingPackage(), 0, userId);
+            if (pi != null) {
+                return pi;
+            }
+        } catch (RemoteException e) {
+            throw new RuntimeException("Package manager has died", e);
         }
+
+        throw new IllegalStateException("Calling package doesn't exist");
     }
 
     private int getGroupParentLocked(int userId) {
