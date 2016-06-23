@@ -5141,13 +5141,6 @@ public final class Settings {
         public static final String AMBIENT_DISPLAY_SHOW_WEATHER_LOCATION = "ambient_display_show_weather_location";
 
         /**
-         * Whether to attach a queue to media notifications.
-         * 0 = 0ff, 1 = on
-         * @hide
-         */
-        public static final String NOTIFICATION_PLAY_QUEUE = "notification_play_queue";
-
-        /**
          * Require double tap instead of simple tap to wake from Doze pulse screen
          * @hide
          */
