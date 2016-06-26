@@ -2461,10 +2461,6 @@ public class PackageManagerService extends IPackageManager.Stub {
                 continue;
             }
 
-            if (requiredInstaller != null) {
-                throw new RuntimeException("There must be one required installer");
-            }
-
             requiredInstaller = packageName;
         }
 
