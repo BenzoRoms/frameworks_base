@@ -93,15 +93,6 @@
     <dimen name="pie_sysinfo_second_layer_radius">255dp</dimen>
     <dimen name="pie_sysinfo_height">85sp</dimen>
 
-    <dimen name="fab_margin">16dp</dimen>
-
-    <dimen name="text_size_m">24sp</dimen>
-    <dimen name="text_size_s">17sp</dimen>
-    <dimen name="button_height">40dp</dimen>
-
-    <dimen name="crop_buttons">48dp</dimen>
-    <dimen name="crop_buttons_inlet">32dp</dimen>
-
     <!-- Network traffic monitor single-line text size -->
     <dimen name="net_traffic_single_text_size">12dp</dimen>
 

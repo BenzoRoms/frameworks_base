@@ -260,13 +260,6 @@
     <!-- Heads up snooze toast -->
     <string name="heads_up_snooze_message">Heads up is snoozing for <xliff:g id="number">%d</xliff:g> minutes.</string>
 
-    <!-- Screenshot Crop & Share -->
-    <string name="action_delete_success">Deleted</string>
-    <string name="action_delete_fault">Deleting was unsuccessful</string>
-    <string name="action_save_success">Saved</string>
-    <string name="action_save_fault">Saving was unsuccessful</string>
-    <string name="action_edit">Edit</string>
-
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go activated</string>
     <string name="onthego_notif_title">On-The-Go is active</string>
