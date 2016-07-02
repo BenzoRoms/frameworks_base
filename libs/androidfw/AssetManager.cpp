@@ -76,6 +76,7 @@ static const char* kAssetsRoot = "assets";
 static const char* kAppZipName = NULL; //"classes.jar";
 static const char* kSystemAssets = "framework/framework-res.apk";
 static const char* kResourceCache = "resource-cache";
+static const char* kAndroidManifest = "AndroidManifest.xml";
 
 static const char* kExcludeExtension = ".EXCLUDE";
 
