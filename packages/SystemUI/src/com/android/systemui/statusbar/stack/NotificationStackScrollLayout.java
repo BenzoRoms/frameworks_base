@@ -335,7 +335,7 @@ public class NotificationStackScrollLayout extends ViewGroup
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int mode = MeasureSpec.getMode(widthMeasureSpec);
         int size = MeasureSpec.getSize(widthMeasureSpec);
-        int childMeasureSpec = MeasureSpec.makeMeasureSpec(size - 2 * mSidePaddings, mode);
+        int childMeasureSpec = MeasureSpec.makeMeasureSpec(size, mode);
         measureChildren(childMeasureSpec, heightMeasureSpec);
     }
 
