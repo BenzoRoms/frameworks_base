@@ -57,6 +57,10 @@ public final class PdfManipulationService extends Service {
     private static final int MILS_PER_INCH = 1000;
     private static final int POINTS_IN_INCH = 72;
 
+    private final Object mLock = new Object();
+    private PdfRenderer mRenderer;
+    private PdfEditor mEditor;
+
     @Override
     public IBinder onBind(Intent intent) {
         String action = intent.getAction();
@@ -74,14 +78,20 @@ public final class PdfManipulationService extends Service {
     }
 
     private final class PdfRendererImpl extends IPdfRenderer.Stub {
-        private final Object mLock = new Object();
 
         private Bitmap mBitmap;
-        private PdfRenderer mRenderer;
 
         @Override
         public int openDocument(ParcelFileDescriptor source) throws RemoteException {
             synchronized (mLock) {
+                while(mEditor != null) {
+                    try {
+                        mLock.wait();
+                    } catch (InterruptedException e) {
+                        /* ignore */
+                    }
+                }
+
                 try {
                     throwIfOpened();
                     if (DEBUG) {
@@ -179,6 +189,7 @@ public final class PdfManipulationService extends Service {
                 }
                 mRenderer.close();
                 mRenderer = null;
+                mLock.notifyAll();
             }
         }
 
@@ -209,13 +220,19 @@ public final class PdfManipulationService extends Service {
     }
 
     private final class PdfEditorImpl extends IPdfEditor.Stub {
-        private final Object mLock = new Object();
 
-        private PdfEditor mEditor;
 
         @Override
         public int openDocument(ParcelFileDescriptor source) throws RemoteException {
             synchronized (mLock) {
+                while(mRenderer != null) {
+                    try {
+                        mLock.wait();
+                    } catch (InterruptedException e) {
+                        /* ignore */
+                    }
+                }
+
                 try {
                     throwIfOpened();
                     if (DEBUG) {
@@ -382,6 +399,7 @@ public final class PdfManipulationService extends Service {
                 }
                 mEditor.close();
                 mEditor = null;
+                mLock.notifyAll();
             }
         }
 
