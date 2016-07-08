@@ -19,7 +19,6 @@ package android.widget;
 
 import android.annotation.IntDef;
 import android.annotation.StringRes;
-import android.app.ActivityManager;
 import android.app.INotificationManager;
 import android.app.ITransientNotification;
 import android.content.Context;
@@ -409,18 +408,13 @@ public class Toast {
                 ImageView appIcon = (ImageView) mView.findViewById(android.R.id.icon);
                 if ((Settings.System.getInt(context.getContentResolver(), Settings.System.TOAST_ICON, 1) == 1)) {
                     if (appIcon != null) {
-                       ActivityManager am =
-                               (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-                       if (!am.isPackageInForeground(packageName)) {
-                           PackageManager pm = context.getPackageManager();
-                           Drawable icon = null;
-                           try {
-                               icon = pm.getApplicationIcon(packageName);
-                           } catch (PackageManager.NameNotFoundException e) {
-                               // nothing to do
-                           }
-                           appIcon.setImageDrawable(icon);
-                       }
+                        PackageManager pm = context.getPackageManager();
+                        try {
+                            Drawable icon = pm.getApplicationIcon(packageName);
+                            appIcon.setImageDrawable(icon);
+                        } catch (PackageManager.NameNotFoundException e) {
+                            // Empty
+                        }
                     }
                 }
                 mWM = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
