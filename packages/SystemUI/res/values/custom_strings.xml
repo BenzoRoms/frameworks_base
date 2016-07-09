@@ -169,9 +169,9 @@
     <string name="accessibility_quick_settings_network_adb_on">ADB over network on.</string>
     <string name="accessibility_quick_settings_network_adb_changed_off">ADB over network turned off.</string>
     <string name="accessibility_quick_settings_network_adb_changed_on">ADB over network turned on.</string>
-    <!-- Layers Manager QS Tile -->
-    <string name="quick_settings_layers_manager_label">Layers</string>
-    <string name="accessibility_quick_settings_layers_manager">Layers.</string>
+    <!-- Substratum QS Tile -->
+    <string name="quick_settings_substratum_label">Substratum</string>
+    <string name="accessibility_quick_settings_substratum">Substratum.</string>
     <!-- Screenrecord QS Tile -->
     <string name="quick_settings_screenrecord_label">Screenrecord</string>
     <string name="quick_settings_screenrecord_on">Recording ...</string>

@@ -30,12 +30,12 @@ import com.android.internal.logging.MetricsLogger;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 
-public class LayersManagerTile extends QSTile<QSTile.BooleanState> {
+public class SubstratumTile extends QSTile<QSTile.BooleanState> {
 
-    private static final String CATEGORY_LAYERS_MANAGER = "com.lovejoy777.rroandlayersmanager.MainActivity";
+    private static final String CATEGORY_SUBSTRATUM = "projekt.substratum.MainActivity";
     private boolean mListening;
 
-    public LayersManagerTile(Host host) {
+    public SubstratumTile(Host host) {
         super(host);
     }
 
@@ -52,8 +52,8 @@ public class LayersManagerTile extends QSTile<QSTile.BooleanState> {
         MetricsLogger.action(mContext, getMetricsCategory());
         mHost.collapsePanels();
         Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.setClassName("com.lovejoy777.rroandlayersmanager",
-            "com.lovejoy777.rroandlayersmanager.MainActivity");
+        intent.setClassName("projekt.substratum",
+            "projekt.substratum.MainActivity");
         mHost.startActivityDismissingKeyguard(intent);
     }
 
@@ -69,9 +69,9 @@ public class LayersManagerTile extends QSTile<QSTile.BooleanState> {
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
         state.visible = true;
-        state.label = mContext.getString(R.string.quick_settings_layers_manager_label);
+        state.label = mContext.getString(R.string.quick_settings_substratum_label);
         state.contentDescription = mContext.getString(
-                R.string.accessibility_quick_settings_layers_manager);
-        state.icon = ResourceIcon.get(R.drawable.ic_qs_layers_manager);
+                R.string.accessibility_quick_settings_substratum);
+        state.icon = ResourceIcon.get(R.drawable.ic_qs_substratum);
     }
 }
