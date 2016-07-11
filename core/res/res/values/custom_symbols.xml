@@ -99,6 +99,7 @@
   <java-symbol type="drawable" name="ic_shortcut_action_recent" />
   <java-symbol type="drawable" name="ic_shortcut_action_ring_vib_silent" />
   <java-symbol type="drawable" name="ic_shortcut_action_screenshot" />
+  <java-symbol type="drawable" name="ic_shortcut_action_screenrecord" />
   <java-symbol type="drawable" name="ic_shortcut_action_search" />
 
   <!-- AOKP custom system animations -->

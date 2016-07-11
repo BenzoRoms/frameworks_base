@@ -157,6 +157,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected static final int MSG_TOGGLE_KILL_APP = 1027;
     protected static final int MSG_TOGGLE_SCREENSHOT = 1028;
     protected static final int MSG_SET_PIE_TRIGGER_MASK = 1029;
+    protected static final int MSG_TOGGLE_SCREENRECORD = 1030;
 
     protected static final boolean ENABLE_HEADS_UP = true;
     // scores above this threshold should be displayed in heads up mode.
@@ -1294,6 +1295,13 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     @Override
+    public void toggleScreenrecord() {
+        int msg = MSG_TOGGLE_SCREENRECORD;
+        mHandler.removeMessages(msg);
+        mHandler.sendEmptyMessage(msg);
+    }
+
+    @Override
     public void setPieTriggerMask(int newMask, boolean lock) {
         int msg = MSG_SET_PIE_TRIGGER_MASK;
         mHandler.removeMessages(msg);
@@ -1547,6 +1555,10 @@ public abstract class BaseStatusBar extends SystemUI implements
              case MSG_TOGGLE_SCREENSHOT:
                  if (DEBUG) Slog.d(TAG, "toggle screenshot");
                  takeScreenshot();
+                 break;
+             case MSG_TOGGLE_SCREENRECORD:
+                 if (DEBUG) Slog.d(TAG, "toggle screenrecord");
+                 takeScreenrecord();
                  break;
              case MSG_SET_PIE_TRIGGER_MASK:
                  updatePieTriggerMask(m.arg1, m.arg2 != 0);
@@ -2772,6 +2784,70 @@ public abstract class BaseStatusBar extends SystemUI implements
             if (mContext.bindService(intent, conn, mContext.BIND_AUTO_CREATE)) {
                 mScreenshotConnection = conn;
                 mHDL.postDelayed(mScreenshotTimeout, 10000);
+            }
+        }
+    }
+
+    /**
+     * functions needed for taking screen record.
+     */
+    final Object mScreenrecordLock = new Object();
+    ServiceConnection mScreenrecordConnection = null;
+
+    final Runnable mScreenrecordTimeout = new Runnable() {
+        @Override public void run() {
+            synchronized (mScreenrecordLock) {
+                if (mScreenrecordConnection != null) {
+                    mContext.unbindService(mScreenrecordConnection);
+                    mScreenrecordConnection = null;
+                }
+            }
+        }
+    };
+
+    private void takeScreenrecord() {
+       synchronized (mScreenrecordLock) {
+            if (mScreenrecordConnection != null) {
+                return;
+            }
+            ComponentName cn = new ComponentName("com.android.systemui",
+                    "com.android.systemui.omni.screenrecord.TakeScreenrecordService");
+            Intent intent = new Intent();
+            intent.setComponent(cn);
+            ServiceConnection conn = new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    synchronized (mScreenrecordLock) {
+                        Messenger messenger = new Messenger(service);
+                        Message msg = Message.obtain(null, 1);
+                        final ServiceConnection myConn = this;
+                        Handler h = new Handler(mHandler.getLooper()) {
+                            @Override
+                            public void handleMessage(Message msg) {
+                                synchronized (mScreenrecordLock) {
+                                    if (mScreenrecordConnection == myConn) {
+                                        mContext.unbindService(mScreenrecordConnection);
+                                        mScreenrecordConnection = null;
+                                        mHandler.removeCallbacks(mScreenrecordTimeout);
+                                    }
+                                }
+                            }
+                        };
+                        msg.replyTo = new Messenger(h);
+                        msg.arg1 = msg.arg2 = 0;
+                        try {
+                            messenger.send(msg);
+                        } catch (RemoteException e) {
+                        }
+                    }
+                }
+                @Override
+                public void onServiceDisconnected(ComponentName name) {}
+            };
+            if (mContext.bindServiceAsUser(
+                    intent, conn, Context.BIND_AUTO_CREATE, UserHandle.CURRENT)) {
+                mScreenrecordConnection = conn;
+                mHandler.postDelayed(mScreenrecordTimeout, 31 * 60 * 1000);
             }
         }
     }
