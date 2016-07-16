@@ -1050,9 +1050,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mNotificationPanelDebugText.setVisibility(View.VISIBLE);
         }*/
 
-        // Setup pie container if enabled
-        attachPieContainer(isPieEnabled());
-
         addGestureAnywhereView();
         addSidebarView();
 
@@ -1064,6 +1061,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             mNavigationBarView.setDisabledFlags(mDisabled1);
             mNavigationBarView.setBar(this);
+            addNavigationBarCallback(mNavigationBarView);
             mNavigationBarView.setOnVerticalChangedListener(
                     new NavigationBarView.OnVerticalChangedListener() {
                 @Override
@@ -1086,6 +1084,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mAssistManager = new AssistManager(this, context);
             }
         }
+
+        // Setup pie container if enabled
+        attachPieContainer(isPieEnabled());
 
         // figure out which pixel-format to use for the status bar.
         mPixelFormat = PixelFormat.OPAQUE;
@@ -1653,6 +1654,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         addNotificationViews(shadeEntry, ranking);
         // Recalculate the position of the sliding windows and the titles.
         setAreThereNotifications();
+        restorePieTriggerMask();
     }
 
     @Override

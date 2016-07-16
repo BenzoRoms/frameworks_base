@@ -82,6 +82,6 @@ public final class EdgeServiceConstants {
     /**
      * Allow IME to reduce left and right trigger height.
      */
-    public static final int IME_CONTROL = 0x10;
+    public static final int IME_CONTROL = 0x30;
 
 }
