@@ -1580,7 +1580,7 @@
     <bool name="config_dreamsSupported">true</bool>
 
     <!-- If supported, are dreams enabled? (by default) -->
-    <bool name="config_dreamsEnabledByDefault">true</bool>
+    <bool name="config_dreamsEnabledByDefault">false</bool>
     <!-- If supported and enabled, are dreams activated when docked? (by default) -->
     <bool name="config_dreamsActivatedOnDockByDefault">true</bool>
     <!-- If supported and enabled, are dreams activated when asleep and charging? (by default) -->
@@ -2380,7 +2380,7 @@
 
     <!-- Allow the gesture to double tap the power button twice to start the camera while the device
          is non-interactive. -->
-    <bool name="config_cameraDoubleTapPowerGestureEnabled">true</bool>
+    <bool name="config_cameraDoubleTapPowerGestureEnabled">false</bool>
 
     <!-- Name of the component to handle network policy notifications. If present,
          disables NetworkPolicyManagerService's presentation of data-usage notifications. -->
