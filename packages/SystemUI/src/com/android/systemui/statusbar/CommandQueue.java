@@ -74,6 +74,7 @@ public class CommandQueue extends IStatusBar.Stub {
     private static final int MSG_SMART_PULLDOWN                     = 30 << MSG_SHIFT;
     private static final int MSG_SET_PIE_TRIGGER_MASK               = 31 << MSG_SHIFT;
     private static final int MSG_TOGGLE_SCREENRECORD                = 32 << MSG_SHIFT;
+    private static final int MSG_TOGGLE_ONTHEGO                     = 33 << MSG_SHIFT;
 
     public static final int FLAG_EXCLUDE_NONE = 0;
     public static final int FLAG_EXCLUDE_SEARCH_PANEL = 1 << 0;
@@ -127,6 +128,7 @@ public class CommandQueue extends IStatusBar.Stub {
         public void toggleScreenshot();
         public void toggleSmartPulldown();
         public void toggleScreenrecord();
+        public void toggleOnTheGo();
         public void setPieTriggerMask(int newMask, boolean lock);
     }
 
@@ -377,6 +379,13 @@ public class CommandQueue extends IStatusBar.Stub {
         }
     }
 
+    public void toggleOnTheGo() {
+        synchronized (mList) {
+            mHandler.removeMessages(MSG_TOGGLE_ONTHEGO);
+            mHandler.sendEmptyMessage(MSG_TOGGLE_ONTHEGO);
+        }
+    }
+
     private final class H extends Handler {
         public void handleMessage(Message msg) {
             final int what = msg.what & MSG_MASK;
@@ -498,6 +507,9 @@ public class CommandQueue extends IStatusBar.Stub {
                     break;
                 case MSG_TOGGLE_SCREENRECORD:
                     mCallbacks.toggleScreenrecord();
+                    break;
+                case MSG_TOGGLE_ONTHEGO:
+                    mCallbacks.toggleOnTheGo();
                     break;
                 case MSG_SET_PIE_TRIGGER_MASK:
                     mCallbacks.setPieTriggerMask(msg.arg1, msg.arg2 != 0);

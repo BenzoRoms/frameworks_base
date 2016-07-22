@@ -25,6 +25,9 @@
     <!-- ScreenRecord -->
     <string name="shortcut_screenrecord">Screenrecord</string>
 
+    <!-- OnTheGo -->
+    <string name="shortcut_onthego">OnTheGo</string>
+
     <!-- The text for the button in the notification window-shade that clears
          all of the currently visible notifications. [CHAR LIMIT=10]-->
    <string name="clear_recents">Close all recent</string>

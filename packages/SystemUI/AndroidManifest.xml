@@ -312,6 +312,21 @@
             </intent-filter>
         </activity>
 
+        <!-- OnTheGo Activity -->
+        <activity
+            android:name="com.android.systemui.shortcuts.OnTheGo"
+            android:label="@string/shortcut_onthego"
+            android:icon="@drawable/ic_sysbar_onthego"
+            android:theme="@android:style/Theme.NoDisplay"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.android.systemui.SHORTCUT" />
+                <category android:name="com.android.systemui.SHORTCUT_EXTRA" />
+            </intent-filter>
+        </activity>
+
         <!-- started from UsbDeviceSettingsManager -->
         <activity android:name=".usb.UsbConfirmActivity"
             android:exported="true"

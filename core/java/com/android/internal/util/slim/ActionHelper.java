@@ -443,6 +443,9 @@ public class ActionHelper {
         } else if (clickAction.equals(ActionConstants.ACTION_CAMERA)) {
             resId = systemUiResources.getIdentifier(
                         SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_camera", null, null);
+        } else if (clickAction.equals(ActionConstants.ACTION_ONTHEGO)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_onthego", null, null);
         } else if (clickAction.equals(ActionConstants.ACTION_POWER_OFF)) {
             resId = com.android.internal.R.drawable.ic_lock_power_off_alpha;
         } else if (clickAction.equals(ActionConstants.ACTION_REBOOT)) {

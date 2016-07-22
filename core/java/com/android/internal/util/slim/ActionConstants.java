@@ -63,6 +63,7 @@ public class ActionConstants {
     public static final String ACTION_SMART_PULLDOWN       = "**smart_pulldown**";
     public static final String ACTION_NOWONTAP             = "**nowontap**";
     public static final String ACTION_SCREENRECORD         = "**screenrecord**";
+    public static final String ACTION_ONTHEGO              = "**onthego**";
 
     // no action
     public static final String ACTION_NULL                 = "**null**";

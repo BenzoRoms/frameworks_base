@@ -89,4 +89,5 @@ oneway interface IStatusBar
     void toggleKillApp();
     void toggleSmartPulldown();
     void toggleScreenrecord();
+    void toggleOnTheGo();
 }

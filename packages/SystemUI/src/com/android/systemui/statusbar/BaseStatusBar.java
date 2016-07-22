@@ -103,6 +103,7 @@ import com.android.internal.logging.MetricsLogger;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.statusbar.StatusBarIconList;
+import com.android.internal.util.benzo.OnTheGoActions;
 import com.android.internal.util.NotificationColorUtil;
 import com.android.internal.util.omni.OmniSwitchConstants;
 import com.android.internal.widget.LockPatternUtils;
@@ -159,6 +160,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected static final int MSG_TOGGLE_SCREENSHOT = 1028;
     protected static final int MSG_SET_PIE_TRIGGER_MASK = 1029;
     protected static final int MSG_TOGGLE_SCREENRECORD = 1030;
+    protected static final int MSG_TOGGLE_ONTHEGO = 1031;
 
     protected static final boolean ENABLE_HEADS_UP = true;
     // scores above this threshold should be displayed in heads up mode.
@@ -1323,6 +1325,13 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     @Override
+    public void toggleOnTheGo() {
+        int msg = MSG_TOGGLE_ONTHEGO;
+        mHandler.removeMessages(msg);
+        mHandler.sendEmptyMessage(msg);
+    }
+
+    @Override
     public void setPieTriggerMask(int newMask, boolean lock) {
         int msg = MSG_SET_PIE_TRIGGER_MASK;
         mHandler.removeMessages(msg);
@@ -1450,6 +1459,12 @@ public abstract class BaseStatusBar extends SystemUI implements
             mSlimRecents.cancelPreloadingRecentTasksList();
             }
         }
+    }
+
+    protected void toggleOnTheGoMode() {
+         ContentResolver resolver = mContext.getContentResolver();
+         OnTheGoActions.processAction(mContext,
+             OnTheGoActions.ACTION_ONTHEGO_TOGGLE);
     }
 
     @Override
@@ -1580,6 +1595,10 @@ public abstract class BaseStatusBar extends SystemUI implements
              case MSG_TOGGLE_SCREENRECORD:
                  if (DEBUG) Slog.d(TAG, "toggle screenrecord");
                  takeScreenrecord();
+                 break;
+             case MSG_TOGGLE_ONTHEGO:
+                 if (DEBUG) Slog.d(TAG, "toggle screenrecord");
+                 toggleOnTheGoMode();
                  break;
              case MSG_SET_PIE_TRIGGER_MASK:
                  updatePieTriggerMask(m.arg1, m.arg2 != 0);
@@ -2881,6 +2900,15 @@ public abstract class BaseStatusBar extends SystemUI implements
                 mHandler.postDelayed(mScreenrecordTimeout, 31 * 60 * 1000);
             }
         }
+    }
+
+    private void startOnTheGo() {
+        final ComponentName cn = new ComponentName("com.android.systemui",
+                "com.android.systemui.benzo.onthego.OnTheGoService");
+        final Intent startIntent = new Intent();
+        startIntent.setComponent(cn);
+        startIntent.setAction("start");
+        mContext.startService(startIntent);
     }
 
     private void getLastApp() {

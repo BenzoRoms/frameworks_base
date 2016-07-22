@@ -286,6 +286,12 @@ public class Action {
                 } catch (RemoteException e) {
                 }
                 return;
+            } else if (action.equals(ActionConstants.ACTION_ONTHEGO)) {
+                try {
+                    barService.toggleOnTheGo();
+                } catch (RemoteException e) {
+                }
+                return;
             } else if (action.equals(ActionConstants.ACTION_RECENTS)) {
                 if (isKeyguardShowing) {
                     return;
