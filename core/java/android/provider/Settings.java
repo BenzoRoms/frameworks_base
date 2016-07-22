@@ -7789,6 +7789,12 @@ public final class Settings {
         public static final String QS_USE_MAIN_TILES = "sysui_qs_main_tiles";
 
         /**
+         * Whether to use one tap tile action to enable or disable data 
+         * @hide
+         */
+        public static final String QS_DATA_ADVANCED = "qs_data_advanced";
+
+        /**
          * HALO, should default to 0 (no, do not show)
          * @hide
          */

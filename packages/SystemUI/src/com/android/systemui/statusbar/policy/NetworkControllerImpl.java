@@ -18,7 +18,9 @@ package com.android.systemui.statusbar.policy;
 
 import static android.net.NetworkCapabilities.NET_CAPABILITY_VALIDATED;
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -840,5 +842,13 @@ public class NetworkControllerImpl extends BroadcastReceiver
                     res.getBoolean(R.bool.config_hspa_data_distinguishable);
             return config;
         }
+    }
+
+    /**
+     * Check the advanced data tile setting
+     */
+    public boolean isAdvancedDataTileEnabled() {
+        return Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.QS_DATA_ADVANCED, 0, ActivityManager.getCurrentUser()) == 1;
     }
 }
