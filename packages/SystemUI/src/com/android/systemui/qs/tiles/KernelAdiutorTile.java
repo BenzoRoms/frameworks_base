@@ -36,7 +36,7 @@ import com.android.systemui.qs.QSTile;
 /** Quick settings tile: KernelAdiutor **/
 public class KernelAdiutorTile extends QSTile<QSTile.BooleanState> {
 
-    private static final String CATEGORY_KERNEL_ADIUTOR = "com.grarak.kerneladiutor.MainActivity";
+    private static final String CATEGORY_KERNEL_ADIUTOR = "com.grarak.kerneladiutor.activities.MainActivity";
     private boolean mListening;
 
     public KernelAdiutorTile(Host host) {
@@ -57,7 +57,7 @@ public class KernelAdiutorTile extends QSTile<QSTile.BooleanState> {
         mHost.collapsePanels();
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.setClassName("com.grarak.kerneladiutor",
-            "com.grarak.kerneladiutor.MainActivity");
+            "com.grarak.kerneladiutor.activities.MainActivity");
         mHost.startActivityDismissingKeyguard(intent);
     }
 
