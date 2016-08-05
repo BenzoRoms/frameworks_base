@@ -235,6 +235,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         mSettingsButton.setOnLongClickListener(this);
         mHaloButton = findViewById(R.id.halo_button);
         mHaloButton.setOnClickListener(this);
+        mHaloButton.setOnLongClickListener(this);
         mHeadsUpButton = findViewById(R.id.heads_up_button);
         mHeadsUpButton.setOnClickListener(this);
         mHeadsUpButton.setOnLongClickListener(this);
@@ -736,6 +737,8 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             startUserLongClickActivity();
         } else if (v == mHeadsUpButton) {
             startHeadsUpLongClickActivity();
+        } else if (v == mHaloButton) {
+            startHaloLongClickActivity();
         } else if (v == mWeatherDetailed) {
             showWeatherSettings();
             return true;
@@ -763,6 +766,13 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         Intent intent = new Intent(Intent.ACTION_MAIN);
 	intent.setClassName("com.android.settings",
             "com.android.settings.Settings$MainSettingsActivity");
+        mActivityStarter.startActivity(intent, true /* dismissShade */);
+    }
+
+    private void startHaloLongClickActivity() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+	intent.setClassName("com.android.settings",
+            "com.android.settings.Settings$HaloActivity");
         mActivityStarter.startActivity(intent, true /* dismissShade */);
     }
 
