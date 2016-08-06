@@ -632,13 +632,21 @@ final class DefaultPermissionGrantPolicy {
 
 	    }
 
+            // Snapdragon Browser
+            PackageParser.Package snapdragonPackage = getDefaultProviderAuthorityPackageLPr(
+                    "org.snapdragon.browser", userId);
+            if (snapdragonPackage != null) {
+                grantRuntimePermissionsLPw(snapdragonPackage, CONTACTS_PERMISSIONS, userId);
+                grantRuntimePermissionsLPw(snapdragonPackage, STORAGE_PERMISSIONS, true, userId);
+            }
+
             // Chromium Browser
             PackageParser.Package chromiumPackage = getDefaultProviderAuthorityPackageLPr(
                     "org.chromium.chrome", userId);
             if (chromiumPackage != null) {
                 grantRuntimePermissionsLPw(chromiumPackage, CONTACTS_PERMISSIONS, userId);
             }
-
+ 
             // Google Connectivity Services
             PackageParser.Package gcsPackage = getDefaultProviderAuthorityPackageLPr(
                     "com.google.android.apps.gcs", userId);
