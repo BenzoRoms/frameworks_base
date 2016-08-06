@@ -684,7 +684,11 @@ public class BatteryMeterView extends View implements DemoMode,
         }
 
         private void loadBatteryDrawables(Resources res, BatteryMeterMode mode) {
-
+                try {
+                    checkBatteryMeterDrawableValid(res, mode);
+                } catch (BatteryMeterDrawableException e) {
+                    Log.w(TAG, "Invalid themed battery meter drawable, falling back to system", e);
+                }
             int drawableResId = getBatteryDrawableResourceForMode(mode);
             mBatteryDrawable = (LayerDrawable) res.getDrawable(drawableResId);
             mFrameDrawable = mBatteryDrawable.findDrawableByLayerId(R.id.battery_frame);
