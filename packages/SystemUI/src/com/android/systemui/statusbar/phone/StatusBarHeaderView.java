@@ -1046,7 +1046,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             batteryY = v1.batteryY * (1 - t) + v2.batteryY * t;
             settingsTranslation = v1.settingsTranslation * (1 - t) + v2.settingsTranslation * t;
             haloButtonTranslation =
-                    v1.haloButtonTranslation * (1 -t) + v2.haloButtonTranslation * t;
+                    v1.haloButtonTranslation * (1 - t) + v2.haloButtonTranslation * t;
             headsUpTranslation =
                     v1.headsUpTranslation * (1 - t) + v2.headsUpTranslation * t;
             somcQuickSettingsTranslation =
