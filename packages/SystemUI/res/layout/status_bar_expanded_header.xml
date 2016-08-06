@@ -70,7 +70,8 @@
         android:layout_height="@dimen/status_bar_header_height"
         android:layout_toStartOf="@id/settings_button"
         style="@android:style/Widget.Material.Button.Borderless"
-        android:background="@drawable/ripple_drawable" />
+        android:background="@drawable/ripple_drawable"
+        android:visibility="gone" />
 
     <ImageButton android:id="@+id/heads_up_button"
         style="@android:style/Widget.Material.Button.Borderless"

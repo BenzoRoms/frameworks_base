@@ -114,6 +114,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     private View mSignalCluster;
     private View mSettingsButton;
     private View mHaloButton;
+    private boolean mShowhaloButton;
     private View mSomcQuickSettings;
     private View mQsDetailHeader;
     private TextView mQsDetailHeaderTitle;
@@ -444,11 +445,9 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             mDateExpanded.setVisibility(mExpanded && mAlarmShowing ? View.INVISIBLE : View.VISIBLE);
             mAlarmStatus.setVisibility(mExpanded && mAlarmShowing ? View.VISIBLE : View.INVISIBLE);
             mSettingsButton.setVisibility(mExpanded ? View.VISIBLE : View.INVISIBLE);
-            mHaloButton.setVisibility(mExpanded ? View.VISIBLE : View.INVISIBLE);
+            mHaloButton.setVisibility(mExpanded && mShowhaloButton ? View.VISIBLE : View.GONE);
             mQsDetailHeader.setVisibility(mExpanded && mShowingDetail ? View.VISIBLE : View.INVISIBLE);
-            if (mHeadsUpButton != null) {
-                mHeadsUpButton.setVisibility(mExpanded && mShowHeadsUpButton ? View.VISIBLE : View.GONE);
-            }
+            mHeadsUpButton.setVisibility(mExpanded && mShowHeadsUpButton ? View.VISIBLE : View.GONE);
             if (mSignalCluster != null) {
                  updateSignalClusterDetachment();
             }
@@ -906,23 +905,13 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
                 ? 0
                 : mSettingsButton.getLeft() - mHaloButton.getLeft();
         target.headsUpAlpha = getAlphaForVisibility(mHeadsUpButton);
-        if (mHeadsUpButton != null) {
-            target.headsUpTranslation = mExpanded
-                    ? 0
-                    : mHaloButton.getLeft() - mHeadsUpButton.getLeft();
-        }
+        target.headsUpTranslation = mExpanded
+                ? 0
+                : mHaloButton.getLeft() - mHeadsUpButton.getLeft();
         target.somcQuickSettingsAlpha = getAlphaForVisibility(mSomcQuickSettings);
-        if (mSomcQuickSettings != null) {
-            if (mHeadsUpButton != null) {
-                target.somcQuickSettingsTranslation = mExpanded
-                        ? 0
-                        : mHeadsUpButton.getLeft() - mSomcQuickSettings.getLeft();
-            } else {
-                target.somcQuickSettingsTranslation = mExpanded
-                        ? 0
-                        : mHaloButton.getLeft() - mSomcQuickSettings.getLeft();
-            }
-        }
+        target.somcQuickSettingsTranslation = mExpanded
+                ? 0
+                : mHeadsUpButton.getLeft() - mSomcQuickSettings.getLeft();
         target.signalClusterAlpha = mSignalClusterDetached ? 0f : 1f;
         target.settingsRotation = !mExpanded ? 90f : 0f;
         target.weatherImageAlpha =  getAlphaForVisibility(mWeatherImage);
@@ -978,9 +967,11 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         mSettingsButton.setTranslationY(mSystemIconsSuperContainer.getTranslationY());
         mSettingsButton.setTranslationX(values.settingsTranslation);
         mSettingsButton.setRotation(values.settingsRotation);
-        mHaloButton.setTranslationY(mSystemIconsSuperContainer.getTranslationY());
-        mHaloButton.setTranslationX(values.haloButtonTranslation);
-        mHaloButton.setRotation(values.settingsRotation);
+        if (mHaloButton != null) {
+            mHaloButton.setTranslationY(mSystemIconsSuperContainer.getTranslationY());
+            mHaloButton.setTranslationX(values.settingsTranslation);
+            mHaloButton.setRotation(values.settingsRotation);
+        }
         if (mHeadsUpButton != null) {
             mHeadsUpButton.setTranslationY(mSystemIconsSuperContainer.getTranslationY());
             mHeadsUpButton.setTranslationX(values.haloButtonTranslation);
@@ -988,7 +979,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         }
         if (mSomcQuickSettings != null) {
             mSomcQuickSettings.setTranslationY(mSystemIconsSuperContainer.getTranslationY());
-            mSomcQuickSettings.setTranslationX(values.somcQuickSettingsTranslation);
+            mSomcQuickSettings.setTranslationX(values.headsUpTranslation);
             mSomcQuickSettings.setRotation(values.settingsRotation);
         }
         applyAlpha(mEmergencyCallsOnly, values.emergencyCallsOnlyAlpha);
@@ -1202,6 +1193,9 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.HEADS_UP_SHOW_STATUS_BUTTON), false, this,
                     UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.HALO_SHOW_BUTTON), false, this,
+                    UserHandle.USER_ALL);
             update();
         }
 
@@ -1235,6 +1229,9 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             mShowHeadsUpButton = Settings.Secure.getIntForUser(
                     resolver, Settings.Secure.HEADS_UP_SHOW_STATUS_BUTTON,
                     0, currentUserId) == 1;
+	    mShowhaloButton = Settings.Secure.getIntForUser(
+                    resolver, Settings.Secure.HALO_SHOW_BUTTON,
+                    1, currentUserId) == 1;
 
             switch (batteryStyle) {
                 case 4: //BATTERY_METER_GONE

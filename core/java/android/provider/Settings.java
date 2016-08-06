@@ -7833,6 +7833,12 @@ public final class Settings {
         public static final String HALO_COLOR = "halo_color";
 
         /**
+         * Enable or disable HALO in the statusbar
+         * @hide
+         */
+        public static final String HALO_SHOW_BUTTON = "halo_show_button";
+
+        /**
          * Whether the camera launch gesture should be disabled.
          *
          * @hide
