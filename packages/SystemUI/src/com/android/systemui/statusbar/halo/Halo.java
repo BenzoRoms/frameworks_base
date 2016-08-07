@@ -387,24 +387,34 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
                     public void run() {
                         mEffect.wake();
                         mEffect.ticker(mContext.getResources()
-                                                .getString(R.string.halo_tutorial1), 0, 3000);
+                                                .getString(R.string.halo_tutorial1), 0, 2000);
                         mHandler.postDelayed(new Runnable() {
                             public void run() {
                                 mEffect.ticker(mContext.getResources()
-                                                .getString(R.string.halo_tutorial2), 0, 3000);
+                                                .getString(R.string.halo_tutorial2), 0, 2000);
                                 mHandler.postDelayed(new Runnable() {
                                     public void run() {
                                         mEffect.ticker(mContext.getResources()
-                                                .getString(R.string.halo_tutorial3), 0, 3000);
+                                                .getString(R.string.halo_tutorial3), 0, 2000);
                                         mHandler.postDelayed(new Runnable() {
                                             public void run() {
-                                                mState = STATE_IDLE;
-                                                mEffect.nap(0);
-                                                mEffect.setHaloOverlay
-                                                        (HaloProperties.Overlay.NONE, 0f);
-                                            }}, 6000);
-                                    }}, 6000);
-                            }}, 6000);
+                                                mEffect.ticker(mContext.getResources()
+                                                        .getString(R.string.halo_tutorial4), 0, 2000);
+                                                mHandler.postDelayed(new Runnable() {
+                                                    public void run() {
+                                                        mEffect.ticker(mContext.getResources()
+                                                                .getString(R.string.halo_tutorial5), 0, 2000);
+                                                        mHandler.postDelayed(new Runnable() {
+                                                            public void run() {
+                                                                mState = STATE_IDLE;
+                                                                mEffect.nap(0);
+                                                                mEffect.setHaloOverlay
+                                                                        (HaloProperties.Overlay.NONE, 0f);
+                                                            }}, 4000);
+                                                    }}, 4000);
+                                            }}, 4000);
+                                    }}, 4000);
+                            }}, 4000);
                     }}, 1000);
             } else {
                 mEffect.setHaloX(msavePositionX);
