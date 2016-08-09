@@ -7839,6 +7839,12 @@ public final class Settings {
         public static final String HALO_SHOW_BUTTON = "halo_show_button";
 
         /**
+         * Launch notifications in floating mode
+         * @hide
+         */
+        public static final String HALO_FLOAT_NOTIFICATIONS = "halo_float_notifications";
+
+        /**
          * Whether the camera launch gesture should be disabled.
          *
          * @hide
