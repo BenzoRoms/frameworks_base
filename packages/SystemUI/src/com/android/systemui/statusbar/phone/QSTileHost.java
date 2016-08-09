@@ -43,6 +43,7 @@ import com.android.systemui.qs.tiles.DndTile;
 import com.android.systemui.qs.tiles.ExpandedDesktopTile;
 import com.android.systemui.qs.tiles.FlashlightTile;
 import com.android.systemui.qs.tiles.FloatingWindowsTile;
+import com.android.systemui.qs.tiles.HaloTile;
 import com.android.systemui.qs.tiles.HeadsUpTile;
 import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.ImeTile;
@@ -318,6 +319,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (tileSpec.equals("headsup")) return new HeadsUpTile(this);
 	else if (tileSpec.equals("benzo")) return new BenzoSettingsTile(this);
 	else if (tileSpec.equals("slimaction")) return new SlimActionTile(this);
+        else if (tileSpec.equals("halo")) return new HaloTile(this);
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
         else throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
     }

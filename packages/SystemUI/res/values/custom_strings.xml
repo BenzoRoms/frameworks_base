@@ -215,6 +215,9 @@
     <string name="quick_settings_benzosettings">Benzo Extras</string>
     <!-- Slim Actions Tile -->
     <string name="quick_settings_slimaction_label">SlimActions</string>
+    <!-- Halo Tile -->
+    <string name="quick_settings_halo_on">Halo</string>
+    <string name="quick_settings_halo_off">Halo disabled</string>
 
     <!-- Title shown in recents popup for showing app launch in floating mode -->
     <string name="recent_float_mode_title">Float Mode</string>

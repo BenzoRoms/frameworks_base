@@ -231,6 +231,7 @@ public class QsTuner extends Fragment implements Callback {
         else if (spec.equals("headsup")) return R.string.quick_settings_heads_up_label;
 	else if (spec.equals("benzo")) return R.string.quick_settings_benzosettings;
 	else if (spec.equals("slimaction")) return R.string.quick_settings_slimaction_label;
+        else if (spec.equals("halo")) return R.string.quick_settings_halo_on;
         return 0;
     }
 
@@ -498,6 +499,7 @@ public class QsTuner extends Fragment implements Callback {
             else if (mSpec.equals("headsup")) return R.drawable.ic_qs_heads_up_on;
 	    else if (mSpec.equals("benzo")) return R.drawable.ic_qs_benzosettings;
 	    else if (mSpec.equals("slimaction")) return R.drawable.ic_sysbar_pie;
+            else if (mSpec.equals("halo")) return R.drawable.ic_notify_halo_normal;
             return R.drawable.android;
         }
 
