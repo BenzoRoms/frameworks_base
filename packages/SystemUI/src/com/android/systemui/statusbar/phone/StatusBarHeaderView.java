@@ -115,6 +115,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     private View mSettingsButton;
     private View mHaloButton;
     private boolean mShowhaloButton;
+    private boolean mHaloActive;
     private View mSomcQuickSettings;
     private View mQsDetailHeader;
     private TextView mQsDetailHeaderTitle;
@@ -1169,9 +1170,9 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         }
     };
 
-    private boolean toggleHalo() {
-        return Settings.Secure.putInt(mContext.getContentResolver(),
-                    Settings.Secure.HALO_ACTIVE, 1);
+    private void toggleHalo() {
+        Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.HALO_ACTIVE, !mHaloActive ? 1 : 0);
     }
 
     class SettingsObserver extends ContentObserver {
@@ -1195,6 +1196,9 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.HALO_SHOW_BUTTON), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.HALO_ACTIVE), false, this,
                     UserHandle.USER_ALL);
             update();
         }
@@ -1232,6 +1236,10 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
 	    mShowhaloButton = Settings.Secure.getIntForUser(
                     resolver, Settings.Secure.HALO_SHOW_BUTTON,
                     1, currentUserId) == 1;
+            mHaloActive = Settings.Secure.getIntForUser(
+                    resolver, Settings.Secure.HALO_ACTIVE,
+                    0, currentUserId) == 1;
+            mHaloButton.setActivated(mHaloActive);
 
             switch (batteryStyle) {
                 case 4: //BATTERY_METER_GONE
