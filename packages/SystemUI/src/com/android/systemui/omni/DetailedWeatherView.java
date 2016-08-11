@@ -54,7 +54,7 @@ import java.util.Date;
 public class DetailedWeatherView extends LinearLayout {
 
     static final String TAG = "DetailedWeatherView";
-    static final boolean DEBUG = true;
+    static final boolean DEBUG = false;
 
     private TextView mWeatherCity;
     private TextView mWeatherTimestamp;

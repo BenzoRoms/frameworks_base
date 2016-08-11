@@ -154,7 +154,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     public static final boolean MULTIUSER_DEBUG = false;
 
     // STOPSHIP disable once we resolve b/18102199
-    private static final boolean NOTIFICATION_CLICK_DEBUG = true;
+    private static final boolean NOTIFICATION_CLICK_DEBUG = false;
 
     public static final boolean ENABLE_CHILD_NOTIFICATIONS = Build.IS_DEBUGGABLE
                     && SystemProperties.getBoolean("debug.child_notifs", false);

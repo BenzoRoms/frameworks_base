@@ -163,9 +163,9 @@ import libcore.io.IoUtils;
 public class BackupManagerService {
 
     private static final String TAG = "BackupManagerService";
-    static final boolean DEBUG = true;
+    static final boolean DEBUG = false;
     static final boolean MORE_DEBUG = false;
-    static final boolean DEBUG_SCHEDULING = MORE_DEBUG || true;
+    static final boolean DEBUG_SCHEDULING = MORE_DEBUG || false;
 
     // System-private key used for backing up an app's widget state.  Must
     // begin with U+FFxx by convention (we reserve all keys starting

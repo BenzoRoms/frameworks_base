@@ -32,7 +32,7 @@ import java.io.PrintWriter;
  */
 public class KeyguardServiceDelegate {
     private static final String TAG = "KeyguardServiceDelegate";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     public static final String KEYGUARD_PACKAGE = "com.android.systemui";
     public static final String KEYGUARD_CLASS = "com.android.systemui.keyguard.KeyguardService";

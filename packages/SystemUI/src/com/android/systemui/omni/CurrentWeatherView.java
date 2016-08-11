@@ -36,7 +36,7 @@ import com.android.systemui.R;
 public class CurrentWeatherView extends FrameLayout {
 
     static final String TAG = "CurrentWeatherView";
-    static final boolean DEBUG = true;
+    static final boolean DEBUG = false;
 
     private ImageView mWeatherImage;
     private TextView mWeatherTemp;
