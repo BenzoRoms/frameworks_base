@@ -71,7 +71,7 @@ public class UsbDeviceManager {
     private static final boolean DEBUG = false;
 
     /**
-     * The persistent property which stores whether adb is enabled or not, and the user default usb state.
+     * The persistent property which stores whether adb is enabled or not.
      * May also contain vendor-specific default functions for testing purposes.
      */
     private static final String USB_PERSISTENT_CONFIG_PROPERTY = "persist.sys.usb.config";
@@ -158,19 +158,6 @@ public class UsbDeviceManager {
             boolean enable = (Settings.Global.getInt(mContentResolver,
                     Settings.Global.ADB_ENABLED, 0) > 0);
             mHandler.sendMessage(MSG_ENABLE_ADB, enable);
-        }
-    }
-
-    private class UsbDataSettingsObserver extends ContentObserver {
-        public UsbDataSettingsObserver() {
-            super(null);
-        }
-        @Override
-        public void onChange(boolean selfChange) {
-            boolean unlocked = (Settings.System.getInt(mContentResolver,
-                    Settings.System.USB_DATA_AUTO_UNLOCK, 0) > 0);
-            mHandler.sendMessage(MSG_SET_USB_DATA_UNLOCKED, unlocked);
-            Slog.d(TAG, "AUTO_UNLOCK IS CHANGED.");
         }
     }
 
@@ -331,7 +318,7 @@ public class UsbDeviceManager {
         private boolean mConnected;
         private boolean mHostConnected;
         private boolean mConfigured;
-        private boolean mUsbDataUnlocked = isUsbDataSetToUnlocked();
+        private boolean mUsbDataUnlocked;
         private String mCurrentFunctions;
         private boolean mCurrentFunctionsApplied;
         private UsbAccessory mCurrentAccessory;
@@ -357,7 +344,7 @@ public class UsbDeviceManager {
                 String state = FileUtils.readTextFile(new File(STATE_PATH), 0, null).trim();
                 updateState(state);
 
-                // register observer to listen for adb settings changes
+                // register observer to listen for settings changes
                 mContentResolver.registerContentObserver(
                         Settings.Global.getUriFor(Settings.Global.ADB_ENABLED),
                                 false, new AdbSettingsObserver());
@@ -369,11 +356,6 @@ public class UsbDeviceManager {
                             }
                         }
                 );
-
-                // register observer to listen for usb data settings changes
-                mContentResolver.registerContentObserver(
-                        Settings.System.getUriFor(Settings.System.USB_DATA_AUTO_UNLOCK),
-                                false, new UsbDataSettingsObserver());
 
                 // Watch for USB configuration changes
                 mUEventObserver.startObserving(USB_STATE_MATCH);
@@ -446,8 +428,6 @@ public class UsbDeviceManager {
             // we always set it due to b/23631400, where adbd was getting killed
             // and not restarted due to property timeouts on some devices
             SystemProperties.set(USB_CONFIG_PROPERTY, config);
-            // set the persistent value too (to survive reboots)
-            SystemProperties.set(USB_PERSISTENT_CONFIG_PROPERTY, config);
             return waitForState(config);
         }
 
@@ -684,7 +664,7 @@ public class UsbDeviceManager {
                 case MSG_UPDATE_STATE:
                     mConnected = (msg.arg1 == 1);
                     mConfigured = (msg.arg2 == 1);
-                    if (!mConnected && !isUsbDataSetToUnlocked()) {
+                    if (!mConnected) {
                         // When a disconnect occurs, relock access to sensitive user data
                         mUsbDataUnlocked = false;
                     }
@@ -693,7 +673,7 @@ public class UsbDeviceManager {
                     if (UsbManager.containsFunction(mCurrentFunctions,
                             UsbManager.USB_FUNCTION_ACCESSORY)) {
                         updateCurrentAccessory();
-                    } else if (!mConnected && !isUsbDataSetToUnlocked()) {
+                    } else if (!mConnected) {
                         // restore defaults when USB is disconnected
                         setEnabledFunctions(null, false);
                     }
@@ -915,11 +895,6 @@ public class UsbDeviceManager {
 
     public boolean isFunctionEnabled(String function) {
         return UsbManager.containsFunction(SystemProperties.get(USB_CONFIG_PROPERTY), function);
-    }
-
-    public boolean isUsbDataSetToUnlocked() {
-        return (Settings.System.getInt(mContentResolver,
-                    Settings.System.USB_DATA_AUTO_UNLOCK, 0) > 0);
     }
 
     public void setCurrentFunctions(String functions) {

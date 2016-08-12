@@ -4902,11 +4902,6 @@ public final class Settings {
          */
         public static final String STATUS_BAR_CARRIER_COLOR = "status_bar_carrier_color";
 
-       /**
-        * USB Data automatic unlock
-        */
-       public static final String USB_DATA_AUTO_UNLOCK = "usb_data_auto_unlock";
-
         /**
          * Display style of the status bar battery information
          * 0: Display the battery an icon in portrait mode
