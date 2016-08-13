@@ -4420,23 +4420,6 @@ public class TelephonyManager {
    }
 
     /**
-     * Returns the IMS Registration Status on a particular subid
-     *
-     * @param subId
-     * @return true if IMS status is registered, false for other.
-     * @hide
-     */
-    public boolean isImsRegistered(int subId) {
-       try {
-           return getITelephony().isImsRegisteredForSubscriber(subId);
-       } catch (RemoteException ex) {
-           return false;
-       } catch (NullPointerException ex) {
-           return false;
-       }
-    }
-
-    /**
      * Returns the Status of Volte
      * @hide
      */
