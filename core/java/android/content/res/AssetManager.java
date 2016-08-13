@@ -24,7 +24,6 @@ import android.util.TypedValue;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -77,8 +76,6 @@ public final class AssetManager implements AutoCloseable {
     private int mNumRefs = 1;
     private boolean mOpen = true;
     private HashMap<Long, RuntimeException> mRefStacks;
-
-    private ArrayList<Integer> mThemeCookies = new ArrayList<Integer>(2);
  
     /**
      * Create a new AssetManager containing only the basic system assets.
@@ -686,19 +683,6 @@ public final class AssetManager implements AutoCloseable {
         }
 
         return cookies;
-    }
-
-    /**
-     * Sets asset cookie for current theme (0 if not a themed asset manager).
-     * {@hide}
-     */
-    public void addThemeCookie(int cookie) {
-        mThemeCookies.add(cookie);
-    }
-
-    /** {@hide} */
-    public boolean hasThemedAssets() {
-        return mThemeCookies.size() == 0;
     }
 
     /**
