@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Benzo Rom
+ * Copyright (c) 2016 Project Substratum
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,6 @@ import com.android.systemui.qs.QSTile;
 
 public class SubstratumTile extends QSTile<QSTile.BooleanState> {
 
-    private static final String CATEGORY_SUBSTRATUM = "projekt.substratum.MainActivity";
     private boolean mListening;
 
     public SubstratumTile(Host host) {
@@ -53,7 +52,7 @@ public class SubstratumTile extends QSTile<QSTile.BooleanState> {
         mHost.collapsePanels();
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.setClassName("projekt.substratum",
-            "projekt.substratum.MainActivity");
+            "projekt.substratum.LaunchActivity");
         mHost.startActivityDismissingKeyguard(intent);
     }
 
@@ -63,7 +62,7 @@ public class SubstratumTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     public int getMetricsCategory() {
-        return MetricsLogger.DONT_TRACK_ME_BRO;
+        return MetricsLogger.QS_SUBSTRATUM;
     }
 
     @Override
