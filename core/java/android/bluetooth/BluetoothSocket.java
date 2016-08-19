@@ -19,6 +19,8 @@ package android.bluetooth;
 import android.os.ParcelUuid;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+import android.system.ErrnoException;
+import android.system.Os;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -576,6 +578,11 @@ public final class BluetoothSocket implements Closeable {
                     if (DBG) Log.d(TAG, "Closing mSocket: " + mSocket);
                     mSocket.shutdownInput();
                     mSocket.shutdownOutput();
+                    try {
+                        Os.close(mSocket.getFileDescriptor());
+                    } catch (ErrnoException e) {
+                        Log.e(TAG, "Closing socket FD's caused an error");
+                    }
                     mSocket.close();
                     mSocket = null;
                 }
