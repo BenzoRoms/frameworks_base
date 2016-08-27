@@ -7746,6 +7746,12 @@ public final class Settings {
         public static final String STATUS_BAR_LOCKED_ON_SECURE_KEYGUARD = "status_bar_locked_on_secure_keyguard";
 
         /**
+         * Whether the device should tint notification title.
+         * @hide
+         */
+        public static final String NOTIFICATION_TITLE_TINT = "notification_title_tint";
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
