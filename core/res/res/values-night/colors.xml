@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2011 The Android Open Source Project
+<!-- Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,7 +14,10 @@
      limitations under the License.
 -->
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_selected="false" android:drawable="@android:color/transparent" />
-    <item android:state_selected="true"  android:drawable="@drawable/silent_mode_selected" />
-</selector>
+<!-- Colors specific to Material themes. -->
+<resources>
+    <color name="background_floating_material_dark">@color/material_grey_850</color>
+    <color name="notification_action_color_filter">#9F9F9F</color>
+    <!-- background of the picture in the big material notification template -->
+    <color name="notification_mtrl_big_picture_bg">#CC111111</color>
+</resources>
