@@ -92,4 +92,7 @@
     <string name="battery_style_circle">Circle</string>
     <string name="battery_style_droid">Benzo Logo</string>
 
+    <!-- Slim seekbar -->
+    <string name="default_string">Default</string>
+
 </resources>
