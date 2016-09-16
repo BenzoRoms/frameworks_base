@@ -24,6 +24,7 @@ import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.RemotableViewMethod;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
@@ -39,6 +40,9 @@ public class ImageFloatingTextView extends TextView {
 
     /** Number of lines from the top to indent */
     private int mIndentLines;
+
+    /** Layout direction applied on indent */
+    private int mIndentDirection = View.LAYOUT_DIRECTION_UNDEFINED;
 
     public ImageFloatingTextView(Context context) {
         this(context, null);
@@ -82,13 +86,26 @@ public class ImageFloatingTextView extends TextView {
                 margins[i] = endMargin;
             }
         }
-        if (getLayoutDirection() == LAYOUT_DIRECTION_RTL) {
+        if (mIndentDirection == LAYOUT_DIRECTION_RTL) {
             builder.setIndents(margins, null);
         } else {
             builder.setIndents(null, margins);
         }
 
         return builder.build();
+    }
+
+    @Override
+    public void onRtlPropertiesChanged(int layoutDirection) {
+        super.onRtlPropertiesChanged(layoutDirection);
+
+        if (layoutDirection != mIndentDirection && isLayoutDirectionResolved()) {
+            mIndentDirection = layoutDirection;
+            if (mIndentLines > 0) {
+                // Invalidate layout.
+                setHint(getHint());
+            }
+        }
     }
 
     @RemotableViewMethod
