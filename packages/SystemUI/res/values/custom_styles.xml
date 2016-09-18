@@ -29,4 +29,9 @@
         <item name="android:shadowDy">2.0</item>
     </style>  
 
+    <!-- Pure Tuner Theme-->
+    <style name="ExTunerSettings" parent="@android:style/Theme.Material.Settings">
+        <item name="preferenceTheme">@style/TunerPreferenceTheme</item>
+    </style>
+
 </resources>
