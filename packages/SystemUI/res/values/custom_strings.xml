@@ -72,4 +72,10 @@
     <string name="navbar_tuner_title">Navbar tuner</string>
     <string name="statusbar_items_title">Statusbar</string>
 
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Sound</string>
+    <string name="quick_settings_sound_ring">Ring</string>
+    <string name="quick_settings_sound_vibrate">Vibrate</string>
+    <string name="quick_settings_sound_dnd">Do not disturb</string>
+
 </resources>
