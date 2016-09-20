@@ -44,10 +44,10 @@
 
     </PreferenceScreen>
 
-    <Preference
+    <!--Preference
         android:key="nav_bar"
         android:title="@string/nav_bar"
-        android:fragment="com.android.systemui.tuner.NavBarTuner" />
+        android:fragment="com.android.systemui.tuner.NavBarTuner" /-->
 
     <Preference
             android:key="other"
@@ -55,8 +55,8 @@
             android:fragment="com.android.systemui.tuner.OtherPrefs" />
 
     <!-- Warning, this goes last. -->
-    <Preference
+    <!--Preference
         android:summary="@string/tuner_persistent_warning"
-        android:selectable="false" />
+        android:selectable="false" /-->
 
 </PreferenceScreen>
