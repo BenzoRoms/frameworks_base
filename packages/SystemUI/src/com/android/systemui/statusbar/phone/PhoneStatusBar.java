@@ -230,7 +230,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     public static final boolean DEBUG_WINDOW_STATE = false;
 
     // Reset navigation bar visibility after adding its view to window manager.
-    public static final boolean RESET_SYSTEMUI_VISIBILITY_FOR_NAVBAR = true;
+    public static final boolean RESET_SYSTEMUI_VISIBILITY_FOR_NAVBAR = false;
 
     // additional instrumentation for testing purposes; intended to be left on during development
     public static final boolean CHATTY = DEBUG;
@@ -551,7 +551,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         public void onChange(boolean selfChange) {
             boolean wasUsing = mUseNavBar;
             mUseNavBar = Settings.System.getIntForUser(
-                    mContext.getContentResolver(), Settings.System.NAVIGATION_BAR_ENABLED, 1,
+                    mContext.getContentResolver(), Settings.System.NAVIGATION_BAR_ENABLED, 0,
                     UserHandle.USER_CURRENT) != 0;
             Log.d(TAG, "navbar is " + (mUseNavBar ? "enabled" : "disabled"));
             if (wasUsing != mUseNavBar) {
@@ -1512,9 +1512,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private void setNavBarEnabled(boolean enabled) {
         if (enabled) {
             addNavigationBar();
-            if (RESET_SYSTEMUI_VISIBILITY_FOR_NAVBAR) {
-                resetSystemUIVisibility();
-            }
         } else {
             removeNavigationBar();
         }
