@@ -2179,7 +2179,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
 
             final boolean navBarEnabled = Settings.System.getIntForUser(resolver,
-                    Settings.System.NAVIGATION_BAR_ENABLED, 1, UserHandle.USER_CURRENT) == 1;
+                    Settings.System.NAVIGATION_BAR_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
             if (navBarEnabled != mNavBarEnabled) {
                 mNavBarEnabled = navBarEnabled;
             }
