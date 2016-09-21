@@ -27,4 +27,8 @@
     <!-- QS edit button text color -->
     <color name="qs_edit_button_text_color">#64FFFFFF</color>
 
+    <!-- Nav bar tuner colors -->
+    <color name="navbar_tuner_background_color">@android:color/white</color>
+    <color name="navbar_tuner_text_color">@*android:color/material_deep_teal_500</color>
+
 </resources>
