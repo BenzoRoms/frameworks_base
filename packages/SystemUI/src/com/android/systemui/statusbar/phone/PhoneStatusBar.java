@@ -45,6 +45,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -156,6 +157,7 @@ import com.android.systemui.recents.events.EventBus;
 import com.android.systemui.recents.events.activity.AppTransitionFinishedEvent;
 import com.android.systemui.recents.events.activity.UndockingTaskEvent;
 import com.android.systemui.settings.BrightnessController;
+import com.android.internal.util.slim.DeviceUtils;
 import com.android.systemui.stackdivider.Divider;
 import com.android.systemui.stackdivider.WindowManagerProxy;
 import com.android.systemui.statusbar.ActivatableNotificationView;
@@ -350,6 +352,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     int mNaturalBarHeight = -1;
 
+    private boolean mHasNavigationBar = false;
+    private boolean mNavigationBarAttached = false;
+
     Display mDisplay;
     Point mCurrentDisplaySize = new Point();
 
@@ -477,12 +482,22 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_MAX_NOTIF_CONFIG),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NAVIGATION_BAR_SHOW),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
         @Override
-        public void onChange(boolean selfChange) {
+        public void onChange(boolean selfChange, Uri uri) {
+            super.onChange(selfChange, uri);
+
             update();
+
+            if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.NAVIGATION_BAR_SHOW))) {
+                updateNavigationBarVisibility();
+            }
         }
 
         public void update() {
@@ -771,7 +786,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         // TODO: use MediaSessionManager.SessionListener to hook us up to future updates
         // in session state
 
-        addNavigationBar();
+        updateNavigationBarVisibility();
 
         SettingsObserver observer = new SettingsObserver(mHandler);
         observer.observe();
@@ -875,7 +890,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         try {
             boolean showNav = mWindowManagerService.hasNavigationBar();
             if (DEBUG) Log.v(TAG, "hasNavigationBar=" + showNav);
-            if (showNav) {
+            if (showNav) {	
                 createNavigationBarView(context);
             }
         } catch (RemoteException ex) {
@@ -1514,6 +1529,23 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     }
 
+    private void updateNavigationBarVisibility() {
+        final int showByDefault = mContext.getResources().getBoolean(
+                    com.android.internal.R.bool.config_showNavigationBar) ? 1 : 0;
+        mHasNavigationBar = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_SHOW, showByDefault,
+                    UserHandle.USER_CURRENT) == 1;
+
+        if (mHasNavigationBar) {
+            addNavigationBar();
+        } else {
+            if (mNavigationBarAttached) {
+                mNavigationBarAttached = false;
+                mWindowManager.removeView(mNavigationBarView);
+            }
+        }
+    }
+
     private void prepareNavigationBarView() {
         mNavigationBarView.reorient();
 
@@ -1537,7 +1569,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     // For small-screen devices (read: phones) that lack hardware navigation buttons
     protected void addNavigationBar() {
         if (DEBUG) Log.v(TAG, "addNavigationBar: about to add " + mNavigationBarView);
-        if (mNavigationBarView == null) return;
+        if (mNavigationBarAttached) return;
+
+        if (mNavigationBarView == null) {
+            // Recreate navigationbarview
+            createNavigationBarView(mContext);
+        }
 
         try {
             WindowManagerGlobal.getWindowManagerService()
@@ -1563,6 +1600,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         prepareNavigationBarView();
 
         mWindowManager.addView(mNavigationBarView, getNavigationBarLayoutParams());
+
+        mNavigationBarAttached = true;
     }
 
     protected void repositionNavigationBar() {
