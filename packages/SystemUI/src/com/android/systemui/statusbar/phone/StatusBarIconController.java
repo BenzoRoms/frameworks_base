@@ -16,8 +16,11 @@
 
 package com.android.systemui.statusbar.phone;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -28,6 +31,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.ArraySet;
 import android.util.TypedValue;
@@ -49,6 +53,8 @@ import com.android.systemui.statusbar.StatusBarIconView;
 import com.android.systemui.statusbar.policy.NetworkTraffic;
 import com.android.systemui.tuner.TunerService;
 import com.android.systemui.tuner.TunerService.Tunable;
+import com.android.internal.util.benzo.StatusBarColorHelper;
+import com.android.internal.util.benzo.ColorHelper;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -63,6 +69,11 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
     public static final long DEFAULT_TINT_ANIMATION_DURATION = 120;
     public static final String ICON_BLACKLIST = "icon_blacklist";
     public static final int DEFAULT_ICON_TINT = Color.WHITE;
+
+    private static final int LOGO_LEFT = 0;
+    private static final int LOGO_RIGHT = 1;
+
+    private int mLogoStyle;
 
     private Context mContext;
     private PhoneStatusBar mPhoneStatusBar;
@@ -83,19 +94,31 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
     private View mCenterClockLayout;
     private NetworkTraffic mNetworkTraffic;
 
+    private ImageView mBenzoLogo;
+    private ImageView mBenzoLogoLeft;
+    private ImageView mBenzoLogoKeyguard;
+    private ImageView mBenzoLogoKeyguardLeft;
+
+    private boolean mShowLogo = false;
+    private boolean mShowKeyguardLogo = false;
+
     private int mIconSize;
     private int mIconHPadding;
 
     private int mIconTint = DEFAULT_ICON_TINT;
     private float mDarkIntensity;
+    private int mLogoColor;
     private final Rect mTintArea = new Rect();
     private static final Rect sTmpRect = new Rect();
     private static final int[] sTmpInt2 = new int[2];
+
+    private boolean mAnimateLogoColor = false;
 
     private boolean mTransitionPending;
     private boolean mTintChangePending;
     private float mPendingDarkIntensity;
     private ValueAnimator mTintAnimator;
+    private Animator mColorTransitionAnimator;
 
     private int mDarkModeIconColorSingleTone;
     private int mLightModeIconColorSingleTone;
@@ -120,6 +143,10 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
                 com.android.internal.R.array.config_statusBarIcons));
         mContext = context;
         mPhoneStatusBar = phoneStatusBar;
+        mBenzoLogo = (ImageView) statusBar.findViewById(R.id.benzo_logo);
+        mBenzoLogoLeft = (ImageView) statusBar.findViewById(R.id.left_benzo_logo);
+        mBenzoLogoKeyguard = (ImageView) keyguardStatusBar.findViewById(R.id.benzo_logo_keyguard);
+        mBenzoLogoKeyguardLeft = (ImageView) keyguardStatusBar.findViewById(R.id.left_benzo_logo_keyguard);
         mSystemIconArea = (LinearLayout) statusBar.findViewById(R.id.system_icon_area);
         mStatusIcons = (LinearLayout) statusBar.findViewById(R.id.statusIcons);
         mSignalCluster = (SignalClusterView) statusBar.findViewById(R.id.signal_cluster);
@@ -139,6 +166,7 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         mBatteryMeterView = (BatteryMeterView) statusBar.findViewById(R.id.battery);
         mBatteryMeterViewKeyguard = (BatteryMeterView) keyguardStatusBar.findViewById(R.id.battery);
         scaleBatteryMeterViews(context);
+        mLogoColor = StatusBarColorHelper.getLogoColor(mContext);
         mNetworkTraffic = (NetworkTraffic) statusBar.findViewById(R.id.networkTraffic);
         mDarkModeIconColorSingleTone = context.getColor(R.color.dark_mode_icon_color_single_tone);
         mLightModeIconColorSingleTone = context.getColor(R.color.light_mode_icon_color_single_tone);
@@ -331,15 +359,60 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
     public void hideNotificationIconArea(boolean animate) {
         animateHide(mNotificationIconAreaInner, animate);
         animateHide(mCenterClockLayout, animate);
+        if (mShowLogo && mLogoStyle == LOGO_LEFT) {
+            animateHide(mBenzoLogoLeft, animate);
+        }
+        if (mShowLogo && mLogoStyle == LOGO_RIGHT) {
+            animateHide(mBenzoLogo, animate);
+        }
     }
 
     public void showNotificationIconArea(boolean animate) {
         animateShow(mNotificationIconAreaInner, animate);
         animateShow(mCenterClockLayout, animate);
+        if (mShowLogo && mLogoStyle == LOGO_LEFT) {
+            animateShow(mBenzoLogoLeft, animate);
+        }
+        if (mShowLogo && mLogoStyle == LOGO_RIGHT) {
+            animateShow(mBenzoLogo, animate);
+        }
     }
 
     public void setClockVisibility(boolean visible) {
         mClockController.setVisibility(visible);
+    }
+
+    public void setLogoVisibility(boolean showLogo, boolean forceHide, int maxAllowedIcons) {
+        mShowLogo = showLogo;
+        ContentResolver resolver = mContext.getContentResolver();
+        boolean forceHideByNumberOfIcons = false;
+        int notificationIconsCount = mNotificationIconAreaController.getNotificationIconsCount();
+        mLogoStyle = Settings.System.getInt(resolver,
+                Settings.System.STATUS_BAR_BENZO_LOGO_STYLE, 1);
+        if (forceHide && notificationIconsCount >= maxAllowedIcons) {
+            forceHideByNumberOfIcons = true;
+        }
+        if (mLogoStyle == LOGO_LEFT) {
+            mBenzoLogoLeft.setVisibility(showLogo && !forceHideByNumberOfIcons ? View.VISIBLE : View.GONE);
+            mBenzoLogo.setVisibility(View.GONE);
+        }
+        if (mLogoStyle == LOGO_RIGHT) {
+            mBenzoLogo.setVisibility(showLogo && !forceHideByNumberOfIcons ? View.VISIBLE : View.GONE);
+            mBenzoLogoLeft.setVisibility(View.GONE);
+        }
+        showKeyguardLogo(mShowKeyguardLogo);
+    }
+
+    public void showKeyguardLogo(boolean show) {
+        mShowKeyguardLogo = show;
+        if (mLogoStyle == LOGO_LEFT) {
+            mBenzoLogoKeyguardLeft.setVisibility(show ? View.VISIBLE : View.GONE);
+            mBenzoLogoKeyguard.setVisibility(View.GONE);
+        }
+        if (mLogoStyle == LOGO_RIGHT) {
+            mBenzoLogoKeyguard.setVisibility(show ? View.VISIBLE : View.GONE);
+            mBenzoLogoKeyguardLeft.setVisibility(View.GONE);
+        }
     }
 
     public void dump(PrintWriter pw) {
@@ -472,6 +545,11 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         mIconTint = (int) ArgbEvaluator.getInstance().evaluate(darkIntensity,
                 mLightModeIconColorSingleTone, mDarkModeIconColorSingleTone);
         mNotificationIconAreaController.setIconTint(mIconTint);
+        mLogoColor = (int) ArgbEvaluator.getInstance().evaluate(darkIntensity,
+                StatusBarColorHelper.getLogoColor(mContext),
+                StatusBarColorHelper.getLogoColorDarkMode(mContext));
+
+        mNotificationIconAreaController.setIconTint(mIconTint);
         applyIconTint();
     }
 
@@ -492,6 +570,14 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
             return color;
         } else {
             return DEFAULT_ICON_TINT;
+        }
+    }
+
+    private int getLogoTint(Rect tintArea, View view, int color) {
+        if (isInArea(tintArea, view) || mDarkIntensity == 0f) {
+            return color;
+        } else {
+            return StatusBarColorHelper.getLogoColor(mContext);
         }
     }
 
@@ -538,6 +624,12 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
                 isInArea(mTintArea, mBatteryMeterView) ? mDarkIntensity : 0);
         mClockController.setTextColor(mIconTint);
 	mNetworkTraffic.setDarkIntensity(mDarkIntensity);
+        if (mShowLogo && mLogoStyle == LOGO_LEFT) {
+            mBenzoLogoLeft.setImageTintList(ColorStateList.valueOf(getLogoTint(mTintArea, mBenzoLogo, mLogoColor)));
+        }
+        if (mShowLogo && mLogoStyle == LOGO_RIGHT) {
+            mBenzoLogo.setImageTintList(ColorStateList.valueOf(getLogoTint(mTintArea, mBenzoLogo, mLogoColor)));
+        }
     }
 
     public void appTransitionPending() {
@@ -608,5 +700,51 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
 
     private void updateClock() {
         mClockController.updateFontSize();
+    }
+
+    private ValueAnimator createColorTransitionAnimator(float start, float end) {
+        ValueAnimator animator = ValueAnimator.ofFloat(start, end);
+
+        animator.setDuration(600);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(){
+            @Override public void onAnimationUpdate(ValueAnimator animation) {
+                float position = animation.getAnimatedFraction();
+                if (mAnimateLogoColor) {
+                    final int blended = ColorHelper.getBlendColor(mLogoColor,
+                            StatusBarColorHelper.getLogoColor(mContext), position);
+                    if (mLogoStyle == LOGO_LEFT) {
+                        mBenzoLogoLeft.setImageTintList(ColorStateList.valueOf(blended));
+                    }
+                    if (mLogoStyle == LOGO_RIGHT) {
+                        mBenzoLogoLeft.setImageTintList(ColorStateList.valueOf(blended));
+                    }
+                }
+            }
+        });
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (mAnimateLogoColor) {
+                    mLogoColor = StatusBarColorHelper.getLogoColor(mContext);
+                    mAnimateLogoColor = false;
+                }
+            }
+        });
+        return animator;
+    }
+
+    public void updateLogoColor(boolean animate) {
+        mAnimateLogoColor = animate;
+        if (!mAnimateLogoColor) {
+            mColorTransitionAnimator.start();
+        }
+        mBenzoLogoLeft.setImageTintList(ColorStateList.valueOf(StatusBarColorHelper.getLogoColor(mContext)));
+        mBenzoLogo.setImageTintList(ColorStateList.valueOf(StatusBarColorHelper.getLogoColor(mContext)));
+        updateKeyguardLogoColor();
+    }
+
+    private void updateKeyguardLogoColor() {
+        mBenzoLogoKeyguardLeft.setImageTintList(ColorStateList.valueOf(StatusBarColorHelper.getLogoColor(mContext)));
+        mBenzoLogoKeyguard.setImageTintList(ColorStateList.valueOf(StatusBarColorHelper.getLogoColor(mContext)));
     }
 }

@@ -37,4 +37,10 @@
     <dimen name="folder_height">480dp</dimen>
     <dimen name="setup_sidebar_width">90dp</dimen>
 
+    <!-- Nadda -->
+    <dimen name="nothing">0dp</dimen>
+
+    <!-- Keyguard Items Padding -->
+    <dimen name="keyguard_items_padding">3dp</dimen> 
+
 </resources>
