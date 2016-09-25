@@ -4571,6 +4571,57 @@ public final class Settings {
         public static final String SHOW_FOURG = "show_fourg";
 
         /**
+         * Statusbar Benzo logo
+         * @hide
+         */
+        public static final String STATUS_BAR_BENZO_LOGO_SHOW = "status_bar_benzo_logo_show";
+
+        /**
+         * Statusbar Benzo logo on the lock screen
+         * @hide
+         */
+        public static final String STATUS_BAR_BENZO_LOGO_SHOW_ON_LOCK_SCREEN = "status_bar_benzo_logo_show_on_lock_screen";
+
+        /**
+         * Style of Status bar logo
+         * 0 - Left (default)
+         * 1 - Right
+         * @hide
+         */
+        public static final String STATUS_BAR_BENZO_LOGO_STYLE = "status_bar_benzo_logo_style";
+
+        /**
+         * Wether to hide the Benzo logo on the status bar when the custom number of notifications is reached
+         * @hide
+         */
+        public static final String STATUS_BAR_BENZO_LOGO_HIDE_LOGO = "status_bar_benzo_logo_hide_logo";
+
+        /**
+         * Hide the Benzo logo on the status bar when the notification icons will reach this number
+         * 1: 1 notification icon (always)
+         * 2: 2 notification icons
+         * 3: 3 notification icons
+         * 4: 4 notification icons
+         * 5: 5 notification icons
+         * 6: 6 notification icons
+         * default: 1
+         * @hide
+         */
+        public static final String STATUS_BAR_BENZO_LOGO_NUMBER_OF_NOTIFICATION_ICONS = "status_bar_benzo_logo_number_of_notification_icons";
+
+        /**
+         * Statusbar Benzo logo color setting
+         * @hide
+         */
+        public static final String STATUS_BAR_BENZO_LOGO_COLOR = "status_bar_benzo_logo_color";
+
+        /**
+         * Statusbar Benzo logo color in dark mode
+         * @hide
+         */
+        public static final String STATUS_BAR_BENZO_LOGO_COLOR_DARK_MODE = "status_bar_benzo_logo_color_dark_mode";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
