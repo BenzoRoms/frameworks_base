@@ -494,6 +494,24 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SHOW_FOURG),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BENZO_LOGO_SHOW),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BENZO_LOGO_SHOW_ON_LOCK_SCREEN),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BENZO_LOGO_STYLE),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BENZO_LOGO_COLOR),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BENZO_LOGO_HIDE_LOGO),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BENZO_LOGO_NUMBER_OF_NOTIFICATION_ICONS),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -527,7 +545,23 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                             updateSpeedbump();
                             updateClearAll();
                             updateEmptyShadeView();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BENZO_LOGO_COLOR))) {
+                updateStatusBarLogoColor(true);
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BENZO_LOGO_SHOW_ON_LOCK_SCREEN))) {
+                showKeyguardLogo();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BENZO_LOGO_SHOW))
+                    || uri.equals(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BENZO_LOGO_STYLE))
+                    || uri.equals(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BENZO_LOGO_HIDE_LOGO))
+                    || uri.equals(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BENZO_LOGO_NUMBER_OF_NOTIFICATION_ICONS))) {
+                    setBenzoLogoVisibility();
             }
+            update();
         }
 
         public void update() {
@@ -2130,6 +2164,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         updateNotificationShade();
         mIconController.updateNotificationIcons(mNotificationData);
+        setBenzoLogoVisibility();
     }
 
     public void requestNotificationUpdate() {
@@ -2521,6 +2556,37 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         Resources res = mContext.getResources();
         if (res.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             updateResources();
+        }
+    }
+
+    private void updateStatusBarLogoColor(boolean animate) {
+        if (mIconController != null) {
+            mIconController.updateLogoColor(animate);
+        }
+    }
+
+
+    private void setBenzoLogoVisibility() {
+        final ContentResolver resolver = mContext.getContentResolver();
+
+        final boolean showLogo = Settings.System.getInt(resolver,
+                Settings.System.STATUS_BAR_BENZO_LOGO_SHOW, 0) == 1;
+        final boolean forceHide = Settings.System.getInt(resolver,
+                Settings.System.STATUS_BAR_BENZO_LOGO_HIDE_LOGO, 0) == 1;
+        final int maxAllowedIcons = Settings.System.getInt(resolver,
+                Settings.System.STATUS_BAR_BENZO_LOGO_NUMBER_OF_NOTIFICATION_ICONS, 4);
+
+        if (mIconController != null) {
+            mIconController.setLogoVisibility(showLogo, forceHide, maxAllowedIcons);
+        }
+    }
+
+    private void showKeyguardLogo() {
+        final boolean show = Settings.System.getInt(
+                mContext.getContentResolver(), Settings.System.STATUS_BAR_BENZO_LOGO_SHOW_ON_LOCK_SCREEN,
+                0) == 1;
+        if (mIconController != null) {
+            mIconController.showKeyguardLogo(show);
         }
     }
 
@@ -3973,6 +4039,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mSidebarPosition = sidebarPosition;
             mWindowManager.updateViewLayout(mAppSidebar, getAppSidebarLayoutParams(sidebarPosition));
         }
+        updateStatusBarLogoColor(false);
+        setBenzoLogoVisibility();
+        showKeyguardLogo();
     }
 
     private void resetUserSetupObserver() {
