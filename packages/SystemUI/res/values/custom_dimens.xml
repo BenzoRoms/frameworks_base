@@ -42,4 +42,10 @@
     <dimen name="omni_battery_level_text_size_small">12sp</dimen>
     <dimen name="omni_battery_level_text_size">14sp</dimen>
 
+    <!-- Nadda -->
+    <dimen name="nothing">0dp</dimen>
+
+    <!-- Keyguard Items Padding -->
+    <dimen name="keyguard_items_padding">3dp</dimen> 
+
 </resources>
