@@ -44,6 +44,7 @@ import com.android.systemui.qs.tiles.AdbOverNetworkTile;
 import com.android.systemui.qs.tiles.AirplaneModeTile;
 import com.android.systemui.qs.tiles.AndroidAutoTile;
 import com.android.systemui.qs.tiles.BatteryTile;
+import com.android.systemui.qs.tiles.BenzoSettingsTile;
 import com.android.systemui.qs.tiles.BluetoothTile;
 import com.android.systemui.qs.tiles.CaffeineTile;
 import com.android.systemui.qs.tiles.CastTile;
@@ -465,6 +466,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (tileSpec.equals("screenshot")) return new ScreenshotTile(this);
         else if (tileSpec.equals("androidauto")) return new AndroidAutoTile(this);
         else if (tileSpec.equals("caffeine")) return new CaffeineTile(this);
+        else if (tileSpec.equals("benzo")) return new BenzoSettingsTile(this);
         // Intent tiles.
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
         else if (tileSpec.startsWith(CustomTile.PREFIX)) return CustomTile.create(this,tileSpec);
