@@ -104,6 +104,8 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
     private boolean mShowLogo = false;
     private boolean mShowKeyguardLogo = false;
 
+    private TextView mWeather;
+
     private int mIconSize;
     private int mIconHPadding;
 
@@ -175,6 +177,7 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         mCarrierLabel = (TextView) statusBar.findViewById(R.id.statusbar_carrier_text);
         mDarkModeIconColorSingleTone = context.getColor(R.color.dark_mode_icon_color_single_tone);
         mLightModeIconColorSingleTone = context.getColor(R.color.light_mode_icon_color_single_tone);
+        mWeather = (TextView) statusBar.findViewById(R.id.weather_temp);
         mHandler = new Handler();
         mClockController = new ClockController(statusBar, mNotificationIcons, mHandler);
         mCenterClockLayout = statusBar.findViewById(R.id.center_clock_layout);
@@ -360,11 +363,21 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
     public void hideSystemIconArea(boolean animate) {
         animateHide(mSystemIconArea, animate);
         animateHide(mCenterClockLayout, animate);
+        if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP, 0,
+                UserHandle.USER_CURRENT) != 0) {
+        animateHide(mWeather,animate);
+        }
     }
 
     public void showSystemIconArea(boolean animate) {
         animateShow(mSystemIconArea, animate);
         animateShow(mCenterClockLayout, animate);
+        if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP, 0,
+                UserHandle.USER_CURRENT) != 0) {
+        animateShow(mWeather,animate);
+        }
     }
 
     public void hideNotificationIconArea(boolean animate) {
@@ -643,6 +656,7 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         }
         mCarrierLabel.setTextColor(getTint(mTintArea, mCarrierLabel, mIconTint));
         mBatteryLevelView.setTextColor(getTint(mTintArea, mBatteryLevelView, mIconTint));
+        mWeather.setTextColor(mIconTint);
     }
 
     public void appTransitionPending() {

@@ -82,4 +82,9 @@
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">4</item>
     </style>
+
+    <!-- Switch bar weather -->
+    <style name="TextAppearance.StatusBar.WeatherTemp" parent="@*android:style/TextAppearance.StatusBar">
+        <item name="android:textStyle">normal</item>
+    </style>
 </resources>
