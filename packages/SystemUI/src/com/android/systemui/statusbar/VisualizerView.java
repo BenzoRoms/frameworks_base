@@ -56,7 +56,10 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
     private boolean mDozing = false;
     private boolean mOccluded = false;
 
-    private int mColor;
+    private boolean mUseCustomColor;
+    private int mColorToUse;
+    private int mDefaultColor;
+    private int mCustomColor;
     private Bitmap mCurrentBitmap;
 
     private SettingsObserver mObserver;
@@ -142,12 +145,15 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
     public VisualizerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mContext = context;        
-        mColor = Color.TRANSPARENT;
+        mContext = context;
+
+        mDefaultColor = Color.TRANSPARENT;
+        updateColorSettings();
+        mColorToUse = mUseCustomColor ? mCustomColor : mDefaultColor;
 
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
-        mPaint.setColor(mColor);
+        mPaint.setColor(mColorToUse);
 
         mFFTPoints = new float[128];
         mValueAnimators = new ValueAnimator[32];
@@ -294,7 +300,10 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
         if (bitmap != null) {
             Palette.generateAsync(bitmap, this);
         } else {
-            setColor(Color.TRANSPARENT);
+            mDefaultColor = Color.TRANSPARENT;
+            if (!mUseCustomColor) {
+                setColor(mDefaultColor);
+            }
         }
     }
 
@@ -309,8 +318,10 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
                 color = palette.getDarkVibrantColor(color);
             }
         }
-
-        setColor(color);
+        mDefaultColor = color;
+        if (!mUseCustomColor) {
+            setColor(mDefaultColor);
+        }
     }
 
     private void setColor(int color) {
@@ -318,10 +329,10 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
             color = Color.WHITE;
         }
 
-        color = Color.argb(140, Color.red(color), Color.green(color), Color.blue(color));
+        color = (140 << 24) | (color & 0x00ffffff);
 
-        if (mColor != color) {
-            mColor = color;
+        if (mColorToUse != color) {
+            mColorToUse = color;
 
             if (mVisualizer != null) {
                 if (mVisualizerColorAnimator != null) {
@@ -329,12 +340,12 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
                 }
 
                 mVisualizerColorAnimator = ObjectAnimator.ofArgb(mPaint, "color",
-                        mPaint.getColor(), mColor);
+                        mPaint.getColor(), mColorToUse);
                 mVisualizerColorAnimator.setStartDelay(600);
                 mVisualizerColorAnimator.setDuration(1200);
                 mVisualizerColorAnimator.start();
             } else {
-                mPaint.setColor(mColor);
+                mPaint.setColor(mColorToUse);
             }
         }
     }
@@ -342,6 +353,17 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
     private void setVisualizerEnabled() {
         mVisualizerEnabled = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.LOCK_SCREEN_VISUALIZER_SHOW, 0) == 1;
+    }
+
+    private void updateColorSettings() {
+        ContentResolver resolver = mContext.getContentResolver();
+
+        mUseCustomColor = Settings.System.getInt(resolver,
+                Settings.System.LOCK_SCREEN_VISUALIZER_USE_CUSTOM_COLOR, 0) == 1;
+        final int color = Settings.System.getInt(resolver,
+                Settings.System.LOCK_SCREEN_VISUALIZER_CUSTOM_COLOR, 0xff1976D2);
+        // make sure custom color always has the right transparency
+        mCustomColor = (140 << 24) | (color & 0x00ffffff);
     }
 
     private void checkStateChanged() {
@@ -384,6 +406,12 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCK_SCREEN_VISUALIZER_SHOW),
                     false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCK_SCREEN_VISUALIZER_USE_CUSTOM_COLOR),
+                    false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCK_SCREEN_VISUALIZER_CUSTOM_COLOR),
+                    false, this);
             update();
         }
 
@@ -399,11 +427,18 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
                 setVisualizerEnabled();
                 checkStateChanged();
                 updateViewVisibility();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.LOCK_SCREEN_VISUALIZER_USE_CUSTOM_COLOR))
+                || uri.equals(Settings.System.getUriFor(
+                    Settings.System.LOCK_SCREEN_VISUALIZER_CUSTOM_COLOR))) {
+                updateColorSettings();
+                setColor(mUseCustomColor ? mCustomColor : mDefaultColor);
             }
         }
 
         protected void update() {
             setVisualizerEnabled();
+            updateColorSettings();
             checkStateChanged();
             updateViewVisibility();
         }
