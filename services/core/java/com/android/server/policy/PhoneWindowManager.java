@@ -502,6 +502,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     int mBackKillTimeout;
     int mPointerLocationMode = 0; // guarded by mLock
 
+    // During wakeup by volume keys, we still need to capture subsequent events
+    // until the key is released. This is required since the beep sound is produced
+    // post keypressed.
+    boolean mVolumeWakeTriggered;
+
     // The last window we were told about in focusChanged.
     WindowState mFocusedWindow;
     IApplicationToken mFocusedApp;
@@ -6024,12 +6029,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
 
         // Basic policy based on interactive state.
-        final boolean isVolumeRockerWake = !isScreenOn()
-                && mVolumeRockerWake
-                && (keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN);
         int result;
         boolean isWakeKey = (policyFlags & WindowManagerPolicy.FLAG_WAKE) != 0
-                || event.isWakeKey() || isVolumeRockerWake;
+                || event.isWakeKey();
         if (interactive || (isInjected && !isWakeKey)) {
             // When the device is interactive or the key is injected pass the
             // key to the application.
@@ -6049,8 +6051,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // If we're currently dozing with the screen on and the keyguard showing, pass the key
             // to the application but preserve its wake key status to make sure we still move
             // from dozing to fully interactive if we would normally go from off to fully
-            // interactive.
+            // interactive, unless the user has explicitly disabled this wake key.
             result = ACTION_PASS_TO_USER;
+            isWakeKey = isWakeKey && isWakeKeyEnabled(keyCode);
             // Since we're dispatching the input, reset the pending key
             mPendingWakeKey = PENDING_KEY_NULL;
         } else {
@@ -6108,6 +6111,27 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_MUTE: {
+                // Eat all volume keys for wake unless music and music control is active
+                // This disables key beep, vol wake based on music active/control states
+                if (mVolBtnMusicControls) {
+                    if (isWakeKey && (!isMusicActive() && mVolumeRockerWake)) {
+                        mVolumeWakeTriggered = true;
+                        break;
+                    } else if (mVolumeWakeTriggered && !down) {
+                        result &= ~ACTION_PASS_TO_USER;
+                        mVolumeWakeTriggered = false;
+                        break;
+                    }
+                } else {
+                    if (isWakeKey && mVolumeRockerWake) {
+                        mVolumeWakeTriggered = true;
+                        break;
+                    } else if (mVolumeWakeTriggered && !down) {
+                        result &= ~ACTION_PASS_TO_USER;
+                        mVolumeWakeTriggered = false;
+                        break;
+                    }
+                }
                 if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
                     if (down) {
                         if (interactive && !mVolumeDownKeyTriggered
@@ -6175,18 +6199,24 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     }
                 }
 
-             // Disable music and volume control when used as wake key
-                if ((result & ACTION_PASS_TO_USER) == 0 && !mVolumeRockerWake) {
+                if ((result & ACTION_PASS_TO_USER) == 0) {
                     boolean mayChangeVolume = false;
 
                     if (isMusicActive()) {
-                        if (mVolBtnMusicControls && (keyCode != KeyEvent.KEYCODE_VOLUME_MUTE)) {
+                        if (mVolBtnMusicControls) {
                             // Detect long key presses.
                             if (down) {
                                 mIsLongPress = false;
-                                // TODO: Long press of MUTE could be mapped to KEYCODE_MEDIA_PLAY_PAUSE
-                                int newKeyCode = event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP ?
-                                        KeyEvent.KEYCODE_MEDIA_NEXT : KeyEvent.KEYCODE_MEDIA_PREVIOUS;
+                                // Map MUTE key to MEDIA_PLAY_PAUSE
+                                int newKeyCode = KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
+                                switch (keyCode) {
+                                    case KeyEvent.KEYCODE_VOLUME_DOWN:
+                                        newKeyCode = KeyEvent.KEYCODE_MEDIA_PREVIOUS;
+                                        break;
+                                    case KeyEvent.KEYCODE_VOLUME_UP:
+                                        newKeyCode = KeyEvent.KEYCODE_MEDIA_NEXT;
+                                        break;
+                                }
                                 scheduleLongPressKeyEvent(event, newKeyCode);
                                 // Consume key down events of all presses.
                                 break;
@@ -6207,15 +6237,21 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     }
 
                     if (mayChangeVolume) {
-                        // If we aren't passing to the user and no one else
-                        // handled it send it to the session manager to figure
-                        // out.
+                        if (mUseTvRouting) {
+                            // On TVs, defer special key handlings to
+                            // {@link interceptKeyBeforeDispatching()}.
+                            result |= ACTION_PASS_TO_USER;
+                        } else if ((result & ACTION_PASS_TO_USER) == 0) {
+                            // If we aren't passing to the user and no one else
+                            // handled it send it to the session manager to
+                            // figure out.
 
-                        // Rewrite the event to use key-down as sendVolumeKeyEvent will
-                        // only change the volume on key down.
-                        KeyEvent newEvent = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
-                        MediaSessionLegacyHelper.getHelper(mContext)
-                                .sendVolumeKeyEvent(newEvent, true);
+                            // Rewrite the event to use key-down as sendVolumeKeyEvent will
+                            // only change the volume on key down.
+                            KeyEvent newEvent = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
+                            MediaSessionLegacyHelper.getHelper(mContext)
+                                    .sendVolumeKeyEvent(newEvent, true);
+                        }
                     }
                     break;
                 }
@@ -6444,6 +6480,25 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     /**
+     * Check if the given keyCode represents a key that is considered a wake key
+     * and is currently enabled by the user in Settings or for another reason.
+     */
+    private boolean isWakeKeyEnabled(int keyCode) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+            case KeyEvent.KEYCODE_VOLUME_MUTE:
+                // Volume keys are still wake keys if the device is docked.
+            if (mVolBtnMusicControls) {
+                return !isMusicActive() && mVolumeRockerWake || mDockMode != Intent.EXTRA_DOCK_STATE_UNDOCKED;
+            } else {
+                return mVolumeRockerWake || mDockMode != Intent.EXTRA_DOCK_STATE_UNDOCKED;
+            }
+        }
+        return true;
+    }
+
+    /**
      * When the screen is off we ignore some keys that might otherwise typically
      * be considered wake keys.  We filter them out here.
      *
@@ -6455,12 +6510,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // ignore volume keys unless docked
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_DOWN:
-                if (mVolumeRockerWake) {
-                    return true;
-                }
             case KeyEvent.KEYCODE_VOLUME_MUTE:
-                return mDockMode != Intent.EXTRA_DOCK_STATE_UNDOCKED;
-
+            if (mVolBtnMusicControls) {
+                return !isMusicActive() && mVolumeRockerWake || mDockMode != Intent.EXTRA_DOCK_STATE_UNDOCKED;
+            } else {
+                  return mVolumeRockerWake || mDockMode != Intent.EXTRA_DOCK_STATE_UNDOCKED;
+            }
             // ignore media and camera keys
             case KeyEvent.KEYCODE_MUTE:
             case KeyEvent.KEYCODE_HEADSETHOOK:
