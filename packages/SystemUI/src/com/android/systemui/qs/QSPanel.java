@@ -190,25 +190,6 @@ public class QSPanel extends LinearLayout implements Tunable, Callback {
         return mHost.createTile(subPanel);
     }
 
-    /**
-     * Enable/disable brightness slider.
-     */
-    private boolean showBrightnessSlider() {
-        boolean brightnessSliderEnabled = Settings.Secure.getIntForUser(
-            mContext.getContentResolver(), Settings.Secure.QS_SHOW_BRIGHTNESS_SLIDER,
-                1, UserHandle.USER_CURRENT) == 1;
-        ToggleSlider brightnessSlider = (ToggleSlider) findViewById(R.id.brightness_slider);
-        if (brightnessSliderEnabled) {
-            mBrightnessView.setVisibility(VISIBLE);
-            brightnessSlider.setVisibility(VISIBLE);
-        } else {
-            mBrightnessView.setVisibility(GONE);
-            brightnessSlider.setVisibility(GONE);
-        }
-        updateResources();
-        return brightnessSliderEnabled;
-    }
-
     private void setBrightnessIcon() {
         boolean brightnessIconEnabled = Settings.System.getIntForUser(
             mContext.getContentResolver(), Settings.System.QS_SHOW_BRIGHTNESS_ICON,
@@ -307,7 +288,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback {
             refreshAllTiles();
         }
         if (mBrightnessView.getVisibility() == View.VISIBLE) {
-            if (listening && showBrightnessSlider()) {
+            if (listening) {
                 mBrightnessController.registerCallbacks();
             } else {
                 mBrightnessController.unregisterCallbacks();
@@ -567,7 +548,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback {
 
     void setGridContentVisibility(boolean visible) {
         int newVis = visible ? VISIBLE : INVISIBLE;
-        setVisibility(showBrightnessSlider() ? newVis : GONE);
+        setVisibility(newVis);
         if (mGridContentVisible != visible) {
             MetricsLogger.visibility(mContext, MetricsEvent.QS_PANEL, newVis);
         }
