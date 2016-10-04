@@ -7297,6 +7297,12 @@ public final class Settings {
          */
         public static final int VR_DISPLAY_MODE_OFF = 1;
 
+        /**
+         * Holds comma separated list of ordering of QS tiles.
+         * @hide
+         */
+        public static final String QS_TILES = "sysui_qs_tiles";
+
         /** Whether to vibrate when quick settings tile is pressed.
           *
           * @hide
@@ -7409,6 +7415,7 @@ public final class Settings {
             TTY_MODE_ENABLED,
             INCALL_POWER_BUTTON_BEHAVIOR,
             ADVANCED_REBOOT,
+            QS_TILES,
         };
 
         /**
