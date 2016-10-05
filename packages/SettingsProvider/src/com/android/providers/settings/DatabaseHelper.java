@@ -2392,6 +2392,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
             loadUISoundEffectsSettings(stmt);
 
+            loadMiscSoundSettings(stmt);
+
             loadIntegerSetting(stmt, Settings.System.POINTER_SPEED,
                     R.integer.def_pointer_speed);
 
@@ -2417,6 +2419,11 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
         loadIntegerSetting(stmt, Settings.System.LOCKSCREEN_SOUNDS_ENABLED,
             R.integer.def_lockscreen_sounds_enabled);
+    }
+
+    private void loadMiscSoundSettings(SQLiteStatement stmt) {
+        loadBooleanSetting(stmt, Settings.System.HEADSET_NOTIFICATION,
+                           R.bool.def_headset_notification_enabled);
     }
 
     private void loadDefaultAnimationSettings(SQLiteStatement stmt) {
