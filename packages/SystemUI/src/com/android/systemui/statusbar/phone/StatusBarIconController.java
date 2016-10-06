@@ -169,8 +169,8 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         notificationIconArea.addView(mNotificationIconAreaInner);
 
         mStatusIconsKeyguard = (LinearLayout) keyguardStatusBar.findViewById(R.id.statusIcons);
-
         //mBatteryMeterView = (BatteryMeterView) statusBar.findViewById(R.id.battery);
+        mBatteryViewManager = phoneStatusBar.getBatteryViewManager();
         //mBatteryMeterViewKeyguard = (BatteryMeterView) keyguardStatusBar.findViewById(R.id.battery);
         //scaleBatteryMeterViews(context);
         mLogoColor = StatusBarColorHelper.getLogoColor(mContext);
@@ -638,6 +638,7 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
             mBenzoLogo.setImageTintList(ColorStateList.valueOf(getLogoTint(mTintArea, mBenzoLogo, mLogoColor)));
         }
         mCarrierLabel.setTextColor(getTint(mTintArea, mCarrierLabel, mIconTint));
+        mBatteryViewManager.setDarkIntensity(mDarkIntensity);
     }
 
     public void appTransitionPending() {
