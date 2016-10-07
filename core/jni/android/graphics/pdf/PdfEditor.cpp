@@ -13,6 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#define LOG_TAG "PdfEditor"
+
+#include <sys/types.h>
+#include <unistd.h>
+
+#include <vector>
+
+#include <android/log.h>
+#include <utils/Log.h>
 
 #include "jni.h"
 #include "JNIHelp.h"
@@ -29,11 +38,6 @@
 #include "SkMatrix.h"
 
 #include <core_jni_helpers.h>
-#include <vector>
-#include <utils/Log.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <unistd.h>
 
 namespace android {
 
