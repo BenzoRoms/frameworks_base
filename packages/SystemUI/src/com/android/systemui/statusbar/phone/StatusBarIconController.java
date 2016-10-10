@@ -47,6 +47,7 @@ import com.android.systemui.FontSizeUtils;
 import com.android.systemui.Interpolators;
 import com.android.systemui.R;
 import com.android.systemui.SystemUIFactory;
+import com.android.systemui.omni.AbstractBatteryView;
 import com.android.systemui.omni.BatteryViewManager;
 import com.android.systemui.statusbar.NotificationData;
 import com.android.systemui.statusbar.SignalClusterView;
@@ -91,6 +92,7 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
 
     //private BatteryMeterView mBatteryMeterView;
     //private BatteryMeterView mBatteryMeterViewKeyguard;
+    private AbstractBatteryView mCurrentBatteryView;
     private BatteryViewManager mBatteryViewManager;
     private ClockController mClockController;
     private View mCenterClockLayout;
@@ -622,7 +624,8 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
             v.setImageTintList(ColorStateList.valueOf(getTint(mTintArea, v, mIconTint)));
         }
         mSignalCluster.setIconTint(mIconTint, mDarkIntensity, mTintArea);
-        mBatteryViewManager.setDarkIntensity(mDarkIntensity);
+        mBatteryViewManager.setDarkIntensity(
+                isInArea(mTintArea, mCurrentBatteryView) ? mDarkIntensity : 0);
         mClockController.setTextColor(mIconTint);
 	mNetworkTraffic.setDarkIntensity(mDarkIntensity);
         if (mShowLogo && mLogoStyle == LOGO_LEFT) {
