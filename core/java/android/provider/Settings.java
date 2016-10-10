@@ -4622,6 +4622,14 @@ public final class Settings {
         public static final String STATUS_BAR_BENZO_LOGO_COLOR_DARK_MODE = "status_bar_benzo_logo_color_dark_mode";
 
         /**
+         * Position of date
+         * 0 - Left of clock
+         * 1 - Right of clock
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_DATE_POSITION = "statusbar_clock_date_position";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
