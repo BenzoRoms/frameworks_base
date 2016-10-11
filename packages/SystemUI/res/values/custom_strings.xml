@@ -117,6 +117,10 @@
     <string name="accessibility_quick_settings_nfc_changed_on">NFC turned on.</string>
     <!-- IME selector QS tile -->
     <string name="quick_settings_ime_label">IME</string>
+    <!-- LTE QS Tile -->
+    <string name="qs_lte_label">LTE</string>
+    <string name="lte_on">LTE ON </string>
+    <string name="lte_off">LTE OFF</string>
 
     <!-- statusbar items tuner -->
     <string name="statusbar_icons_blacklist">Status bar icons</string>
