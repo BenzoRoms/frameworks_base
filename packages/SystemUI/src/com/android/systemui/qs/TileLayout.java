@@ -81,7 +81,7 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
         final boolean isPortrait = res.getConfiguration().orientation
                 == Configuration.ORIENTATION_PORTRAIT;
         final int columnsPortrait = Settings.System.getInt(resolver,
-                Settings.System.QS_COLUMNS_PORTRAIT, 5);
+                Settings.System.QS_COLUMNS_PORTRAIT, 3);
         final int columnsLandscape = Settings.System.getInt(resolver,
                 Settings.System.QS_COLUMNS_LANDSCAPE, 5);
         final int columns = Math.max(1, isPortrait ? columnsPortrait : columnsLandscape);
