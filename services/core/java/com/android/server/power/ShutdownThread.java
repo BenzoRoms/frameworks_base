@@ -148,8 +148,6 @@ public final class ShutdownThread extends Thread {
         shutdownInner(context, confirm);
     }
 
-    }
-
     private static boolean isAdvancedRebootPossible(final Context context) {
         boolean advancedRebootEnabled = Settings.Secure.getInt(context.getContentResolver(),
             Settings.Secure.ADVANCED_REBOOT, 1) == 1;
