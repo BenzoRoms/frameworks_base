@@ -142,6 +142,7 @@ import com.android.systemui.recents.events.activity.AppTransitionFinishedEvent;
 import com.android.systemui.recents.events.activity.UndockingTaskEvent;
 import com.android.systemui.settings.BrightnessController;
 import com.android.internal.util.benzo.Helpers;
+import com.android.internal.util.benzo.WeatherControllerImpl;
 import com.android.internal.util.slim.DeviceUtils;
 import com.android.systemui.stackdivider.Divider;
 import com.android.systemui.stackdivider.WindowManagerProxy;
@@ -335,6 +336,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     FingerprintUnlockController mFingerprintUnlockController;
     LightStatusBarController mLightStatusBarController;
     protected LockscreenWallpaper mLockscreenWallpaper;
+    WeatherControllerImpl mWeatherController;
 
     int mNaturalBarHeight = -1;
 
@@ -1130,6 +1132,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     mHandler, this);
             createUserSwitcher();
         }
+        mWeatherController = new WeatherControllerImpl(mContext);
 
         // Set up the quick settings tile panel
         AutoReinflateContainer container = (AutoReinflateContainer) mStatusBarWindow.findViewById(
@@ -1167,6 +1170,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mBatteryViewManager.setBatteryController(mBatteryController);
         mHeader.setBatteryController(mBatteryController);
         mKeyguardStatusBar.setBatteryController(mBatteryController);
+        mHeader.setWeatherController(mWeatherController);
 
         PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mBroadcastReceiver.onReceive(mContext,

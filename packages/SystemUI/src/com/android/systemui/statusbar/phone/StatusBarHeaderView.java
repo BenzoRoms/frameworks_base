@@ -48,6 +48,9 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.internal.util.benzo.WeatherController;
+import com.android.internal.util.benzo.WeatherControllerImpl;
 import com.android.keyguard.KeyguardStatusView;
 import com.android.systemui.BatteryMeterView;
 import com.android.systemui.FontSizeUtils;
@@ -70,7 +73,7 @@ import java.text.NumberFormat;
  */
 public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnClickListener, View.OnLongClickListener,
         BatteryController.BatteryStateChangeCallback, NextAlarmController.NextAlarmChangeCallback,
-        EmergencyListener, BatteryViewManager.BatteryViewManagerObserver {
+        EmergencyListener, BatteryViewManager.BatteryViewManagerObserver, WeatherController.Callback {
 
     private boolean mExpanded;
     private boolean mListening;
@@ -123,6 +126,7 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
     private ActivityStarter mActivityStarter;
     private BatteryController mBatteryController;
     private NextAlarmController mNextAlarmController;
+    private WeatherController mWeatherController;
     private QSPanel mQSPanel;
 
     private final Rect mClipBounds = new Rect();
@@ -305,6 +309,11 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
         mNextAlarmController = nextAlarmController;
     }
 
+    @Override
+    public void setWeatherController(WeatherController weatherController) {
+        mWeatherController = weatherController;
+    }
+
     public int getCollapsedHeight() {
         return mCollapsedHeight;
     }
@@ -399,9 +408,11 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
         if (mListening) {
             mBatteryController.addStateChangedCallback(this);
             mNextAlarmController.addStateChangedCallback(this);
+            mWeatherController.addCallback(this);
         } else {
             mBatteryController.removeStateChangedCallback(this);
             mNextAlarmController.removeStateChangedCallback(this);
+            mWeatherController.removeCallback(this);
         }
     }
 
@@ -449,6 +460,10 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
         mAlarmShowing = nextAlarm != null;
         updateEverything();
         requestCaptureValues();
+    }
+
+    @Override
+    public void onWeatherChanged(WeatherController.WeatherInfo info) {
     }
 
     private void updateClickTargets() {

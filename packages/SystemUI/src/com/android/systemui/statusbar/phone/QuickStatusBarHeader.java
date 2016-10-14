@@ -19,24 +19,31 @@ package com.android.systemui.statusbar.phone;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.ContentResolver;
+import android.database.ContentObserver;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.provider.AlarmClock;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.internal.util.benzo.WeatherController;
+import com.android.internal.util.benzo.WeatherControllerImpl;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.MetricsProto;
 import com.android.keyguard.KeyguardStatusView;
@@ -54,7 +61,8 @@ import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.UserInfoController.OnUserInfoChangedListener;
 
 public class QuickStatusBarHeader extends BaseStatusBarHeader implements
-        NextAlarmChangeCallback, OnClickListener, OnLongClickListener, OnUserInfoChangedListener {
+        NextAlarmChangeCallback, OnClickListener, OnLongClickListener,
+        OnUserInfoChangedListener, WeatherController.Callback {
 
     private static final String TAG = "QuickStatusBarHeader";
 
@@ -76,7 +84,9 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
 
     private ViewGroup mDateTimeGroup;
     private ViewGroup mDateTimeAlarmGroup;
+    private ViewGroup mWeatherContainer;
     private TextView mEmergencyOnly;
+    private TextView mWeatherLine1, mWeatherLine2;
 
     protected ExpandableIndicator mExpandIndicator;
 
@@ -102,6 +112,10 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
     private QSTileHost mHost;
     private boolean mShowFullAlarm;
     protected Vibrator mVibrator;
+
+    private WeatherController mWeatherController;
+    private SettingsObserver mSettingsObserver;
+    private boolean mShowWeather;
 
     public QuickStatusBarHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -149,6 +163,13 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         // settings), so disable it for this view
         ((RippleDrawable) mSettingsButton.getBackground()).setForceSoftware(true);
         ((RippleDrawable) mExpandIndicator.getBackground()).setForceSoftware(true);
+
+        mWeatherContainer = (LinearLayout) findViewById(R.id.weather_container);
+        mWeatherContainer.setOnClickListener(this);
+        mWeatherLine1 = (TextView) findViewById(R.id.weather_line_1);
+        mWeatherLine2 = (TextView) findViewById(R.id.weather_line_2);
+
+        mSettingsObserver = new SettingsObserver(new Handler());
 
         updateResources();
     }
@@ -328,13 +349,18 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         mSettingsButton.setVisibility(mExpanded ? View.VISIBLE : View.INVISIBLE);
         mMultiUserSwitch.setVisibility(mExpanded && mMultiUserSwitch.hasMultipleUsers()
                 ? View.VISIBLE : View.INVISIBLE);
+        mWeatherContainer.setVisibility(mExpanded && mShowWeather ? View.VISIBLE : View.GONE);
     }
 
     private void updateListeners() {
         if (mListening) {
+            mSettingsObserver.observe();
             mNextAlarmController.addStateChangedCallback(this);
+            mWeatherController.addCallback(this);
         } else {
             mNextAlarmController.removeStateChangedCallback(this);
+            mWeatherController.removeCallback(this);
+            mSettingsObserver.unobserve();
         }
     }
 
@@ -382,6 +408,8 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
             startAlarmsActivity();
         } else if (v == mDate) {
             startCalendarActivity();
+        } else if (v == mWeatherContainer) {
+            startForecastActivity();
         }
     }
 
@@ -441,6 +469,26 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         mActivityStarter.startActivity(intent, true /* dismissShade */);
     }
 
+    private void startForecastActivity() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setComponent(WeatherControllerImpl.COMPONENT_WEATHER_FORECAST);
+        mActivityStarter.startActivity(intent, true /* dismissShade */);
+    }
+
+    @Override
+    public void onWeatherChanged(WeatherController.WeatherInfo info) {
+        if (info.temp == null || info.condition == null) {
+            mWeatherLine1.setText(null);
+        } else {
+            mWeatherLine1.setText(mContext.getString(
+                    R.string.status_bar_expanded_header_weather_format,
+                    info.temp,
+                    info.condition));
+        }
+        mWeatherLine2.setText(info.city);
+    }
+
     @Override
     public void setNextAlarmController(NextAlarmController nextAlarmController) {
         mNextAlarmController = nextAlarmController;
@@ -475,5 +523,45 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
     @Override
     public void onUserInfoChanged(String name, Drawable picture) {
         mMultiUserAvatar.setImageDrawable(picture);
+    }
+
+    @Override
+    public void setWeatherController(WeatherController weatherController) {
+        mWeatherController = weatherController;
+    }
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_SHOW_WEATHER), false, this);
+            update();
+        }
+
+        void unobserve() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.unregisterContentObserver(this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            update();
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            update();
+        }
+
+        public void update() {
+            ContentResolver resolver = mContext.getContentResolver();
+            mShowWeather = Settings.System.getInt(
+                    resolver, Settings.System.STATUS_BAR_SHOW_WEATHER, 0) == 1;
+            updateVisibilities();
+        }
     }
 }
