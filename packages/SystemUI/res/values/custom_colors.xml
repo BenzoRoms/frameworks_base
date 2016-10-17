@@ -60,4 +60,7 @@
     <color name="system_secondary_color">@*android:color/material_pixel_blue_light</color>
     <color name="system_accent_color">@*android:color/material_pixel_blue_bright</color>
 
+    <!-- Status bar battery level text color -->
+    <color name="status_bar_battery_level_text_color">#ffffff</color>
+
 </resources>
