@@ -49,7 +49,7 @@
     <string name="battery_style_default">Default</string>
     <string name="battery_style_meter_horizontal">Horizontal bar</string>
     <string name="battery_style_circle">Circle</string>
-    <string name="battery_style_droid">Droid</string>
+    <string name="battery_style_droid">Benzo Logo</string>
 
     <!-- Vendor mismatched fingerprint warning [CHAR LIMIT=NONE] -->
     <string name="system_error_vendorprint">Your vendor image does not match the system. Please flash the <xliff:g id="string">%s</xliff:g> vendor image for your device</string>
