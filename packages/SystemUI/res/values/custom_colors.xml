@@ -76,4 +76,7 @@
     <color name="battery_background">#ffffff</color>
     <color name="status">#ffffff</color>
 
+    <!-- Status bar battery level text color -->
+    <color name="status_bar_battery_level_text_color">#ffffff</color>
+
 </resources>
