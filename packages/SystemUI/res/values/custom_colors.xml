@@ -29,4 +29,7 @@
     <!-- app sidebar item text shadow color -->
     <color name="sidebar_item_text_shadow_color">#ff000000</color>
 
+    <!-- carrier label color -->
+    <color name="status_bar_carrier_color">#FFFFFFFF</color>
+
 </resources>

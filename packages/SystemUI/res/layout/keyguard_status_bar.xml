@@ -92,7 +92,7 @@
         android:gravity="center"
         android:visibility="gone" />
 
-    <com.android.keyguard.CarrierText
+    <com.android.systemui.benzo.carrierlabel.CarrierLabel
         android:id="@+id/keyguard_carrier_text"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -101,8 +101,7 @@
         android:gravity="center_vertical"
         android:ellipsize="marquee"
         android:paddingStart="@dimen/keyguard_items_padding"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#ffffff"
+        android:textAppearance="@style/TextAppearance.StatusBar.CarrierLabel"
         android:singleLine="true" />
 
     </LinearLayout>
