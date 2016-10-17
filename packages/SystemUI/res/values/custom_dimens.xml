@@ -54,4 +54,7 @@
     <dimen name="app_sidebar_icon_width">72dp</dimen>
     <dimen name="app_sidebar_icon_height">72dp</dimen>
 
+    <!-- carrier label text height -->
+    <dimen name="status_bar_carrier_height">14dp</dimen>
+
 </resources>
