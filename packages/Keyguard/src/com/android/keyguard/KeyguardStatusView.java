@@ -76,6 +76,7 @@ public class KeyguardStatusView extends GridLayout implements
 
     private WeatherController mWeatherController;
     private boolean mIsDozing;
+
     //On the first boot, keyguard will start to receiver TIME_TICK intent.
     //And onScreenTurnedOff will not get called if power off when keyguard is not started.
     //Set initial value to false to skip the above case.
@@ -498,13 +499,12 @@ public class KeyguardStatusView extends GridLayout implements
             mWeatherView.setVisibility(
                 (mShowWeather && !forceHideByNumberOfNotifications) ? View.VISIBLE : View.GONE);
         }
+
         if (forceHide) {
-            if (!mIsDozing) {
-            noWeatherInfo.setVisibility(View.VISIBLE);
-            }
+            noWeatherInfo.setVisibility(View.GONE);
             weatherPanel.setVisibility(View.GONE);
             mWeatherConditionText.setVisibility(View.GONE);
-        } else {
+        } else if (!mIsDozing) {
             noWeatherInfo.setVisibility(View.GONE);
             weatherPanel.setVisibility(View.VISIBLE);
             mWeatherConditionText.setVisibility(View.VISIBLE);
