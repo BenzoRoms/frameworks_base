@@ -109,6 +109,7 @@ public class KeyguardStatusBarView extends RelativeLayout
         mKeyguardClock = (TextView) findViewById(R.id.keyguard_clock);
         loadDimens();
         updateUserSwitcher();
+        updateVisibilities();
         LinearLayout batteryContainer = (LinearLayout) findViewById(R.id.battery_container);
         mBatteryViewManager = new BatteryViewManager(mContext, batteryContainer, null, null);
     }
