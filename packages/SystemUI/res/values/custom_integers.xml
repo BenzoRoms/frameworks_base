@@ -24,4 +24,10 @@
     <!-- The min animation duration for animating the fab out -->
     <integer name="recents_animate_fab_exit_duration">125</integer>
 
+    <style name="TextAppearance.StatusBar.PhoneTicker"
+        parent="@*android:style/TextAppearance.StatusBar.Ticker">
+        <!-- Note: must be dp to fit in status bar -->
+        <item name="android:textSize">14dp</item>
+    </style>
+
 </resources>
