@@ -745,6 +745,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     private final MutableBoolean mTmpBoolean = new MutableBoolean(false);
 
+    // screen unpin
+    private boolean mLongPressBackConsumed;
+
     private static final int MSG_ENABLE_POINTER_LOCATION = 1;
     private static final int MSG_DISABLE_POINTER_LOCATION = 2;
     private static final int MSG_DISPATCH_MEDIA_KEY_WITH_WAKE_LOCK = 3;
@@ -1584,6 +1587,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     Runnable mBackLongPress = new Runnable() {
         public void run() {
+            mLongPressBackConsumed = true;
+            if (isStopLockTaskMode(false)) {
+                return;
+            }
             if (DevUtils.killForegroundApplication(mContext)) {
                 performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
                 Toast.makeText(mContext, R.string.app_killed_message, Toast.LENGTH_SHORT).show();
@@ -3335,6 +3342,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         if (keyCode == KeyEvent.KEYCODE_BACK && !down) {
             mHandler.removeCallbacks(mBackLongPress);
+            if (mLongPressBackConsumed) {
+                mLongPressBackConsumed = false;
+                return -1;
+            }
         }
 
         // First we always handle the home key here, so applications
@@ -3770,6 +3781,24 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         // Let the application handle the key.
         return 0;
+    }
+
+    private boolean isStopLockTaskMode(boolean checkOnly) {
+        // in this case there is a different way to stop it
+        if (DeviceUtils.deviceSupportNavigationBar(mContext)) {
+            return false;
+        }
+        try {
+            if (ActivityManagerNative.getDefault().isInLockTaskMode()) {
+                if (!checkOnly) {
+                    ActivityManagerNative.getDefault().stopSystemLockTaskMode();
+                }
+                return true;
+            }
+        } catch (RemoteException e) {
+            // ignore
+        }
+        return false;
     }
 
     /** {@inheritDoc} */

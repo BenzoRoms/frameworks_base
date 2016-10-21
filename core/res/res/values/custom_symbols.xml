@@ -228,4 +228,7 @@
   <!-- Proximity check timeout on screen on -->
   <java-symbol type="integer" name="config_proximityCheckTimeout" />
 
+  <!-- Screen unpin -->
+  <java-symbol type="string" name="lock_to_app_toast_back" />
+
 </resources>

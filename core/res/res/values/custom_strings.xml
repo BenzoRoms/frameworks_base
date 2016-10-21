@@ -88,4 +88,7 @@
     <!-- Slim seekbar -->
     <string name="default_string">Default</string>
 
+    <!-- Notify use that they are in Lock-to-app in accessibility mode -->
+    <string name="lock_to_app_toast_back">To unpin this screen, touch and hold Back.</string>
+
 </resources>

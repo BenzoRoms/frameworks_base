@@ -278,4 +278,7 @@
     <string name="stream_title_notification">Notification</string>
     <string name="stream_title_bluetooth">Bluetooth</string>
 
+    <!-- Screen pinning dialog description when in accessibility mode. -->
+    <string name="screen_pinning_description_back">This keeps it in view until you unpin. Touch and hold Back to unpin.</string>
+
 </resources>
