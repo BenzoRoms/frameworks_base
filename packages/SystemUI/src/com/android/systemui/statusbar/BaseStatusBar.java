@@ -131,6 +131,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import static android.service.notification.NotificationListenerService.Ranking.IMPORTANCE_HIGH;
+import static android.service.notification.NotificationListenerService.Ranking.IMPORTANCE_MIN;
 import static android.service.notification.NotificationListenerService.Ranking.IMPORTANCE_VERY_LOW;
 
 public abstract class BaseStatusBar extends SystemUI implements
@@ -2378,7 +2379,8 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     public boolean shouldShowOnKeyguard(StatusBarNotification sbn) {
         return mShowLockscreenNotifications && !mNotificationData.isAmbient(sbn.getKey())
-            && mNotificationData.getImportance(sbn.getKey()) > IMPORTANCE_VERY_LOW;
+            && mNotificationData.getImportance(sbn.getKey()) != IMPORTANCE_VERY_LOW
+            && mNotificationData.getImportance(sbn.getKey()) != IMPORTANCE_MIN;
     }
 
     private void hideWeatherPanelIfNecessary(int visibleNotifications, int maxKeyguardNotifications) {
