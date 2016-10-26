@@ -121,6 +121,7 @@ public final class MediaFormat {
     public static final String MIMETYPE_AUDIO_AC3 = "audio/ac3";
     public static final String MIMETYPE_AUDIO_EAC3 = "audio/eac3";
     public static final String MIMETYPE_VIDEO_DOLBY_VISION = "video/dolby-vision";
+    public static final String MIMETYPE_AUDIO_AC4 = "audio/ac4";
 
     /**
      * MIME type for WebVTT subtitle data.
@@ -367,6 +368,13 @@ public final class MediaFormat {
      * be used to configure an encoder to emit ADTS output.
      */
     public static final String KEY_IS_ADTS = "is-adts";
+
+    /**
+     * A key mapping to a value of 1 if the content is AC4 audio and
+     * audio frames are encapsulated as an AC4 sync frame.
+     * The associated value is an integer (0 or 1).
+     */
+    public static final String KEY_AC4_IS_SYNC = "ac4-is-sync";
 
     /**
      * A key describing the channel composition of audio content. This mask
