@@ -353,9 +353,7 @@ public class NavigationBarInflaterView extends FrameLayout implements TunerServi
 
     private void clearAllChildren(ViewGroup group) {
         for (int i = 0; i < group.getChildCount(); i++) {
-            if (group.getChildAt(i).getId() != R.id.dpad_group) {
-                ((ViewGroup) group.getChildAt(i)).removeAllViews();
-            }
+            ((ViewGroup) group.getChildAt(i)).removeAllViews();
         }
     }
 }

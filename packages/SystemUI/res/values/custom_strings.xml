@@ -161,10 +161,6 @@
     <string name="chamber_name_toast">Using default name</string>
     <string name="shortcut_clear_notifications">Clear notifications</string>
 
-    <!-- Typing virtual buttons -->
-    <string name="accessibility_dpad_left">Cursor left</string>
-    <string name="accessibility_dpad_right">Cursor right</string>
-
     <!-- [CHAR LIMIT=NONE] Importance Tuner setting title -->
     <string name="cm_power_notification_controls_description">With power notification controls, you can set an importance level from 0 to 6 for an app\'s notifications.
         \n\n<b>Level 6</b>
