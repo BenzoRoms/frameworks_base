@@ -4676,6 +4676,12 @@ public final class Settings {
          */
         public static final String HEADSET_NOTIFICATION = "headset_notification";
 
+          /**
+          * Whether to show the negociated charger current in the lockscreen
+          * @hide
+          */
+         public static final String LOCKSCREEN_CHARGING_CURRENT = "lockscreen_charging_current";
+ 
         /**
          * Show four g instead of lte
          * @hide
