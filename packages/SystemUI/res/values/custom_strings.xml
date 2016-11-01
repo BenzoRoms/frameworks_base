@@ -134,13 +134,6 @@
     <string name="accessibility_quick_settings_screenshot">Screenshot.</string>
     <string name="quick_settings_screenshot_label">Screenshot</string>
 
-    <!-- statusbar items tuner -->
-    <string name="statusbar_icons_blacklist">Status bar icons</string>
-    <!-- tuner display color -->
-    <string name="tuner_display_color">Screen color &amp; appearance</string>
-    <!-- notification controls -->
-    <string name="tuner_notification_control">Power notification controls</string>
-
     <!-- 4G LTE switch -->
     <string name="show_fourg_title">Show 4G instead of LTE</string>
     <string name="show_fourg_summary">Replaces LTE statusbar indicator with 4G</string>
