@@ -48,4 +48,11 @@
     <color name="ripple_material_light">#40000000</color>
     <color name="ripple_material_dark">#40ffffff</color>
 
+    <!-- Navbar icon Colors -->
+    <color name="icon_color_back">@android:color/white</color>
+    <color name="icon_color_ime_switcher">@android:color/white</color>
+    <color name="icon_color_split_screen">@android:color/white</color>
+    <color name="icon_color_home">@android:color/white</color>
+    <color name="icon_color_overview">@android:color/white</color>
+
 </resources>
