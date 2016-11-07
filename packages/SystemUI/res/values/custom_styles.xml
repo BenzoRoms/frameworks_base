@@ -42,7 +42,4 @@
         <item name="android:textColor">@color/status_bar_carrier_color</item>
     </style>
 
-    <style name="ScreenshotEditorStyle" parent="@android:style/Theme.Material" >
-    </style>
-
 </resources>
