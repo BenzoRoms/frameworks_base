@@ -98,6 +98,10 @@ public class ScreenshotEditor extends Service implements View.OnClickListener {
     private SharedPreferences preferences;
     private float mDensity;
 
+    public ScreenshotEditor() {
+
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -168,7 +172,7 @@ public class ScreenshotEditor extends Service implements View.OnClickListener {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        screenshotPath = intent.getStringExtra(GlobalScreenshot.SCREENSHOT_FILE_PATH);
+        screenshotPath = intent.getStringExtra("screenshotPath");
         addView();
         return Service.START_STICKY;
     }
