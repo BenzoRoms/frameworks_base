@@ -241,4 +241,7 @@
     <string name="accessibility_dpad_left">Cursor left</string>
     <string name="accessibility_dpad_right">Cursor right</string>
 
+    <!-- Android Auto 2.0x QS tile -->
+    <string name="quick_settings_androidauto_label">Android Auto</string>
+
 </resources>
