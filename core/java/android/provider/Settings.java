@@ -3455,6 +3455,12 @@ public final class Settings {
         public static final Validator SHOW_WEB_SUGGESTIONS_VALIDATOR = sBooleanValidator;;
 
         /**
+         * Check the proximity sensor during wakeup
+         * @hide
+         */
+        public static final String PROXIMITY_ON_WAKE = "proximity_on_wake";
+
+        /**
          * Whether to allow notifications with the screen on or DayDreams.
          * The value is boolean (1 or 0). Default will always be false.
          * @hide
