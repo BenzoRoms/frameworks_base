@@ -756,7 +756,7 @@ class MtpDatabase {
         values.putNull(Document.COLUMN_LAST_MODIFIED);
         values.put(Document.COLUMN_ICON, R.drawable.ic_root_mtp);
         values.put(Document.COLUMN_FLAGS, getDocumentFlags(
-                device.operationsSupported,
+                null,  //not need support operation for "Device"
                 Document.MIME_TYPE_DIR,
                 0,
                 MtpConstants.PROTECTION_STATUS_NONE,
