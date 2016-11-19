@@ -262,4 +262,13 @@
     <string name="battery_circle_full" translatable="false">M 12 2 C 17.5228474983 2 22 6.47715250169 22 12 C 22 17.5228474983 17.5228474983 22 12 22 C 6.47715250169 22 2 17.5228474983 2 12 C 2 6.47715250169 6.47715250169 2 12 2 Z</string>
     <string name="battery_circle_empty" translatable="false">M 12 12 C 12 12 12 12 12 12 C 12 12 12 12 12 12 C 12 12 12 12 12 12 C 12 12 12 12 12 12 Z</string>
 
+    <!-- Volume steam names -->
+    <string name="stream_title_call">Call</string>
+    <string name="stream_title_system">System</string>
+    <string name="stream_title_ring">Ring</string>
+    <string name="stream_title_music">Music</string>
+    <string name="stream_title_alarm">Alarm</string>
+    <string name="stream_title_notification">Notification</string>
+    <string name="stream_title_bluetooth">Bluetooth</string>
+
 </resources>
