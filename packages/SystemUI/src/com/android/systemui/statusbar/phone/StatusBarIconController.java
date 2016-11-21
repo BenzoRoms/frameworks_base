@@ -47,7 +47,6 @@ import com.android.systemui.FontSizeUtils;
 import com.android.systemui.Interpolators;
 import com.android.systemui.R;
 import com.android.systemui.SystemUIFactory;
-import com.android.systemui.omni.BatteryViewManager;
 import com.android.systemui.statusbar.NotificationData;
 import com.android.systemui.statusbar.SignalClusterView;
 import com.android.systemui.statusbar.StatusBarIconView;
@@ -103,11 +102,6 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
 
     private boolean mShowLogo = false;
     private boolean mShowKeyguardLogo = false;
-
-    //private BatteryMeterView mBatteryMeterView;
-    //private BatteryMeterView mBatteryMeterViewKeyguard;
-
-    private BatteryViewManager mBatteryViewManager;
 
     private int mIconSize;
     private int mIconHPadding;
@@ -169,10 +163,10 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         notificationIconArea.addView(mNotificationIconAreaInner);
 
         mStatusIconsKeyguard = (LinearLayout) keyguardStatusBar.findViewById(R.id.statusIcons);
-        //mBatteryMeterView = (BatteryMeterView) statusBar.findViewById(R.id.battery);
-        mBatteryViewManager = phoneStatusBar.getBatteryViewManager();
-        //mBatteryMeterViewKeyguard = (BatteryMeterView) keyguardStatusBar.findViewById(R.id.battery);
-        //scaleBatteryMeterViews(context);
+
+        mBatteryMeterView = (BatteryMeterView) statusBar.findViewById(R.id.battery);
+        mBatteryMeterViewKeyguard = (BatteryMeterView) keyguardStatusBar.findViewById(R.id.battery);
+        scaleBatteryMeterViews(context);
         mLogoColor = StatusBarColorHelper.getLogoColor(mContext);
         mNetworkTraffic = (NetworkTraffic) statusBar.findViewById(R.id.networkTraffic);
         mCarrierLabel = (TextView) statusBar.findViewById(R.id.statusbar_carrier_text);
@@ -208,8 +202,8 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
                 (int) (batteryWidth * iconScaleFactor), (int) (batteryHeight * iconScaleFactor));
         scaledLayoutParams.setMarginsRelative(0, 0, 0, marginBottom);
 
-        //mBatteryMeterView.setLayoutParams(scaledLayoutParams);
-        //mBatteryMeterViewKeyguard.setLayoutParams(scaledLayoutParams);
+        mBatteryMeterView.setLayoutParams(scaledLayoutParams);
+        mBatteryMeterViewKeyguard.setLayoutParams(scaledLayoutParams);
     }
 
     @Override
@@ -628,6 +622,8 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
             v.setImageTintList(ColorStateList.valueOf(getTint(mTintArea, v, mIconTint)));
         }
         mSignalCluster.setIconTint(mIconTint, mDarkIntensity, mTintArea);
+        mBatteryMeterView.setDarkIntensity(
+                isInArea(mTintArea, mBatteryMeterView) ? mDarkIntensity : 0);
         mClockController.setTextColor(mIconTint);
 	mNetworkTraffic.setDarkIntensity(mDarkIntensity);
         if (mShowLogo && mLogoStyle == LOGO_LEFT) {
@@ -637,7 +633,6 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
             mBenzoLogo.setImageTintList(ColorStateList.valueOf(getLogoTint(mTintArea, mBenzoLogo, mLogoColor)));
         }
         mCarrierLabel.setTextColor(getTint(mTintArea, mCarrierLabel, mIconTint));
-        mBatteryViewManager.setDarkIntensity(mDarkIntensity);
     }
 
     public void appTransitionPending() {
@@ -704,8 +699,7 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
                     ViewGroup.LayoutParams.WRAP_CONTENT, mIconSize);
             child.setLayoutParams(lp);
         }
-        mBatteryViewManager.onDensityOrFontScaleChanged();
-        //scaleBatteryMeterViews(mContext);
+        scaleBatteryMeterViews(mContext);
     }
 
     private void updateCarrier() {
