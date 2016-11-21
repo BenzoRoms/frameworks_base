@@ -5038,6 +5038,11 @@ public final class Settings {
         /**
          * @hide
          */
+        public static final String AMBIENT_DISPLAY_SHOW_WEATHER = "ambient_display_show_weather";
+
+        /**
+         * @hide
+         */
         public static final String PA_PIE_ALWAYS_RIGHT = "pa_pie_always_right";
 
         /**
