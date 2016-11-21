@@ -2554,7 +2554,7 @@
 	<bool name="config_show_IMESwitcher">true</bool>
 
     <!-- Show battery fully charged notification -->
-    <bool name="config_showBatteryFullyChargedNotification">true</bool>
+    <bool name="config_showBatteryFullyChargedNotification">false</bool>
 
     <!-- Default value for proximity check on screen wake
          NOTE ! - Enable for devices that have a fast response proximity sensor (ideally < 300ms)
