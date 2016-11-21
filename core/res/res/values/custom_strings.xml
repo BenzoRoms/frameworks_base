@@ -85,11 +85,4 @@
     <string name="notify_battery_fully_charged_title">Battery fully charged</string>
     <string name="notify_battery_fully_charged_text">Disconnect your device from the charger to improve battery longevity.</string>
 
-    <!-- Battery styles -->
-    <string name="battery_style_text">Text only</string>
-    <string name="battery_style_default">Default</string>
-    <string name="battery_style_meter_horizontal">Horizontal bar</string>
-    <string name="battery_style_circle">Circle</string>
-    <string name="battery_style_droid">Benzo Logo</string>
-
 </resources>
