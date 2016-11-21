@@ -423,7 +423,7 @@ public class KeyguardStatusView extends GridLayout implements
                 mAmbientDisplayBatteryView.setVisibility(View.GONE);
             }
         }
-        if (dozing) {
+        if (dozing & !weatherWhileDozing()) {
             mIsDozing = true;
             updateWeatherSettings(true);
         } else {
@@ -435,6 +435,11 @@ public class KeyguardStatusView extends GridLayout implements
     private boolean showBattery() {
         return Settings.System.getInt(getContext().getContentResolver(),
                 Settings.System.AMBIENT_DISPLAY_SHOW_BATTERY, 1) == 1;
+    } 
+
+    private boolean weatherWhileDozing() {
+        return Settings.System.getInt(getContext().getContentResolver(),
+                Settings.System.AMBIENT_DISPLAY_SHOW_WEATHER, 0) == 1;
     } 
 
     @Override
@@ -504,6 +509,7 @@ public class KeyguardStatusView extends GridLayout implements
             noWeatherInfo.setVisibility(View.GONE);
             weatherPanel.setVisibility(View.GONE);
             mWeatherConditionText.setVisibility(View.GONE);
+            mWeatherCity.setVisibility(View.GONE);
         } else if (!mIsDozing) {
             noWeatherInfo.setVisibility(View.GONE);
             weatherPanel.setVisibility(View.VISIBLE);
