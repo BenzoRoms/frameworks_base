@@ -4837,6 +4837,11 @@ public final class Settings {
         public static final String SHOW_ALARM_FULLSCREEN = "show_alarm_fullscreen";
 
         /**
+         * @hide
+         */
+        public static final String AMBIENT_DISPLAY_SHOW_WEATHER = "ambient_display_show_weather";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
