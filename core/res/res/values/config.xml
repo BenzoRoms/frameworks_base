@@ -2538,6 +2538,8 @@
          ASSIST_DISCLOSURE_ENABLED. -->
     <bool name="config_allowDisablingAssistDisclosure">false</bool>
 
+    <bool name="single_hand_mode">true</bool>
+
     <!-- True if the device supports system navigation keys. -->
     <bool name="config_supportSystemNavigationKeys">false</bool>
 
