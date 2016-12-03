@@ -231,9 +231,11 @@ public class OpaLayout extends FrameLayout implements ButtonDispatcher.ButtonInt
             Animator curAnim = (Animator) this.mCurrentAnimators.valueAt(i);
             curAnim.removeAllListeners();
             curAnim.cancel();
+            setOpaEnabled(false);
         }
         this.mCurrentAnimators.clear();
         this.mAnimationState = OpaLayout.ANIMATION_STATE_NONE;
+        setOpaEnabled(false);
     }
 
     private void endCurrentAnimation() {
@@ -243,9 +245,11 @@ public class OpaLayout extends FrameLayout implements ButtonDispatcher.ButtonInt
             Animator curAnim = (Animator) this.mCurrentAnimators.valueAt(i);
             curAnim.removeAllListeners();
             curAnim.end();
+            setOpaEnabled(false);
         }
         this.mCurrentAnimators.clear();
         this.mAnimationState = OpaLayout.ANIMATION_STATE_NONE;
+        setOpaEnabled(false);
     }
 
     private ArraySet<Animator> getCollapseAnimatorSet() {
@@ -487,13 +491,11 @@ public class OpaLayout extends FrameLayout implements ButtonDispatcher.ButtonInt
         mHalo = this.findViewById(R.id.halo);
         mHome = (KeyButtonView) this.findViewById(R.id.home_button);
 
-        this.setOpaEnabled(true);
+        setOpaEnabled(false);
     }
 
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (!this.mOpaEnabled) {
-            return false;
-        }
+        setOpaEnabled(true);
         switch (ev.getAction()) {
             case 0: {
                 if (!this.mCurrentAnimators.isEmpty()) {
@@ -587,7 +589,7 @@ public class OpaLayout extends FrameLayout implements ButtonDispatcher.ButtonInt
         this.mRed.setVisibility(visibility);
         this.mYellow.setVisibility(visibility);
         this.mGreen.setVisibility(visibility);
-        this.mHalo.setVisibility(visibility);
+        this.mHalo.setVisibility(View.INVISIBLE);
     }
 
 }
