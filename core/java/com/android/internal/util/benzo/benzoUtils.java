@@ -20,6 +20,13 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Locale;
 
 public class benzoUtils {
@@ -33,5 +40,15 @@ public class benzoUtils {
     public static boolean isChineseLanguage() {
        return Resources.getSystem().getConfiguration().locale.getLanguage().startsWith(
                Locale.CHINESE.getLanguage());
+    }
+
+    /**
+     * Checks whether the given file exists
+     *
+     * @return true if exists, false if not
+     */
+    public static boolean fileExists(String fileName) {
+        final File file = new File(fileName);
+        return file.exists();
     }
 }
