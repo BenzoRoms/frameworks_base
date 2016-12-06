@@ -19,6 +19,7 @@ package com.android.systemui.statusbar.phone;
 import android.content.Context;
 import android.os.SystemProperties;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.MathUtils;
@@ -221,5 +222,13 @@ public class DozeParameters {
         public boolean isIn(int value) {
             return (mIsIn.get(value, mDefaultIsIn));
         }
+    }
+
+    public int getDozeBrightness() {
+	final int dozeBrightnessDefault = mContext.getResources().getInteger(
+                    com.android.internal.R.integer.config_screenBrightnessDoze);
+        return Settings.System.getIntForUser(mContext.getContentResolver(),
+            Settings.System.DOZE_SCREEN_BRIGHTNESS, dozeBrightnessDefault,
+                UserHandle.USER_CURRENT);
     }
 }
