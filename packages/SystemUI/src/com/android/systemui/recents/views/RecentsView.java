@@ -420,7 +420,7 @@ public class RecentsView extends FrameLayout {
         if (mFloatingButton != null && showClearAllRecents) {
             clearRecentsLocation = Settings.System.getIntForUser(
                 mContext.getContentResolver(), Settings.System.RECENTS_CLEAR_ALL_LOCATION,
-                2, UserHandle.USER_CURRENT);
+                3, UserHandle.USER_CURRENT);
             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)
                     mFloatingButton.getLayoutParams();
             boolean isLandscape = mContext.getResources().getConfiguration().orientation
