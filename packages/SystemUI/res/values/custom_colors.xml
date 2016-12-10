@@ -64,7 +64,7 @@
     <color name="status_bar_battery_level_text_color">#ffffff</color>
 
     <!-- Floating action button -->
-    <color name="fab_color">@*android:color/accent_material_light</color>
-    <color name="floating_action_button_icon_color">#ffffff</color>
+    <color name="fab_color">?android:attr/colorAccent</color>
+    <color name="floating_action_button_icon_color">@android:color/white</color>
 
 </resources>
