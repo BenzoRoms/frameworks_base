@@ -100,17 +100,17 @@
 
     <!-- The default tiles to display in QuickSettings -->
     <string name="quick_settings_tiles_default" translatable="false">
-        wifi,cell,battery,dnd,flashlight,rotation,bt,airplane,location
+        wifi,cell,battery,dnd,flashlight,bt,airplane,benzo,location
     </string>
 
     <!-- The default tiles to display in QuickSettings -->
     <string name="quick_settings_tiles_extra" translatable="false">
-        adb_network,androidauto,saver,cast,caffeine,expanded_desktop,heads_up,hotspot,ime,inversion,lte,navbar,nfc,night,screen_off,screenshot,sync,usb_tether,work,benzo,kernel
+        adb_network,androidauto,saver,cast,caffeine,expanded_desktop,heads_up,hotspot,ime,inversion,lte,navbar,nfc,night,screen_off,screenshot,sync,usb_tether,work,benzo,kernel,rotation
     </string>
 
     <!-- Tiles native to System UI. Order should match "quick_settings_tiles_default" -->
     <string name="quick_settings_tiles_stock" translatable="false">
-        wifi,cell,battery,dnd,flashlight,rotation,bt,airplane,location
+        wifi,cell,battery,dnd,flashlight,bt,airplane,benzo,location
     </string>
 
     <!-- The tiles to display in QuickSettings -->
