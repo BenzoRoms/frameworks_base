@@ -4867,6 +4867,12 @@ public final class Settings {
         public static final String SINGLE_HAND_MODE_ENABLED = "single_hand_mode_enabled";
 
         /**
+         * Whether tdisplay large text for statusbar battery percentage
+         * @hide
+         */
+        public static final String BATTERY_LARGE_TEXT = "battery_large_text";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
