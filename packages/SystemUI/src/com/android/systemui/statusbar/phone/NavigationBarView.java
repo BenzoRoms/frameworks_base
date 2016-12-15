@@ -252,7 +252,11 @@ public class NavigationBarView extends LinearLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        mSlideTouchEvent.handleTouchEvent(event);
+        boolean onehandEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.SINGLE_HAND_MODE_ENABLED, 1, UserHandle.USER_CURRENT) == 1;
+        if (onehandEnabled) {
+            mSlideTouchEvent.handleTouchEvent(event);
+        }
         boolean doubleTapNav = Settings.System.getIntForUser(
                       mContext.getContentResolver(), Settings.System.DOUBLE_TAP_SLEEP_NAVBAR, 0, UserHandle.USER_CURRENT) == 1;
         if (mGestureHelper.onTouchEvent(event)) {
@@ -273,7 +277,11 @@ public class NavigationBarView extends LinearLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        mSlideTouchEvent.handleTouchEvent(event);
+        boolean onehandedEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.SINGLE_HAND_MODE_ENABLED, 1, UserHandle.USER_CURRENT) == 1;
+        if (onehandedEnabled) {
+            mSlideTouchEvent.handleTouchEvent(event);
+        }
         return mGestureHelper.onInterceptTouchEvent(event);
     }
 

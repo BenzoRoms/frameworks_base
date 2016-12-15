@@ -149,21 +149,26 @@ public class SlideTouchEvent {
      * @param distanceX Sliding X distance
      */
     private void startSingleHandMode(float distanceX) {
-        String str = Settings.Global.getString(mContext.getContentResolver(), Settings.Global.SINGLE_HAND_MODE);
-        Log.i("SingleHand", "start single hand mode str: " + str + " distanceX: " + distanceX);
-        if (distanceX > 0 && TextUtils.isEmpty(str)) {
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SINGLE_HAND_MODE_ENABLED, 1) == 1) {
+
+            String str = Settings.Global.getString(mContext.getContentResolver(), Settings.Global.SINGLE_HAND_MODE);
+            Log.i("SingleHand", "start single hand mode str: " + str + " distanceX: " + distanceX);
+            if (distanceX > 0 && TextUtils.isEmpty(str)) {
             Settings.Global.putString(mContext.getContentResolver(), Settings.Global.SINGLE_HAND_MODE, LEFT);
-        }
-
-        if (distanceX < 0 && TextUtils.isEmpty(str)) {
+            }
+            if (distanceX < 0 && TextUtils.isEmpty(str)) {
             Settings.Global.putString(mContext.getContentResolver(), Settings.Global.SINGLE_HAND_MODE, RIGHT);
-        }
+            }
 
-        if (distanceX < 0 && str != null && str.contains(LEFT)) {
-            quitLSingleHandMode();
-        }
+            if (distanceX < 0 && str != null && str.contains(LEFT)) {
+                quitLSingleHandMode();
+            }
 
-        if (distanceX > 0 && str != null && str.contains(RIGHT)) {
+            if (distanceX > 0 && str != null && str.contains(RIGHT)) {
+                quitLSingleHandMode();
+            }
+        } else {
             quitLSingleHandMode();
         }
     }

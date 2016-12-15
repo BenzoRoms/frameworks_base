@@ -4861,6 +4861,12 @@ public final class Settings {
         public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
 
         /**
+         * enable or disable single handed mode
+         * @hide
+         */
+        public static final String SINGLE_HAND_MODE_ENABLED = "single_hand_mode_enabled";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
