@@ -49,7 +49,7 @@ public class BenzoSettingsTile extends QSTile<QSTile.BooleanState> {
     private static final Intent BENZO_SETTINGS = new Intent().setComponent(new ComponentName(
             "com.android.settings", "com.android.settings.Settings$BenzoSettingsActivity"));
     private static final Intent BENZO_OTA = new Intent().setComponent(new ComponentName(
-            "com.benzo.ota", "com.benzo.ota.activities.MainActivity"));
+            "benzorom.overtheair", "benzorom.overtheair.activities.MainActivity"));
 
     public BenzoSettingsTile(Host host) {
         super(host);
