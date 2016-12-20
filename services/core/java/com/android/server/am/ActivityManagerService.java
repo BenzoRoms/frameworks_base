@@ -2941,11 +2941,9 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     @Override
     public void batterySendBroadcast(Intent intent) {
-        synchronized (this) {
-            broadcastIntentLocked(null, null, intent, null, null, 0, null, null, null,
-                    AppOpsManager.OP_NONE, null, false, false,
-                    -1, Process.SYSTEM_UID, UserHandle.USER_ALL);
-        }
+        broadcastIntentLocked(null, null, intent, null, null, 0, null, null, null,
+                AppOpsManager.OP_NONE, null, false, false,
+                -1, Process.SYSTEM_UID, UserHandle.USER_ALL);
     }
 
     /**
