@@ -1393,7 +1393,7 @@
 
          If this string is empty or the specified package does not exist, then
          the behavior will be as though no app was named as an explicit default. -->
-    <string name="default_browser" translatable="false"></string>
+    <string name="default_browser" translatable="false">org.snapdragon.browser</string>
 
     <!-- Enable/disable default bluetooth profiles:
         HSP_AG, ObexObjectPush, Audio, NAP -->
@@ -1627,7 +1627,7 @@
     <bool name="config_dreamsSupported">true</bool>
 
     <!-- If supported, are dreams enabled? (by default) -->
-    <bool name="config_dreamsEnabledByDefault">true</bool>
+    <bool name="config_dreamsEnabledByDefault">false</bool>
     <!-- If supported and enabled, are dreams activated when docked? (by default) -->
     <bool name="config_dreamsActivatedOnDockByDefault">true</bool>
     <!-- If supported and enabled, are dreams activated when asleep and charging? (by default) -->
@@ -1954,7 +1954,7 @@
             >com.android.vpndialogs/com.android.vpndialogs.ConfirmDialog</string>
 
     <!-- Apps that are authorized to access shared accounts, overridden by product overlays -->
-    <string name="config_appsAuthorizedForSharedAccounts" translatable="false">;com.android.vending;com.android.settings;</string>
+    <string name="config_appsAuthorizedForSharedAccounts" translatable="false">;com.android.settings;</string>
 
     <!-- Flag indicating that the media framework should not allow changes or mute on any
          stream or master volumes. -->
@@ -2145,7 +2145,7 @@
     </string-array>
 
     <!-- Flag indicating which package name can access the persistent data partition -->
-    <string name="config_persistentDataPackageName" translatable="false">com.google.android.gms</string>
+    <string name="config_persistentDataPackageName" translatable="false"></string>
 
     <!-- Flag indicating apps will skip sending hold request before merge. In this case
         IMS service implementation will do both.i.e.hold followed by merge. -->
