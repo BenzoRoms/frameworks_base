@@ -78,6 +78,7 @@ public class CommandQueue extends IStatusBar.Stub {
     private static final int MSG_DISMISS_KEYBOARD_SHORTCUTS    = 32 << MSG_SHIFT;
     private static final int MSG_HANDLE_SYSNAV_KEY             = 33 << MSG_SHIFT;
     private static final int MSG_SET_AUTOROTATE_STATUS         = 34 << MSG_SHIFT;
+    private static final int MSG_RESTART_UI                    = 35 << MSG_SHIFT;
 
     public static final int FLAG_EXCLUDE_NONE = 0;
     public static final int FLAG_EXCLUDE_SEARCH_PANEL = 1 << 0;
@@ -135,10 +136,18 @@ public class CommandQueue extends IStatusBar.Stub {
         void clickTile(ComponentName tile);
 
         void handleSystemNavigationKey(int arg1);
+        void restartUI();
     }
 
     public CommandQueue(Callbacks callbacks) {
         mCallbacks = callbacks;
+    }
+
+    public void restartUI() {
+        synchronized (mLock) {
+            mHandler.removeMessages(MSG_RESTART_UI);
+            mHandler.sendEmptyMessage(MSG_RESTART_UI);
+        }
     }
 
     public void setIcon(String slot, StatusBarIcon icon) {
@@ -530,6 +539,9 @@ public class CommandQueue extends IStatusBar.Stub {
                 case MSG_SET_AUTOROTATE_STATUS:
                     mCallbacks.setAutoRotate(msg.arg1 != 0);
 
+                    break;
+                case MSG_RESTART_UI:
+                    mCallbacks.restartUI();
                     break;
             }
         }
