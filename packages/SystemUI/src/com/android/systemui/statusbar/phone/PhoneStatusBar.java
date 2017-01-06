@@ -151,6 +151,7 @@ import com.android.systemui.classifier.FalsingManager;
 import com.android.systemui.doze.DozeHost;
 import com.android.systemui.doze.DozeLog;
 import com.android.systemui.keyguard.KeyguardViewMediator;
+import com.android.systemui.omni.StatusBarHeaderMachine;
 import com.android.systemui.qs.QSContainer;
 import com.android.systemui.qs.QSPanel;
 import com.android.systemui.recents.ScreenPinningRequest;
@@ -432,6 +433,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private float mScreenWidth;
     private int mMinBrightness;
     private boolean mJustPeeked;
+    private StatusBarHeaderMachine mStatusBarHeaderMachine;
     int mLinger;
     int mInitialTouchX;
     int mInitialTouchY;
@@ -663,6 +665,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         void observe() {
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAVIGATION_BAR_SHOW),
+                    false, this, UserHandle.USER_ALL);
+            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_CUSTOM_HEADER_SHADOW),
                     false, this, UserHandle.USER_ALL);
             update();
         }
@@ -1249,6 +1254,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         // Private API call to make the shadows look better for Recents
         ThreadedRenderer.overrideProperty("ambientRatio", String.valueOf(1.5f));
+
+        mStatusBarHeaderMachine = new StatusBarHeaderMachine(mContext);
+        mStatusBarHeaderMachine.addObserver((QuickStatusBarHeader) mHeader);
+        mStatusBarHeaderMachine.updateEnablement();
 
         return mStatusBarView;
     }
@@ -4119,6 +4128,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mScrimController.setCurrentUser(newUserId);
         updateMediaMetaData(true, false);
         mNavigationBarObserver.update();
+        mStatusBarHeaderMachine.updateEnablement();
     }
 
     private void setControllerUsers() {
