@@ -206,6 +206,7 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         mAnimator = builder.build();
 
         updateSettingsAnimator();
+        updateSettings();
 
         mQsPanelOffsetNormal = getResources().getDimensionPixelSize(R.dimen.qs_panel_top_offset_normal);
         mQsPanelOffsetHeader = getResources().getDimensionPixelSize(R.dimen.qs_panel_top_offset_header);
@@ -488,6 +489,24 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
             Settings.System.QS_SETTINGS_ICON_TOGGLE, 1) == 1;
     }
 
+    public void updateSettings() {
+        if (mQsPanel != null) {
+            // if header is active we want to push the qs panel a little bit further down
+            // to have more space for the header image
+            post(new Runnable() {
+                public void run() {
+                    final boolean customHeader = Settings.System.getIntForUser(mContext.getContentResolver(),
+                            Settings.System.STATUS_BAR_CUSTOM_HEADER, 0,
+                            UserHandle.USER_CURRENT) != 0;
+                    FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mQsPanel.getLayoutParams();
+                    params.setMargins(0, customHeader ? mQsPanelOffsetHeader : mQsPanelOffsetNormal, 0, 0);
+                    mQsPanel.setLayoutParams(params);
+                }
+            });
+        }
+        applyHeaderBackgroundShadow();
+    }
+
     public boolean isSettingsExpandedEnabled() {
         return Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.QS_SETTINGS_EXPANDED_TOGGLE, 0) == 1;
@@ -560,6 +579,7 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
             mBackgroundImage.setImageDrawable(dw);
         }
         applyHeaderBackgroundShadow();
+        updateSettings();
     }
 
     private void applyHeaderBackgroundShadow() {
