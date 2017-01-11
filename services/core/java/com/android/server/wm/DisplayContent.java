@@ -395,7 +395,8 @@ class DisplayContent {
             for (int taskNdx = tasks.size() - 1; taskNdx >= 0; --taskNdx) {
                 final Task task = tasks.get(taskNdx);
                 AppWindowToken token = task.getTopVisibleAppToken();
-                if (token == null || !token.isVisible()) {
+                // Take "focused token about to show" into account
+                if (token == null || (!token.isVisible() && (task != focusedTask))) {
                     continue;
                 }
 
