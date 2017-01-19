@@ -17,6 +17,7 @@ package com.android.settingslib.drawer;
 
 import android.annotation.LayoutRes;
 import android.annotation.Nullable;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -264,9 +265,12 @@ public class SettingsDrawerActivity extends Activity {
 
     public void showMenuIcon() {
         mShowingMenu = true;
-        getActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
-        getActionBar().setHomeActionContentDescription(R.string.content_description_menu_button);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+            actionBar.setHomeActionContentDescription(R.string.content_description_menu_button);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     public List<DashboardCategory> getDashboardCategories() {
