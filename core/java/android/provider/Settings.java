@@ -4068,6 +4068,12 @@ public final class Settings {
         public static final String DISABLE_SETTINGS_SUGGESTIONS = "disable_settings_suggestions";
 
         /**
+         * Number of colums in the settings dashboard
+         * @hide
+         */
+        public static final String DASHBOARD_COLUMNS = "dashboard_columns";
+
+        /**
          * Remove tile summaries in settings
          * @hide
          */
