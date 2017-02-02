@@ -76,4 +76,7 @@
 
     <color name="alarm_status_color">#E0E0E0</color>
 
+    <!-- Keyguard affordance circle background -->
+    <color name="keyguard_affordance_circle_background">@android:color/white</color>
+
 </resources>
