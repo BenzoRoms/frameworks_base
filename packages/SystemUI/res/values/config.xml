@@ -105,7 +105,7 @@
 
     <!-- The default tiles to display in QuickSettings -->
     <string name="quick_settings_tiles_extra" translatable="false">
-        adb_network,ambient,androidauto,app_picker,saver,cast,caffeine,expanded_desktop,heads_up,hotspot,ime,inversion,lte,navbar,nfc,night,screen_off,screenshot,sound,sync,usb_tether,work,benzo,kernel,rotation,music,weather,assist,voiceassist
+        adb_network,ambient,androidauto,app_picker,saver,cast,caffeine,expanded_desktop,heads_up,hotspot,ime,inversion,lte,navbar,nfc,night,screen_off,screenshot,sound,sync,usb_tether,work,benzo,kernel,rotation,music,weather,assist,voiceassist,compass
     </string>
 
     <!-- Tiles native to System UI. Order should match "quick_settings_tiles_default" -->
