@@ -157,6 +157,9 @@
     <string name="omnijaws_detail_header">Weather</string>
     <string name="omnijaws_label_default">Weather</string>
     <string name="omnijaws_current_text">Now</string>
+    <!-- Google Assist -->
+    <string name="quick_settings_google_assist_label">Assist</string>
+    <string name="quick_settings_google_voice_assist_label">Voice assist</string>
 
     <!-- 4G LTE switch -->
     <string name="show_fourg_title">Show 4G instead of LTE</string>
