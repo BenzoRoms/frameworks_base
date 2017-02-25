@@ -294,4 +294,8 @@
     <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_data_connection_hspap">HSPA+</string>
 
+    <!-- Sim recents -->
+    <string name="recents_multiwin_warning">A multiwindow session is already active.\nJust tap an app if you want to dock it now.</string>
+    <string name="recents_multiwin_nolastapp">You removed all recents, please choose an app from launcher or drawer.</string>
+
 </resources>
