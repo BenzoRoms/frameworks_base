@@ -30,5 +30,8 @@
     <!-- Nav bar tuner colors -->
     <color name="navbar_tuner_background_color">@android:color/white</color>
     <color name="navbar_tuner_text_color">@*android:color/material_deep_teal_500</color>
+    <!-- Screenshot action colors -->
+    <color name="screenshot_flash_color">@android:color/white</color>
+    <color name="screenshot_background_color">@android:color/black</color>
 
 </resources>
