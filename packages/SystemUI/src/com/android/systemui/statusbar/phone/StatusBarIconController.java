@@ -104,6 +104,10 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
     private boolean mShowLogo = false;
     private boolean mShowKeyguardLogo = false;
 
+    // Statusbar weather
+    private TextView mWeatherTextView;
+    private ImageView mWeatherImageView;
+
     private int mIconSize;
     private int mIconHPadding;
 
@@ -178,6 +182,8 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         mHandler = new Handler();
         mClockController = new ClockController(statusBar, mNotificationIcons, mHandler);
         mCenterClockLayout = statusBar.findViewById(R.id.center_clock_layout);
+        mWeatherTextView = (TextView) statusBar.findViewById(R.id.weather_temp_omni);
+        mWeatherImageView = (ImageView) statusBar.findViewById(R.id.weather_image_omni);
         loadDimens();
 
         mBatteryLevelView = (BatteryLevelTextView) statusBar.findViewById(R.id.battery_level);
@@ -643,6 +649,8 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         }
         mCarrierLabel.setTextColor(getTint(mTintArea, mCarrierLabel, mIconTint));
         mBatteryLevelView.setTextColor(getTint(mTintArea, mBatteryLevelView, mIconTint));
+        mWeatherTextView.setTextColor(mIconTint);
+        mWeatherImageView.setImageTintList(ColorStateList.valueOf(mIconTint));
     }
 
     public void appTransitionPending() {
