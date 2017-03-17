@@ -66,6 +66,7 @@ import com.android.systemui.qs.tiles.IntentTile;
 import com.android.systemui.qs.tiles.KernelAdiutorTile;
 import com.android.systemui.qs.tiles.LocationTile;
 import com.android.systemui.qs.tiles.LteTile;
+import com.android.systemui.qs.tiles.MagiskManagerTile;
 import com.android.systemui.qs.tiles.MusicTile;
 import com.android.systemui.qs.tiles.NavBarTile;
 import com.android.systemui.qs.tiles.NfcTile;
@@ -484,6 +485,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (tileSpec.equals("weather")) return new WeatherTile(this);
         else if (tileSpec.equals("assist")) return new GoogleAssistTile(this);
         else if (tileSpec.equals("voiceassist")) return new GoogleVoiceAssistTile(this);
+        else if (tileSpec.equals("magiskmanager")) return new MagiskManagerTile(this);
         // Intent tiles.
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
         else if (tileSpec.startsWith(CustomTile.PREFIX)) return CustomTile.create(this,tileSpec);
