@@ -1066,10 +1066,6 @@ public class PackageInstaller {
             }
         }
 
-        public void setInstallFlagsQuick() {
-            installFlags |= PackageManager.INSTALL_QUICK;
-        }
-
         /** {@hide} */
         public void dump(IndentingPrintWriter pw) {
             pw.printPair("mode", mode);
