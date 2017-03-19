@@ -16,9 +16,20 @@
 
 package com.android.internal.util.slim;
 
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
@@ -35,7 +46,12 @@ import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.VectorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.ParcelFileDescriptor;
+import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
+import android.util.Xml;
 
 public class ImageHelper {
 
@@ -164,4 +180,47 @@ public class ImageHelper {
         return output;
     }
 
+    /**
+     * @param context callers context
+     * @param uri Uri to handle
+     * @return A bitmap from the requested uri
+     * @throws IOException
+     *
+     * @Credit: StackOverflow
+     *             http://stackoverflow.com/questions/35909008/pick-image
+     *             -from-gallery-or-google-photos-failing
+     */
+    public static Bitmap getBitmapFromUri(Context context, Uri uri) throws IOException {
+        if (context == null || uri == null) {
+            return null;
+        }
+        ParcelFileDescriptor parcelFileDescriptor =
+                context.getContentResolver().openFileDescriptor(uri, "r");
+        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+        parcelFileDescriptor.close();
+        return image;
+    }
+
+    /**
+     * @param storageDir Desired location in storage as a File
+     * @param fileName Name of bitmap file to store
+     * @param bitmap the bitmap to store
+     * @return the Uri of the bitmap
+     */
+    public static Uri addBitmapToStorage(File storageDir, String fileName, Bitmap bitmap) {
+        if (storageDir == null || fileName == null || bitmap == null) {
+            return null;
+        }
+        File imageFile = new File(storageDir, fileName);
+        try {
+            FileOutputStream fos = new FileOutputStream(imageFile);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+            return null;
+        }
+        return Uri.fromFile(imageFile);
+    }
 }
