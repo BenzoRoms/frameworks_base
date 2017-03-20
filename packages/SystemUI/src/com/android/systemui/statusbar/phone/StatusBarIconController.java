@@ -155,6 +155,8 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         mBenzoLogoLeft = (ImageView) statusBar.findViewById(R.id.left_benzo_logo);
         mBenzoLogoKeyguard = (ImageView) keyguardStatusBar.findViewById(R.id.benzo_logo_keyguard);
         mBenzoLogoKeyguardLeft = (ImageView) keyguardStatusBar.findViewById(R.id.left_benzo_logo_keyguard);
+        mWeatherTextView = (TextView) statusBar.findViewById(R.id.weather_temp_omni);
+        mWeatherImageView = (ImageView) statusBar.findViewById(R.id.weather_image_omni);
         mSystemIconArea = (LinearLayout) statusBar.findViewById(R.id.system_icon_area);
         mStatusIcons = (LinearLayout) statusBar.findViewById(R.id.statusIcons);
         mSignalCluster = (SignalClusterView) statusBar.findViewById(R.id.signal_cluster);
@@ -182,8 +184,6 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         mHandler = new Handler();
         mClockController = new ClockController(statusBar, mNotificationIcons, mHandler);
         mCenterClockLayout = statusBar.findViewById(R.id.center_clock_layout);
-        mWeatherTextView = (TextView) statusBar.findViewById(R.id.weather_temp_omni);
-        mWeatherImageView = (ImageView) statusBar.findViewById(R.id.weather_image_omni);
         loadDimens();
 
         mBatteryLevelView = (BatteryLevelTextView) statusBar.findViewById(R.id.battery_level);

@@ -57,6 +57,23 @@
             android:visibility="gone"
             />
 
+        <com.android.systemui.benzo.statusbarweather.StatusBarWeather
+            android:id="@+id/weather_temp_omni"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Weather.Detailed"
+            android:gravity="left|center_vertical"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp" />
+
+        <com.android.systemui.benzo.statusbarweather.StatusBarWeatherImage
+            android:id="@+id/weather_image_omni"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp" />
+
         <!-- The alpha of this area is controlled from both PhoneStatusBarTransitions and
              PhoneStatusBar (DISABLE_NOTIFICATION_ICONS). -->
         <com.android.systemui.statusbar.AlphaOptimizedFrameLayout
@@ -79,23 +96,6 @@
                 android:singleLine="false"
                 android:fontFamily="sans-serif-condensed"
                 android:gravity="right|center_vertical"
-                android:paddingEnd="2dp" />
-
-          <com.android.systemui.benzo.statusbarweather.StatusBarWeather
-                android:id="@+id/weather_temp_omni"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Weather.Detailed"
-                android:gravity="right|center_vertical"
-                android:paddingStart="2dp"
-                android:paddingEnd="2dp" />
-
-            <com.android.systemui.benzo.statusbarweather.StatusBarWeatherImage
-                android:id="@+id/weather_image_omni"
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
-                android:paddingStart="2dp"
                 android:paddingEnd="2dp" />
 
             <include layout="@layout/system_icons" />

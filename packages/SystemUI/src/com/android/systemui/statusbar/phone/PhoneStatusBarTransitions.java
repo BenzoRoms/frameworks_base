@@ -32,8 +32,8 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
     private final PhoneStatusBarView mView;
     private final float mIconAlphaWhenOpaque;
 
-    private View mBenzoLogoLeft, mLeftSide, mStatusIcons, mSignalCluster, mBattery, mClock,
-          mNetworkTraffic, mBenzoLogo, mWeatherTextView, mWeatherImageView;
+    private View mBenzoLogoLeft, mWeatherTextView, mWeatherImageView, mLeftSide, mStatusIcons, mSignalCluster,
+           mBattery, mClock, mNetworkTraffic, mBenzoLogo;
     private Animator mCurrentAnimation;
 
     public PhoneStatusBarTransitions(PhoneStatusBarView view) {
@@ -45,6 +45,8 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
 
     public void init() {
         mBenzoLogoLeft = mView.findViewById(R.id.left_benzo_logo);
+        mWeatherTextView = mView.findViewById(R.id.weather_temp_omni);
+        mWeatherImageView = mView.findViewById(R.id.weather_image_omni);
         mLeftSide = mView.findViewById(R.id.notification_icon_area);
         mStatusIcons = mView.findViewById(R.id.statusIcons);
         mSignalCluster = mView.findViewById(R.id.signal_cluster);
@@ -52,8 +54,6 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
         mClock = mView.findViewById(R.id.clock);
         mNetworkTraffic = mView.findViewById(R.id.networkTraffic);
         mBenzoLogo = mView.findViewById(R.id.benzo_logo);
-        mWeatherTextView = mView.findViewById(R.id.weather_temp_omni);
-        mWeatherImageView = mView.findViewById(R.id.weather_image_omni);
         applyModeBackground(-1, getMode(), false /*animate*/);
         applyMode(getMode(), false /*animate*/);
     }
@@ -95,15 +95,15 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
             AnimatorSet anims = new AnimatorSet();
             anims.playTogether(
                     animateTransitionTo(mBenzoLogoLeft, newAlphaBC),
+                    animateTransitionTo(mWeatherTextView, newAlphaBC),
+                    animateTransitionTo(mWeatherImageView, newAlphaBC),
                     animateTransitionTo(mLeftSide, newAlpha),
                     animateTransitionTo(mStatusIcons, newAlpha),
                     animateTransitionTo(mSignalCluster, newAlpha),
                     animateTransitionTo(mNetworkTraffic, newAlpha),
                     animateTransitionTo(mBattery, newAlphaBC),
                     animateTransitionTo(mClock, newAlphaBC),
-                    animateTransitionTo(mBenzoLogo, newAlphaBC),
-                    animateTransitionTo(mWeatherTextView, newAlphaBC),
-                    animateTransitionTo(mWeatherImageView, newAlphaBC)
+                    animateTransitionTo(mBenzoLogo, newAlphaBC)
                     );
             if (isLightsOut(mode)) {
                 anims.setDuration(LIGHTS_OUT_DURATION);
@@ -112,6 +112,8 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
             mCurrentAnimation = anims;
         } else {
             mBenzoLogoLeft.setAlpha(newAlphaBC);
+            mWeatherTextView.setAlpha(newAlphaBC);
+            mWeatherImageView.setAlpha(newAlphaBC);
             mLeftSide.setAlpha(newAlpha);
             mStatusIcons.setAlpha(newAlpha);
             mSignalCluster.setAlpha(newAlpha);
@@ -119,8 +121,6 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
             mBattery.setAlpha(newAlphaBC);
             mClock.setAlpha(newAlphaBC);
             mBenzoLogo.setAlpha(newAlphaBC);
-            mWeatherTextView.setAlpha(newAlphaBC);
-            mWeatherImageView.setAlpha(newAlphaBC);
         }
     }
 }
