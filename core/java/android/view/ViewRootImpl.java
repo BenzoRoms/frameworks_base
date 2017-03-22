@@ -7320,14 +7320,19 @@ public final class ViewRootImpl implements ViewParent,
             mAttachInfo.mHighContrastText = mAccessibilityManager.isHighTextContrastEnabled();
         }
         @Override
-        public void onHighTextContrastStateChanged(boolean enabled) {
-            mAttachInfo.mHighContrastText = enabled;
+        public void onHighTextContrastStateChanged(final boolean enabled) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mAttachInfo.mHighContrastText = enabled;
 
-            // Destroy Displaylists so they can be recreated with high contrast recordings
-            destroyHardwareResources();
+                    // Destroy Displaylists so they can be recreated with high contrast recordings
+                    destroyHardwareResources();
 
-            // Schedule redraw, which will rerecord + redraw all text
-            invalidate();
+                    // Schedule redraw, which will rerecord + redraw all text
+                    invalidate();
+                }
+            });
         }
     }
 
