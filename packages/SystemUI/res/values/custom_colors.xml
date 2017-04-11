@@ -97,4 +97,7 @@
     <!-- Used by selector -->
     <color name="card_pressed">#7e3c3c3c</color>
 
+    <!-- Separate QS text label tint from icon tint -->
+    <color name="qs_tile_label_tint_unavailable">@color/qs_tile_tint_unavailable</color>
+
 </resources>
