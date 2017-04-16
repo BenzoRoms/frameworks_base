@@ -100,4 +100,8 @@
     <!-- Separate QS text label tint from icon tint -->
     <color name="qs_tile_label_tint_unavailable">@color/qs_tile_tint_unavailable</color>
 
+    <!-- Expanded Status Bar Weather Text Colors -->
+    <color name="status_bar_temperature_text_color">#FFFFFFFF</color>
+    <color name="status_bar_temperature_location_text_color">#FFFFFFFF</color>
+
 </resources>

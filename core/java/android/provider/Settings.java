@@ -4804,6 +4804,21 @@ public final class Settings {
          */
         public static final String LOCKSCREEN_PIN_RIPPLE = "lockscreen_pin_ripple";
 
+
+        /**
+         * Whether to show or hide Weather panel in expanded header
+         * @hide
+         */
+        public static final String HEADER_WEATHER_ENABLED = "header_weather_enabled";
+
+
+        /**
+         * Whether to show or hide Weather panel image in expanded header
+         * @hide
+         */
+        public static final String HEADER_WEATHER_IMAGE_ENABLED = "header_weather_image_enabled";
+
+
         /**
          * Whether to show arrows in the navigation bar while typing
          * @hide
