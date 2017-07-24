@@ -3563,6 +3563,9 @@ public final class ActivityManagerService extends ActivityManagerNative
             String abiOverride, String entryPoint, String[] entryPointArgs, Runnable crashHandler) {
         long startTime = SystemClock.elapsedRealtime();
         ProcessRecord app;
+        if(!isAutoStartAllowed(info.uid, info.packageName) && ("service".equals(hostingType) || "content provider".equals(hostingType))){
+           return null;
+        }
         if (!isolated) {
             app = getProcessRecordLocked(processName, info.uid, keepIfLarge);
             checkTime(startTime, "startProcess: after getProcessRecord");
@@ -7981,6 +7984,16 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
         }
         return ActivityManager.APP_START_MODE_NORMAL;
+    }
+
+    boolean isAutoStartAllowed(int uid, String packageName){
+        UidRecord uidRec = mActiveUids.get(uid);
+        if(uidRec == null) {
+            if (mAppOpsService.noteOperation(AppOpsManager.OP_AUTO_START, uid, packageName) != AppOpsManager.MODE_ALLOWED) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private ProviderInfo getProviderInfoLocked(String authority, int userHandle, int pmFlags) {

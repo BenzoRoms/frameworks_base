@@ -242,7 +242,9 @@ public class AppOpsManager {
     /** @hide */
     public static final int OP_BOOT_COMPLETED = 64;
     /** @hide */
-    public static final int _NUM_OP = 65;
+    public static final int OP_AUTO_START = 65;
+    /** @hide */
+    public static final int _NUM_OP = 66;
 
     /** Access to coarse location information. */
     public static final String OPSTR_COARSE_LOCATION = "android:coarse_location";
@@ -343,7 +345,8 @@ public class AppOpsManager {
     /** Required for start at boot **/
     private static final String OPSTR_BOOT_COMPLETED =
             "android:boot_completed";
-
+    /** @hide */
+    public static final String OPSTR_AUTO_START = "android:auto_start";
     private static final int[] RUNTIME_PERMISSIONS_OPS = {
             // Contacts
             OP_READ_CONTACTS,
@@ -455,6 +458,7 @@ public class AppOpsManager {
             OP_GET_ACCOUNTS,
             OP_RUN_IN_BACKGROUND,
             OP_BOOT_COMPLETED,
+            OP_AUTO_START,
     };
 
     /**
@@ -527,6 +531,7 @@ public class AppOpsManager {
             OPSTR_GET_ACCOUNTS,
             null,
             OPSTR_BOOT_COMPLETED,
+            OPSTR_AUTO_START,
     };
 
     /**
@@ -599,6 +604,7 @@ public class AppOpsManager {
             "GET_ACCOUNTS",
             "RUN_IN_BACKGROUND",
             "BOOT_COMPLETED",
+            "AUTO_START",
     };
 
     /**
@@ -671,6 +677,7 @@ public class AppOpsManager {
             Manifest.permission.GET_ACCOUNTS,
             null, // no permission for running in background
             Manifest.permission.RECEIVE_BOOT_COMPLETED,
+            null, // no permission for auto start
     };
 
     /**
@@ -744,6 +751,7 @@ public class AppOpsManager {
             null, // GET_ACCOUNTS
             null, // RUN_IN_BACKGROUND
             null, //BOOT_COMPLETED
+            null, // OP_AUTO_START
     };
 
     /**
@@ -816,6 +824,7 @@ public class AppOpsManager {
             false, // GET_ACCOUNTS
             false, // RUN_IN_BACKGROUND
             false, // BOOT_COMPLETED
+            false, // OP_AUTO_START
     };
 
     /**
@@ -887,6 +896,7 @@ public class AppOpsManager {
             AppOpsManager.MODE_ALLOWED,
             AppOpsManager.MODE_ALLOWED,  // OP_RUN_IN_BACKGROUND
             AppOpsManager.MODE_ALLOWED, // OP_BOOT_COMPLETED
+            AppOpsManager.MODE_ALLOWED,  //OP_AUTO_START
     };
 
     /**
@@ -962,6 +972,7 @@ public class AppOpsManager {
             false,
             false,
             false,     // OP_BOOT_COMPLETED
+            false, //OP_AUTO_START
     };
 
     /**

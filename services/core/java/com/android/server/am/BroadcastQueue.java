@@ -1190,6 +1190,10 @@ public final class BroadcastQueue {
                 }
             }
 
+            if (!skip) {
+                skip = !mService.isAutoStartAllowed(info.activityInfo.applicationInfo.uid, info.activityInfo.applicationInfo.packageName);
+            }
+
             if (skip) {
                 if (DEBUG_BROADCAST)  Slog.v(TAG_BROADCAST,
                         "Skipping delivery of ordered [" + mQueueName + "] "
