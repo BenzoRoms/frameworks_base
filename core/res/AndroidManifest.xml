@@ -527,6 +527,8 @@
 
     <protected-broadcast android:name="android.intent.action.DEVICE_LOCKED_CHANGED" />
 
+    <protected-broadcast android:name="projekt.substratum.APP_CRASHED" />
+
     <!-- Added in O -->
     <!-- TODO: temporary broadcast used by AutoFillManagerServiceImpl; will be removed -->
     <protected-broadcast android:name="com.android.internal.autofill.action.REQUEST_AUTOFILL" />
@@ -546,6 +548,10 @@
     <protected-broadcast android:name="org.omnirom.omniswitch.ACTION_RESTORE_HOME_STACK" />
     <protected-broadcast android:name="org.omnirom.omniswitch.ACTION_PRELOAD_TASKS" />
     <protected-broadcast android:name="org.omnirom.omniswitch.ACTION_HIDE_OVERLAY" />
+
+    <!-- Substratum -->
+    <protected-broadcast android:name="projekt.substratum.APP_CRASHED" />
+    <protected-broadcast android:name="com.android.systemui.action.RESTART_THEME" />
 
     <!-- ====================================================================== -->
     <!--                          RUNTIME PERMISSIONS                           -->
