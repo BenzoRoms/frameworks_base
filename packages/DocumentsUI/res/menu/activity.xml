@@ -55,14 +55,14 @@
             android:title="@string/menu_create_dir"
             android:icon="@drawable/ic_menu_new_folder"
             android:alphabeticShortcut="e"
-            android:showAsAction="never"
-            android:visible="false" />
+            android:showAsAction="always"
+            android:visible="true" />
         <item
             android:id="@+id/menu_paste_from_clipboard"
             android:title="@string/menu_paste_from_clipboard"
             android:alphabeticShortcut="v"
-            android:showAsAction="never"
-            android:visible="false" />
+            android:showAsAction="always"
+            android:visible="true" />
         <!-- Copy action is defined in mode_directory.xml -->
         <item
             android:id="@+id/menu_sort"
@@ -83,12 +83,12 @@
         </item>
         <item
             android:id="@+id/menu_file_size"
-            android:showAsAction="never"
-            android:visible="false" />
+            android:showAsAction="always"
+            android:visible="true" />
         <item
             android:id="@+id/menu_advanced"
-            android:showAsAction="never"
-            android:visible="false" />
+            android:showAsAction="always"
+            android:visible="true" />
         <item
             android:id="@+id/menu_settings"
             android:title="@string/menu_settings"

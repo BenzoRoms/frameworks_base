@@ -100,19 +100,8 @@ public class DocumentsActivity extends BaseActivity {
             // We set the activity title in AsyncTask.onPostExecute().
             // To prevent talkback from reading aloud the default title, we clear it here.
             setTitle("");
-
-            // As a matter of policy we don't load the last used stack for the copy
-            // destination picker (user is already in Files app).
-            // Concensus was that the experice was too confusing.
-            // In all other cases, where the user is visiting us from another app
-            // we restore the stack as last used from that app.
-            if (mState.action == ACTION_PICK_COPY_DESTINATION) {
-                if (DEBUG) Log.d(TAG, "Launching directly into Home directory.");
-                loadRoot(getDefaultRoot());
-            } else {
-                if (DEBUG) Log.d(TAG, "Attempting to load last used stack for calling package.");
-                new LoadLastUsedStackTask(this).execute();
-            }
+            if (DEBUG) Log.d(TAG, "Launching directly into Home directory.");
+            loadRoot(getDefaultRoot());
         }
     }
 
@@ -147,7 +136,7 @@ public class DocumentsActivity extends BaseActivity {
             // Why? Directory creation isn't supported by some roots (like Downloads).
             // This allows us to restrict available roots to just those with support.
             state.directoryCopy = intent.getBooleanExtra(
-                    Shared.EXTRA_DIRECTORY_COPY, false);
+                    Shared.EXTRA_DIRECTORY_COPY, true);
             state.copyOperationSubType = intent.getIntExtra(
                     FileOperationService.EXTRA_OPERATION,
                     FileOperationService.OPERATION_COPY);
@@ -233,8 +222,8 @@ public class DocumentsActivity extends BaseActivity {
         final MenuItem fileSize = menu.findItem(R.id.menu_file_size);
 
 
-        createDir.setVisible(picking);
-        createDir.setEnabled(canCreateDirectory());
+        createDir.setVisible(true);
+        createDir.setEnabled(true);
 
         // No display options in recent directories
         boolean inRecents = cwd == null;
@@ -319,7 +308,7 @@ public class DocumentsActivity extends BaseActivity {
     @Override
     void onRootPicked(RootInfo root) {
         super.onRootPicked(root);
-        mNavigator.revealRootsDrawer(false);
+        mNavigator.revealRootsDrawer(true);
     }
 
     @Override
