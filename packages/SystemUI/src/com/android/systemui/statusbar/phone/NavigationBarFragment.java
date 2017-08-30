@@ -68,6 +68,7 @@ import android.view.accessibility.AccessibilityManager.AccessibilityServicesStat
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+import com.android.internal.util.omni.OmniSwitchConstants;
 import com.android.keyguard.LatencyTracker;
 import com.android.systemui.Dependency;
 import com.android.systemui.R;
@@ -130,6 +131,9 @@ public class NavigationBarFragment extends Fragment implements Callbacks {
 
     // Enable swapped naviagtion keys.
     protected boolean mUseSwapKey = false;
+
+    // omniswitch
+    private boolean mOmniSwitchRecents;
 
     // ----- Fragment Lifecycle Callbacks -----
 
@@ -471,12 +475,20 @@ public class NavigationBarFragment extends Fragment implements Callbacks {
     private boolean onRecentsTouch(View v, MotionEvent event) {
         int action = event.getAction() & MotionEvent.ACTION_MASK;
         if (action == MotionEvent.ACTION_DOWN) {
-            mCommandQueue.preloadRecentApps();
+            if (mOmniSwitchRecents) {
+                OmniSwitchConstants.preloadOmniSwitchRecents(getContext(), UserHandle.CURRENT);
+            } else {
+                mCommandQueue.preloadRecentApps();
+            }
         } else if (action == MotionEvent.ACTION_CANCEL) {
-            mCommandQueue.cancelPreloadRecentApps();
+            if (!mOmniSwitchRecents) {
+                mCommandQueue.cancelPreloadRecentApps();
+            }
         } else if (action == MotionEvent.ACTION_UP) {
             if (!v.isPressed()) {
-                mCommandQueue.cancelPreloadRecentApps();
+                if (!mOmniSwitchRecents) {
+                    mCommandQueue.cancelPreloadRecentApps();
+                }
             }
         }
         return false;
@@ -488,7 +500,11 @@ public class NavigationBarFragment extends Fragment implements Callbacks {
                     LatencyTracker.ACTION_TOGGLE_RECENTS);
         }
         mStatusBar.awakenDreams();
-        mCommandQueue.toggleRecentApps();
+        if (mOmniSwitchRecents) {
+            OmniSwitchConstants.toggleOmniSwitchRecents(getContext(), UserHandle.CURRENT);
+        } else {
+            mCommandQueue.toggleRecentApps();
+        }
     }
 
     /**

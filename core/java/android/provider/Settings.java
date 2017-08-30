@@ -4846,6 +4846,12 @@ public final class Settings {
         public static final String STATUS_BAR_NOTIF_COUNT = "status_bar_notif_count";
 
         /**
+         * navbar recents style - 0 default AOSP (card) 1 OmniSwitch 2 default AOSP (grid)
+         * @hide
+         */
+        public static final String RECENTS_USE_OMNISWITCH = "recents_use_omniswitch";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -5046,6 +5052,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(BATTERY_LIGHT_FULL_COLOR);
             PRIVATE_SETTINGS.add(BATTERY_LIGHT_REALLY_FULL_COLOR);
             PRIVATE_SETTINGS.add(STATUS_BAR_NOTIF_COUNT);
+            PRIVATE_SETTINGS.add(RECENTS_USE_OMNISWITCH);
         }
 
         /**

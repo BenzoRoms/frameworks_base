@@ -149,7 +149,9 @@ import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.statusbar.NotificationVisibility;
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.util.benzo.DeviceUtils;
+import com.android.internal.util.benzo.TaskUtils;
 import com.android.internal.util.NotificationMessagingUtil;
+import com.android.internal.util.omni.OmniSwitchConstants;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.KeyguardHostView.OnDismissAction;
 import com.android.keyguard.KeyguardStatusView;
@@ -827,6 +829,8 @@ public class StatusBar extends SystemUI implements DemoMode,
     private View mNavigationBarView;
 
     private StatusBarHeaderMachine mStatusBarHeaderMachine;
+
+    private boolean mOmniSwitchRecents;
 
     @Override
     public void start() {
@@ -1639,8 +1643,12 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
         int dockSide = WindowManagerProxy.getInstance().getDockSide();
         if (dockSide == WindowManager.DOCKED_INVALID) {
-            return mRecents.dockTopTask(NavigationBarGestureHelper.DRAG_MODE_NONE,
-                    ActivityManager.DOCKED_STACK_CREATE_MODE_TOP_OR_LEFT, null, metricsDockAction);
+            if (!mOmniSwitchRecents) {
+                mRecents.dockTopTask(NavigationBarGestureHelper.DRAG_MODE_NONE,
+                        ActivityManager.DOCKED_STACK_CREATE_MODE_TOP_OR_LEFT, null, metricsDockAction);
+            } else {
+                TaskUtils.dockTopTask(mContext);
+            }
         } else {
             Divider divider = getComponent(Divider.class);
             if (divider != null && divider.isMinimized() && !divider.isHomeStackResizable()) {
@@ -5588,6 +5596,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_STYLE_DARK),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RECENTS_USE_OMNISWITCH),
+                    false, this, UserHandle.USER_ALL);
 
             update();
         }
@@ -5644,6 +5655,8 @@ public class StatusBar extends SystemUI implements DemoMode,
                     Settings.System.STATUS_BAR_QUICK_QS_PULLDOWN_FP, 0, UserHandle.USER_CURRENT) == 1;
             boolean mDarkQS = Settings.System.getIntForUser(resolver,
                     Settings.System.QS_STYLE_DARK, 0, UserHandle.USER_CURRENT) == 1;
+            mOmniSwitchRecents = Settings.System.getIntForUser(resolver,
+                    Settings.System.RECENTS_USE_OMNISWITCH, 0, UserHandle.USER_CURRENT) == 1;
             setQsPanelOptions();
             setDoubleTapNavbar();
             setLockscreenDoubleTapToSleep();
