@@ -4300,6 +4300,12 @@ public final class Settings {
         @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_FIELD)
         public static final String GESTURE_ANYWHERE_SHOW_TRIGGER = "gesture_anywhere_show_trigger";
 
+       /**
+        * Whether to show QS panel footer warnings like for active VPN
+        * @hide
+        */
+       public static final String QS_FOOTER_WARNINGS = "qs_footer_warnings";
+
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
