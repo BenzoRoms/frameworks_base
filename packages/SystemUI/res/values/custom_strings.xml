@@ -57,4 +57,10 @@
     <string name="action_ok">OK</string>
     <string name="action_edit">Edit</string>
 
+    <!-- SysUI Tuner -->
+    <string name="statusbar_icons_blacklist">Status bar icons</string>
+    <string name="navbar_tuner_activity">Navigation bar buttons</string>
+    <string name="lockscreen_tuner_activity">Lockscreen shortcuts</string>
+    <string name="powernotif_tuner_activity">Power notifications</string>
+
 </resources>
