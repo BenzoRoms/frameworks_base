@@ -129,6 +129,7 @@ public final class NotificationRecord {
     private boolean mShowBadge;
     private LogMaker mLogMaker;
     private Light mLight;
+    private boolean mLightOnZen;
     private String mGroupLogTag;
     private String mChannelIdLogTag;
 
@@ -150,6 +151,7 @@ public final class NotificationRecord {
         mAttributes = calculateAttributes();
         mImportance = calculateImportance();
         mLight = calculateLights();
+        mLightOnZen = calculateLightOnZen();
     }
 
     private boolean isPreChannelsNotification() {
@@ -200,7 +202,7 @@ public final class NotificationRecord {
         int userSetLightColor = getChannel().getLightColor();
         int userSetLightOnTime = getChannel().getLightOnTime();
         int userSetLightOffTime = getChannel().getLightOffTime();
-        int channelLightColor = userSetLightColor != 0x00ffffff ? userSetLightColor
+        int channelLightColor = userSetLightColor != 0x00FFFFFF ? userSetLightColor
                 : defaultLightColor;
         int channelLightOnTime = userSetLightOnTime != 0 ? userSetLightOnTime
                 : defaultLightOn;
@@ -214,11 +216,11 @@ public final class NotificationRecord {
                 & NotificationChannel.USER_LOCKED_LIGHTS) == 0) {
             final Notification notification = sbn.getNotification();
             if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0) {
-                light = new Light(userSetLightColor != 0x00ffffff ? userSetLightColor : notification.ledARGB,
+                light = new Light(userSetLightColor != 0x00FFFFFF ? userSetLightColor : notification.ledARGB,
                         userSetLightOnTime != 0 ? userSetLightOnTime : notification.ledOnMS,
                         userSetLightOffTime != 0 ? userSetLightOffTime : notification.ledOffMS);
                 if ((notification.defaults & Notification.DEFAULT_LIGHTS) != 0) {
-                    light = new Light(userSetLightColor != 0x00ffffff ? userSetLightColor : defaultLightColor,
+                    light = new Light(userSetLightColor != 0x00FFFFFF ? userSetLightColor : defaultLightColor,
                         userSetLightOnTime != 0 ? userSetLightOnTime : defaultLightOn,
                         userSetLightOffTime != 0 ? userSetLightOffTime : defaultLightOff);
                 }
@@ -227,6 +229,10 @@ public final class NotificationRecord {
             }
         }
         return light;
+    }
+
+    private boolean calculateLightOnZen() {
+        return getChannel().shouldLightOnZen();
     }
 
     private long[] calculateVibration() {
@@ -823,6 +829,10 @@ public final class NotificationRecord {
 
     public Light getLight() {
         return mLight;
+    }
+
+    public boolean shouldLightOnZen() {
+        return mLightOnZen;
     }
 
     public Uri getSound() {
