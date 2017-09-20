@@ -29,6 +29,7 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.service.quicksettings.Tile;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -111,7 +112,6 @@ public class QSPanel extends LinearLayout implements Tunable, Callback {
         if (mTileLayout instanceof PagedTileLayout) {
             ((PagedTileLayout) mTileLayout).setPageIndicator((PageIndicator) mPageIndicator);
         }
-        updateSettings();
 
         addDivider();
 
@@ -145,6 +145,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback {
                 R.layout.qs_paged_tile_layout, this, false);
         mTileLayout.setListening(mListening);
         addView((View) mTileLayout);
+        updateSettings();
     }
 
     public boolean isShowingCustomize() {
@@ -410,6 +411,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback {
         r.callback = callback;
         r.tileView.init(r.tile);
         r.tile.refreshState();
+        r.tileView.setHideExpand(mTileLayout.getNumColumns() > 4);
         mRecords.add(r);
 
         if (mTileLayout != null) {
@@ -595,6 +597,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback {
 
         boolean updateResources();
         void updateSettings();
+        int getNumColumns();
 
         void setListening(boolean listening);
     }
@@ -605,6 +608,11 @@ public class QSPanel extends LinearLayout implements Tunable, Callback {
         }
         if (mTileLayout != null) {
             mTileLayout.updateSettings();
+
+            for (TileRecord r : mRecords) {
+                QSTileView v = r.tileView;
+                v.setHideExpand(mTileLayout.getNumColumns() > 4);
+            }
         }
     }
 }
