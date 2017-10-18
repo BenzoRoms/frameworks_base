@@ -446,6 +446,9 @@ public class StatusBar extends SystemUI implements DemoMode,
     // 4G instead of LTE
     private boolean mShow4G;
 
+    // QS DarkUI
+    private boolean mDarkQS;
+
     // Swap naviagtion keys
     protected boolean mUseSwapKey = false;
 
@@ -5582,6 +5585,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_QUICK_QS_PULLDOWN_FP),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_STYLE_DARK),
+                    false, this, UserHandle.USER_ALL);
 
             update();
         }
@@ -5615,6 +5621,16 @@ public class StatusBar extends SystemUI implements DemoMode,
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.RECENTS_ICON_PACK))) {
                 updateRecentsIconPack();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.QS_STYLE_DARK))) {
+                    mDarkQS = Settings.System.getIntForUser(
+                            mContext.getContentResolver(),
+                            Settings.System.QS_STYLE_DARK,
+                            0, UserHandle.USER_CURRENT) == 1;
+                            mCommandQueue.restartUI();
+                            updateRowStates();
+                            updateClearAll();
+                            updateEmptyShadeView();
             }
         }
 
@@ -5626,6 +5642,8 @@ public class StatusBar extends SystemUI implements DemoMode,
                     Settings.System.LOCKSCREEN_MAX_NOTIF_CONFIG, 5, mCurrentUserId);
             mFingerprintQuickPulldown = Settings.System.getIntForUser(resolver,
                     Settings.System.STATUS_BAR_QUICK_QS_PULLDOWN_FP, 0, UserHandle.USER_CURRENT) == 1;
+            boolean mDarkQS = Settings.System.getIntForUser(resolver,
+                    Settings.System.QS_STYLE_DARK, 0, UserHandle.USER_CURRENT) == 1;
             setQsPanelOptions();
             setDoubleTapNavbar();
             setLockscreenDoubleTapToSleep();
